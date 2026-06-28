@@ -3,35 +3,238 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>hevangel.github.io</title>
+  <title>Programming Journal | hevangel.github.io</title>
   <style>
-    :root { color-scheme: light dark; }
+    :root {
+      --bg: #0b1020;
+      --panel: #121a33;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: #2a355d;
+      --accent: #60a5fa;
+      --accent2: #a78bfa;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
+      color: var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(96,165,250,0.18), transparent 60%),
+        radial-gradient(1000px 500px at 100% 0%, rgba(167,139,250,0.14), transparent 60%),
+        var(--bg);
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
     }
-    main {
-      background: rgba(255,255,255,0.9);
-      color: #111827;
-      padding: 2rem 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+    header {
+      padding: 2.2rem 1rem 1.2rem;
       text-align: center;
-      max-width: 680px;
     }
-    h1 { margin: 0 0 0.5rem; }
-    p { margin: 0.25rem 0; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .timeline-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 1rem 3rem;
+    }
+
+    /* Parallel vertical tracks */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .track {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.8rem;
+      min-height: 65vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track::before {
+      content: "";
+      position: absolute;
+      left: 16px;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), transparent 85%);
+      opacity: 0.45;
+    }
+
+    .track:nth-child(2)::before { background: linear-gradient(180deg, #22d3ee, transparent 85%); }
+    .track:nth-child(3)::before { background: linear-gradient(180deg, #f59e0b, transparent 85%); }
+    .track:nth-child(4)::before { background: linear-gradient(180deg, var(--accent2), transparent 85%); }
+
+    .track h2 {
+      margin: 0 0 0.75rem 0;
+      padding-left: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .entry {
+      margin: 0.75rem 0 0.95rem;
+      padding: 0.7rem 0.7rem 0.7rem 0.95rem;
+      margin-left: 0.5rem;
+      border: 1px solid #263156;
+      border-radius: 10px;
+      background: rgba(13, 20, 40, 0.75);
+      position: relative;
+    }
+
+    .entry::before {
+      content: "";
+      position: absolute;
+      left: -0.72rem;
+      top: 1rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
+    }
+
+    .date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .title {
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .desc {
+      margin: 0;
+      color: #c7cfdd;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    a.button, span.button-disabled {
+      display: inline-block;
+      margin-top: 0.65rem;
+      font-size: 0.84rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid #33406d;
+    }
+
+    a.button {
+      color: #dbeafe;
+      background: rgba(37, 99, 235, 0.25);
+    }
+
+    a.button:hover { filter: brightness(1.08); }
+
+    span.button-disabled {
+      color: #9aa3b2;
+      background: rgba(148, 163, 184, 0.12);
+      border-color: #3a455f;
+      cursor: not-allowed;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 0 1rem 2rem;
+      font-size: 0.86rem;
+    }
+
+    @media (max-width: 980px) {
+      .timeline {
+        grid-template-columns: 1fr 1fr;
+      }
+      .track { min-height: 48vh; }
+    }
+
+    @media (max-width: 620px) {
+      .timeline {
+        grid-template-columns: 1fr;
+      }
+      .track { min-height: auto; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Hello from hevangel.github.io 👋</h1>
-    <p>Your GitHub Pages site is live.</p>
-    <p>Last updated: June 28, 2026</p>
+  <header>
+    <h1>My Programming Journal</h1>
+    <div class="subtitle">Chronological tracks (parallel scrolling layout) • Start with four sections</div>
+  </header>
+
+  <main class="timeline-wrap">
+    <section class="timeline" aria-label="Programming journal timeline">
+      <!-- 1) GW-BASIC -->
+      <article class="track">
+        <h2>GW-BASIC</h2>
+        <div class="entry">
+          <div class="date">First language</div>
+          <div class="title">Getting started with GW-BASIC</div>
+          <p class="desc">Foundational experiments, loops, and small console programs.</p>
+          <a class="button" href="/gwbasic.html">Open GW-BASIC Runner</a>
+        </div>
+      </article>
+
+      <!-- 2) Pascal -->
+      <article class="track">
+        <h2>Pascal</h2>
+        <div class="entry">
+          <div class="date">Next step</div>
+          <div class="title">Structured programming era</div>
+          <p class="desc">Types, procedures, and stronger program structure.</p>
+          <span class="button-disabled">Page coming soon</span>
+        </div>
+      </article>
+
+      <!-- 3) dBASE IV+ -->
+      <article class="track">
+        <h2>dBASE IV+</h2>
+        <div class="entry">
+          <div class="date">Database phase</div>
+          <div class="title">Data-driven workflows</div>
+          <p class="desc">Forms, records, and report-oriented app building.</p>
+          <span class="button-disabled">Page coming soon</span>
+        </div>
+      </article>
+
+      <!-- 4) Placeholder -->
+      <article class="track">
+        <h2>Section 4</h2>
+        <div class="entry">
+          <div class="date">Reserved</div>
+          <div class="title">Future language / era</div>
+          <p class="desc">Keep this section as a placeholder for the next chapter.</p>
+          <span class="button-disabled">Page coming soon</span>
+        </div>
+      </article>
+    </section>
   </main>
+
+  <footer>
+    © Programming Journal • hevangel.github.io
+  </footer>
 </body>
 </html>
