@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" data-theme="green">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GW-BASIC Runner | hevangel.github.io</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #0b0b0b;
+      --frame: #2a2a2a;
+      --text: #7CFF7A;
+      --glow: rgba(124, 255, 122, 0.45);
+      --accent: #7CFF7A;
+      --muted: #9ca3af;
+    }
+
+    html[data-theme="amber"] {
+      --text: #FFBF66;
+      --glow: rgba(255, 191, 102, 0.45);
+      --accent: #FFBF66;
+    }
+
+    html[data-theme="mono"] {
+      --text: #F3F4F6;
+      --glow: rgba(243, 244, 246, 0.35);
+      --accent: #F3F4F6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,255,255,0.04), transparent 35%),
+        #020202;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      padding: 1rem;
+      border-bottom: 1px solid #1f1f1f;
+      background: #060606;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px var(--glow);
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    select, button, a.button {
+      background: #0e0e0e;
+      color: var(--text);
+      border: 1px solid #2c2c2c;
+      border-radius: 6px;
+      padding: 0.45rem 0.6rem;
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      text-shadow: 0 0 8px var(--glow);
+    }
+
+    select:focus, button:focus, a.button:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    main {
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+
+    .crt-frame {
+      width: min(980px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--frame);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow:
+        0 0 0 2px #0a0a0a inset,
+        0 0 32px rgba(0,0,0,0.6),
+        0 0 20px var(--glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .crt-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.045) 0px,
+        rgba(255,255,255,0.045) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+      opacity: 0.45;
+    }
+
+    .crt-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.35) 100%);
+      pointer-events: none;
+    }
+
+    #container {
+      width: 100%;
+      min-height: 520px;
+      border: 1px solid #242424;
+      border-radius: 8px;
+      background: #000;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+    }
+
+    footer {
+      padding: 0.75rem 1rem 1rem;
+      color: #a1a1aa;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    code { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">GW-BASIC Runner</h1>
+    <div class="controls">
+      <label for="theme">CRT Theme</label>
+      <select id="theme" aria-label="CRT Theme">
+        <option value="green">Green phosphor</option>
+        <option value="amber">Amber phosphor</option>
+        <option value="mono">Monochrome white</option>
+      </select>
+      <button id="runBtn" type="button">Run Program</button>
+      <a class="button" href="/">Back to Timeline</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="crt-frame" aria-label="GW-BASIC terminal">
+      <div id="container"></div>
+    </section>
+  </main>
+
+  <footer>
+    Placeholder source file: <code>programs/gwbasic-placeholder.bas</code>
+  </footer>
+
+  <script src="https://unpkg.com/qb.js"></script>
+  <script>
+    const PROGRAM_URL = 'programs/gwbasic-placeholder.bas';
+    const THEME_KEY = 'gwbasicTheme';
+
+    const html = document.documentElement;
+    const themeSelect = document.getElementById('theme');
+    const runBtn = document.getElementById('runBtn');
+
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      themeSelect.value = theme;
+      try { localStorage.setItem(THEME_KEY, theme); } catch {}
+    }
+
+    function loadSavedTheme() {
+      let saved = 'green';
+      try { saved = localStorage.getItem(THEME_KEY) || 'green'; } catch {}
+      if (!['green', 'amber', 'mono'].includes(saved)) saved = 'green';
+      applyTheme(saved);
+    }
+
+    async function runProgram() {
+      const container = document.getElementById('container');
+      container.innerHTML = '';
+
+      try {
+        const res = await fetch(PROGRAM_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`Could not load ${PROGRAM_URL}`);
+        const source = await res.text();
+
+        if (!window.QB || typeof window.QB.start !== 'function') {
+          throw new Error('qb.js did not load correctly.');
+        }
+
+        window.QB.start({
+          dom: container,
+          code: source,
+          width: 80,
+          height: 25
+        });
+      } catch (err) {
+        container.innerHTML = `<pre style="padding:1rem;color:#fca5a5">${String(err.message || err)}</pre>`;
+      }
+    }
+
+    themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
+    runBtn.addEventListener('click', runProgram);
+
+    loadSavedTheme();
+    runProgram();
+  </script>
+</body>
+</html>
