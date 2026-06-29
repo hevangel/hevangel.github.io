@@ -7,7 +7,7 @@ A personal programming journal hosted at [hevangel.github.io](https://hevangel.g
 - `index.html` - Main timeline page with four parallel tracks: GW-BASIC, Pascal, dBASE IV+, and a placeholder for future entries
 - `gwbasic.html` - Interactive GW-BASIC runner/playground
 - `js/` - JavaScript modules for the GW-BASIC interpreter
-- `gwbasic_programs/` - Example GW-BASIC programs
+- `gwbasic/` - Example GW-BASIC programs
 - `scripts/` - Utility scripts
 
 ## Features
@@ -45,7 +45,7 @@ Push to `main` branch → GitHub Pages deploys automatically from root.
 ├── index.html          # Main timeline page
 ├── gwbasic.html        # GW-BASIC interactive runner
 ├── js/                 # JS modules (tokenizer, parser, interpreter, etc.)
-├── gwbasic_programs/   # Sample GW-BASIC programs
+├── gwbasic/            # Sample GW-BASIC programs
 ├── scripts/            # Build/utilities
 └── .gitignore
 ```

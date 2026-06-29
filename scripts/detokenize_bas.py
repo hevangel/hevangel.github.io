@@ -166,7 +166,7 @@ def decode(data: bytes, encoding: str = "cp437") -> str:
 
 
 def main() -> int:
-    path = Path(sys.argv[1] if len(sys.argv) > 1 else "../gwbasic_programs/DICE.BAS")
+    path = Path(sys.argv[1] if len(sys.argv) > 1 else "../gwbasic/DICE.BAS")
     print(decode(path.read_bytes()))
     return 0
 

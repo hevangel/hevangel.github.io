@@ -13,7 +13,7 @@ Personal programming journal website (hevangel.github.io) - a static site docume
 ├── index.html          # Main timeline page
 ├── gwbasic.html        # GW-BASIC interpreter page
 ├── js/                 # JavaScript modules for GW-BASIC interpreter
-├── gwbasic_programs/   # Example BASIC programs
+├── gwbasic/            # Example BASIC programs + GWBASIC.EXE
 ├── scripts/            # Utility scripts
 └── .gitignore
 ```

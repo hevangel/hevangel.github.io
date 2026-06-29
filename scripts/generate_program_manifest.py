@@ -1,4 +1,4 @@
-"""Regenerate gwbasic_programs/manifest.json from .BAS files in gwbasic_programs/."""
+"""Regenerate gwbasic/manifest.json from .BAS files in gwbasic/."""
 
 from __future__ import annotations
 
@@ -6,10 +6,10 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PROGRAMS_DIR = ROOT / "gwbasic_programs"
+PROGRAMS_DIR = ROOT / "gwbasic"
 MANIFEST_PATH = PROGRAMS_DIR / "manifest.json"
 SUPPORT_SUFFIXES = {".dat", ".fil", ".pic"}
-DEFAULT_PROGRAM = "gwbasic_programs/RACE2.BAS"
+DEFAULT_PROGRAM = "gwbasic/RACE2.BAS"
 
 LABELS = {
     "gwbasic-placeholder.bas": "Placeholder Demo",
@@ -106,19 +106,19 @@ def main() -> None:
     )
     default_program = DEFAULT_PROGRAM
     if bas_files and DEFAULT_PROGRAM.split("/")[-1] not in bas_files:
-        default_program = f"gwbasic_programs/{bas_files[0]}"
+        default_program = f"gwbasic/{bas_files[0]}"
 
     manifest = {
         "defaultProgram": default_program,
         "programs": [
             {
-                "path": f"gwbasic_programs/{name}",
+                "path": f"gwbasic/{name}",
                 "label": label_from_name(name),
                 "description": description_from_name(name),
             }
             for name in bas_files
         ],
-        "supportFiles": [f"gwbasic_programs/{name}" for name in support_files],
+        "supportFiles": [f"gwbasic/{name}" for name in support_files],
     }
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {len(manifest['programs'])} program(s) to {MANIFEST_PATH}")

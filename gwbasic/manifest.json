@@ -1,55 +1,55 @@
 {
-  "defaultProgram": "gwbasic_programs/RACE2.BAS",
+  "defaultProgram": "gwbasic/RACE2.BAS",
   "programs": [
     {
-      "path": "gwbasic_programs/CHECKID.BAS",
+      "path": "gwbasic/CHECKID.BAS",
       "label": "Check ID",
       "description": "Validates a Hong Kong ID card number. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/CONVERT1.BAS",
+      "path": "gwbasic/CONVERT1.BAS",
       "label": "Convert",
       "description": "Converts a number between bases 2 and 16. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/DICE.BAS",
+      "path": "gwbasic/DICE.BAS",
       "label": "Dice",
       "description": "Guess big or small on a random dice roll. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/DRAW.BAS",
+      "path": "gwbasic/DRAW.BAS",
       "label": "Draw",
       "description": "Move a cursor and draw on the screen with the keyboard. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/RACE.BAS",
+      "path": "gwbasic/RACE.BAS",
       "label": "Race",
       "description": "Super Horse Racing, first version. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/RACE2.BAS",
+      "path": "gwbasic/RACE2.BAS",
       "label": "Race 2",
       "description": "Super Horse Racing is my final class project and the very first game I ever wrote. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/RACE3.BAS",
+      "path": "gwbasic/RACE3.BAS",
       "label": "Race 3",
       "description": "Super Chicken horse racing v2.0 with save/load \u2014 never finished. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/SONG1.BAS",
+      "path": "gwbasic/SONG1.BAS",
       "label": "Song 1",
       "description": "Plays a tune with GW-BASIC PLAY statements. Homework from my first high school computer science class."
     },
     {
-      "path": "gwbasic_programs/SONG2.BAS",
+      "path": "gwbasic/SONG2.BAS",
       "label": "Song 2",
       "description": "Plays a longer song from stored note strings. Homework from my first high school computer science class."
     }
   ],
   "supportFiles": [
-    "gwbasic_programs/HELLO.DAT",
-    "gwbasic_programs/HORACE.DAT",
-    "gwbasic_programs/SAVEGAME.FIL"
+    "gwbasic/HELLO.DAT",
+    "gwbasic/HORACE.DAT",
+    "gwbasic/SAVEGAME.FIL"
   ]
 }

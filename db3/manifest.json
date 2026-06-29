@@ -1,0 +1,39 @@
+{
+  "programs": [
+    { "path": "db3/MENU1.PRG", "label": "Main Menu 1", "description": "Primary menu system" },
+    { "path": "db3/MENU2.PRG", "label": "Main Menu 2", "description": "Secondary menu system" },
+    { "path": "db3/IN_ST.PRG", "label": "Student Input", "description": "Student data entry form" },
+    { "path": "db3/IN_BK.PRG", "label": "Book Input", "description": "Book data entry form" },
+    { "path": "db3/LISTST.PRG", "label": "List Students", "description": "Student listing report" },
+    { "path": "db3/LISTBK.PRG", "label": "List Books", "description": "Book listing report" },
+    { "path": "db3/EDST.PRG", "label": "Edit Students", "description": "Student record editor" },
+    { "path": "db3/EDBK.PRG", "label": "Edit Books", "description": "Book record editor" },
+    { "path": "db3/DELST.PRG", "label": "Delete Students", "description": "Student deletion utility" },
+    { "path": "db3/DELBK.PRG", "label": "Delete Books", "description": "Book deletion utility" },
+    { "path": "db3/HELP.PRG", "label": "Help System", "description": "Main help program" },
+    { "path": "db3/HELP1.PRG", "label": "Help 1", "description": "Help screen 1" },
+    { "path": "db3/HELP2.PRG", "label": "Help 2", "description": "Help screen 2" },
+    { "path": "db3/OVERDUE.PRG", "label": "Overdue Reports", "description": "Overdue book reports" },
+    { "path": "db3/CREDIT.PRG", "label": "Credit System", "description": "Credit management" },
+    { "path": "db3/PROCE.PRG", "label": "Procedures", "description": "Procedural utilities" },
+    { "path": "db3/ABOUT.PRG", "label": "About", "description": "About this application" },
+    { "path": "db3/BYE.PRG", "label": "Exit Program", "description": "Exit/cleanup routine" },
+    { "path": "db3/SIGNIN.PRG", "label": "Sign In", "description": "User sign-in" },
+    { "path": "db3/SIGNOUT.PRG", "label": "Sign Out", "description": "User sign-out" },
+    { "path": "db3/ALS.PRG", "label": "ALS Utility", "description": "ALS utility program" },
+    { "path": "db3/PTERROR.PRG", "label": "Error Handler", "description": "Error handling routine" },
+    { "path": "db3/PTOVER.PRG", "label": "Overdue Processor", "description": "Process overdue items" },
+    { "path": "db3/PETER.PRG", "label": "Peter Utility", "description": "Peter's utility program" }
+  ],
+  "supportFiles": [
+    "db3/STUDENT.DBF",
+    "db3/STUDENT1.DBF",
+    "db3/BOOKREC.DBF",
+    "db3/BOOKREC1.DBF",
+    "db3/SIGN.DBF",
+    "db3/PETER.DBF",
+    "db3/TEMPST.DBF",
+    "db3/TEMPBK.DBF"
+  ],
+  "defaultProgram": "db3/MENU1.PRG"
+}
