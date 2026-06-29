@@ -1,6 +1,55 @@
-[
-  {
-    "path": "programs/DICE.BAS",
-    "label": "Dice"
-  }
-]
+{
+  "defaultProgram": "programs/RACE2.BAS",
+  "programs": [
+    {
+      "path": "programs/CHECKID.BAS",
+      "label": "Check ID",
+      "description": "Validates a Hong Kong ID card number. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/CONVERT1.BAS",
+      "label": "Convert",
+      "description": "Converts a number between bases 2 and 16. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/DICE.BAS",
+      "label": "Dice",
+      "description": "Guess big or small on a random dice roll. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/DRAW.BAS",
+      "label": "Draw",
+      "description": "Move a cursor and draw on the screen with the keyboard. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/RACE.BAS",
+      "label": "Race",
+      "description": "Super Horse Racing, first version. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/RACE2.BAS",
+      "label": "Race 2",
+      "description": "Super Horse Racing is my final class project and the very first game I ever wrote. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/RACE3.BAS",
+      "label": "Race 3",
+      "description": "Super Chicken horse racing v2.0 with save/load \u2014 never finished. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/SONG1.BAS",
+      "label": "Song 1",
+      "description": "Plays a tune with GW-BASIC PLAY statements. Homework from my first high school computer science class."
+    },
+    {
+      "path": "programs/SONG2.BAS",
+      "label": "Song 2",
+      "description": "Plays a longer song from stored note strings. Homework from my first high school computer science class."
+    }
+  ],
+  "supportFiles": [
+    "programs/HELLO.DAT",
+    "programs/HORACE.DAT",
+    "programs/SAVEGAME.FIL"
+  ]
+}

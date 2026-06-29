@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PROGRAMS_DIR = ROOT / "programs"
 MANIFEST_PATH = PROGRAMS_DIR / "manifest.json"
+SUPPORT_SUFFIXES = {".dat", ".fil", ".pic"}
+DEFAULT_PROGRAM = "programs/RACE2.BAS"
 
 LABELS = {
     "gwbasic-placeholder.bas": "Placeholder Demo",
@@ -35,6 +37,45 @@ LABELS = {
     "SONG2.BAS": "Song 2",
 }
 
+DESCRIPTIONS = {
+    "CHECKID.BAS": (
+        "Validates a Hong Kong ID card number. Homework from my first high school "
+        "computer science class."
+    ),
+    "CONVERT1.BAS": (
+        "Converts a number between bases 2 and 16. Homework from my first high "
+        "school computer science class."
+    ),
+    "DICE.BAS": (
+        "Guess big or small on a random dice roll. Homework from my first high "
+        "school computer science class."
+    ),
+    "DRAW.BAS": (
+        "Move a cursor and draw on the screen with the keyboard. Homework from my "
+        "first high school computer science class."
+    ),
+    "RACE.BAS": (
+        "Super Horse Racing, first version. Homework from my first high school "
+        "computer science class."
+    ),
+    "RACE2.BAS": (
+        "Super Horse Racing — my final class project and the very first game I ever "
+        "wrote. Homework from my first high school computer science class."
+    ),
+    "RACE3.BAS": (
+        "Super Chicken horse racing v2.0 with save/load — never finished. Homework "
+        "from my first high school computer science class."
+    ),
+    "SONG1.BAS": (
+        "Plays a tune with GW-BASIC PLAY statements. Homework from my first high "
+        "school computer science class."
+    ),
+    "SONG2.BAS": (
+        "Plays a longer song from stored note strings. Homework from my first high "
+        "school computer science class."
+    ),
+}
+
 
 def label_from_name(name: str) -> str:
     if name in LABELS:
@@ -45,16 +86,48 @@ def label_from_name(name: str) -> str:
     return stem
 
 
+def description_from_name(name: str) -> str:
+    if name in DESCRIPTIONS:
+        return DESCRIPTIONS[name]
+    return (
+        f"GW-BASIC program from my first high school computer science class ({name})."
+    )
+
+
 def main() -> None:
     bas_files = sorted(
         (p.name for p in PROGRAMS_DIR.iterdir() if p.is_file() and p.suffix.lower() == ".bas"),
         key=lambda name: (name.lower() == "gwbasic-placeholder.bas", name.lower()),
     )
-    programs = [{"path": f"programs/{name}", "label": label_from_name(name)} for name in bas_files]
-    MANIFEST_PATH.write_text(json.dumps(programs, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {len(programs)} program(s) to {MANIFEST_PATH}")
-    for entry in programs:
+    support_files = sorted(
+        p.name
+        for p in PROGRAMS_DIR.iterdir()
+        if p.is_file() and p.suffix.lower() in SUPPORT_SUFFIXES
+    )
+    default_program = DEFAULT_PROGRAM
+    if bas_files and DEFAULT_PROGRAM.split("/")[-1] not in bas_files:
+        default_program = f"programs/{bas_files[0]}"
+
+    manifest = {
+        "defaultProgram": default_program,
+        "programs": [
+            {
+                "path": f"programs/{name}",
+                "label": label_from_name(name),
+                "description": description_from_name(name),
+            }
+            for name in bas_files
+        ],
+        "supportFiles": [f"programs/{name}" for name in support_files],
+    }
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {len(manifest['programs'])} program(s) to {MANIFEST_PATH}")
+    for entry in manifest["programs"]:
         print(f"  - {entry['label']}: {entry['path']}")
+    if manifest["supportFiles"]:
+        print(f"Support files ({len(manifest['supportFiles'])}):")
+        for path in manifest["supportFiles"]:
+            print(f"  - {path}")
 
 
 if __name__ == "__main__":

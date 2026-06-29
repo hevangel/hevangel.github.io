@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="green">
+<html lang="en" data-theme="mono">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,25 +10,13 @@
     :root {
       --panel: #0b0b0b;
       --frame: #2a2a2a;
-      --text: #7CFF7A;
-      --glow: rgba(124, 255, 122, 0.45);
-      --accent: #7CFF7A;
+      --text: #F3F4F6;
+      --glow: rgba(243, 244, 246, 0.35);
+      --accent: #F3F4F6;
       --dos-font: "Perfect DOS VGA 437 Win", "Perfect DOS VGA 437", "Fixedsys Excelsior", monospace;
       --dos-blue: #0000aa;
       --dos-blue-light: #5555ff;
       --dos-cyan: #55ffff;
-    }
-
-    html[data-theme="amber"] {
-      --text: #FFBF66;
-      --glow: rgba(255, 191, 102, 0.45);
-      --accent: #FFBF66;
-    }
-
-    html[data-theme="mono"] {
-      --text: #F3F4F6;
-      --glow: rgba(243, 244, 246, 0.35);
-      --accent: #F3F4F6;
     }
 
     * { box-sizing: border-box; }
@@ -91,6 +79,22 @@
       align-items: center;
     }
 
+    #soundBtn {
+      display: inline-grid;
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    #soundBtn::before {
+      content: "Sound Off";
+      visibility: hidden;
+      grid-area: 1 / 1;
+    }
+
+    #soundBtn .sound-btn-label {
+      grid-area: 1 / 1;
+    }
+
     select, button, a.button {
       background: var(--dos-blue);
       color: #ffffff;
@@ -136,8 +140,23 @@
       padding: 1rem;
     }
 
+    .console-area {
+      --console-scale: 1.35;
+      --dos-width: 640;
+      --dos-height: 400;
+      --console-width: calc(var(--dos-width) * 1px * var(--console-scale));
+      --console-height: calc(var(--dos-height) * 1px * var(--console-scale));
+      --frame-width: min(calc(640px * 1.35 + 28px), 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      align-items: center;
+      width: var(--frame-width);
+      max-width: 100%;
+    }
+
     .crt-frame {
-      width: min(calc(640px * 1.35 + 28px), 100%);
+      width: 100%;
       background: var(--panel);
       border: 1px solid var(--frame);
       border-radius: 12px;
@@ -148,6 +167,43 @@
         0 0 20px var(--glow);
       position: relative;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .crt-bezel {
+      width: var(--console-width);
+      max-width: 100%;
+      border: 1px solid #242424;
+      border-radius: 8px;
+      background: #000;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+    }
+
+    .program-description {
+      margin: -0.35rem 0 0.15rem;
+      padding: 0 0.15em;
+      width: 100%;
+      color: var(--text);
+      font-family: var(--dos-font);
+      font-size: calc(16px * var(--console-scale) / 1.35);
+      line-height: 1.15;
+      letter-spacing: 0;
+      text-align: center;
+      text-shadow: 0 0 8px var(--glow);
+    }
+
+    #container {
+      width: 100%;
+      height: var(--console-height);
+      background: #000;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
     .crt-frame::before {
@@ -174,24 +230,6 @@
       background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.35) 100%);
       pointer-events: none;
       z-index: 2;
-    }
-
-    #container {
-      --console-scale: 1.35;
-      --dos-width: 640;
-      --dos-height: 400;
-      --console-width: calc(var(--dos-width) * 1px * var(--console-scale));
-      --console-height: calc(var(--dos-height) * 1px * var(--console-scale));
-      width: var(--console-width);
-      max-width: 100%;
-      height: var(--console-height);
-      border: 1px solid #242424;
-      border-radius: 8px;
-      background: #000;
-      position: relative;
-      z-index: 1;
-      overflow: hidden;
-      box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
     }
 
     #container .jsdos-rso,
@@ -345,28 +383,27 @@
   <header>
     <h1 class="title">GW-BASIC Runner</h1>
     <div class="controls">
-      <label for="theme">CRT Theme</label>
-      <select id="theme" aria-label="CRT Theme">
-        <option value="green">Green phosphor</option>
-        <option value="amber">Amber phosphor</option>
-        <option value="mono">Monochrome white</option>
-      </select>
       <label for="program">Program</label>
       <select id="program" aria-label="GW-BASIC Program" disabled>
         <option value="">Loading programs...</option>
       </select>
       <div class="action-buttons">
-        <button id="readBtn" type="button">Read</button>
         <button id="runBtn" type="button">Run</button>
+        <button id="soundBtn" type="button" aria-pressed="false"><span class="sound-btn-label">Sound On</span></button>
       </div>
       <a class="button" href="/">Back to Timeline</a>
     </div>
   </header>
 
   <main>
-    <section class="crt-frame" aria-label="GW-BASIC terminal">
-      <div id="container" aria-live="polite"></div>
-    </section>
+    <div class="console-area">
+      <p id="programDescription" class="program-description" aria-live="polite"></p>
+      <section class="crt-frame" aria-label="GW-BASIC terminal">
+        <div class="crt-bezel">
+          <div id="container" aria-live="polite"></div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -380,26 +417,29 @@
   <script>
     const PROGRAM_MANIFEST_URL = 'programs/manifest.json';
     const GWBASIC_EXE_URL = 'dos/GWBASIC.EXE';
-    const THEME_KEY = 'gwbasicTheme';
     const PROGRAM_KEY = 'gwbasicProgram';
     const VIEW_KEY = 'gwbasicView';
+    const SOUND_KEY = 'gwbasicSound';
+    const FALLBACK_DEFAULT_PROGRAM = 'programs/RACE2.BAS';
 
-    const html = document.documentElement;
-    const themeSelect = document.getElementById('theme');
     const programSelect = document.getElementById('program');
-    const readBtn = document.getElementById('readBtn');
+    const programDescription = document.getElementById('programDescription');
+    const soundBtn = document.getElementById('soundBtn');
+    const soundBtnLabel = soundBtn.querySelector('.sound-btn-label');
     const programPath = document.getElementById('programPath');
     const runBtn = document.getElementById('runBtn');
     const container = document.getElementById('container');
 
     let programs = [];
+    let supportFiles = [];
+    let defaultProgram = FALLBACK_DEFAULT_PROGRAM;
     let dosPlayer = null;
+    let dosCi = null;
     let gwbasicExeBytes = null;
-    let currentMode = 'run';
-    const supportFilePattern = /\.(dat|fil|pic)$/i;
+    let currentMode = 'source';
+    let soundEnabled = true;
 
     function setActionButtonsDisabled(disabled) {
-      readBtn.disabled = disabled;
       runBtn.disabled = disabled;
     }
 
@@ -445,14 +485,12 @@ echo Program finished. Choose another program and click Run.
         { path: basName, contents: prepareBasForDos(await fetchBytes(programUrl)) },
       ];
 
-      const supportFiles = programs
-        .map((program) => program.path.split('/').pop())
-        .filter((name) => name !== basName && supportFilePattern.test(name));
+      const supportPaths = supportFiles.filter((path) => path.split('/').pop() !== basName);
 
       const supportContents = await Promise.all(
-        supportFiles.map(async (name) => ({
-          name,
-          bytes: await fetchBytes(`programs/${name}`),
+        supportPaths.map(async (path) => ({
+          name: path.split('/').pop(),
+          bytes: prepareBasForDos(await fetchBytes(path)),
         })),
       );
 
@@ -506,16 +544,36 @@ echo Program finished. Choose another program and click Run.
       programSelect.disabled = programs.length === 0;
     }
 
+    function getSelectedProgram() {
+      const path = getSelectedProgramUrl();
+      return programs.find((program) => program.path === path) || null;
+    }
+
+    function updateProgramDescription() {
+      const program = getSelectedProgram();
+      programDescription.textContent = program?.description || '';
+    }
+
     async function loadProgramManifest() {
       const res = await fetch(PROGRAM_MANIFEST_URL, { cache: 'no-store' });
       if (!res.ok) throw new Error(`Could not load ${PROGRAM_MANIFEST_URL}`);
       const data = await res.json();
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('Program manifest is empty.');
+      if (Array.isArray(data)) {
+        programs = data.filter((program) => program.path && program.label);
+        supportFiles = [];
+        defaultProgram = FALLBACK_DEFAULT_PROGRAM;
+      } else if (data && Array.isArray(data.programs)) {
+        programs = data.programs.filter((program) => program.path && program.label);
+        supportFiles = (data.supportFiles || []).filter((path) => typeof path === 'string');
+        defaultProgram = data.defaultProgram || FALLBACK_DEFAULT_PROGRAM;
+      } else {
+        throw new Error('Program manifest is invalid.');
       }
-      programs = data.filter((program) => program.path && program.label);
       if (programs.length === 0) {
         throw new Error('Program manifest has no valid entries.');
+      }
+      if (!programs.some((program) => program.path === defaultProgram)) {
+        defaultProgram = programs[0].path;
       }
       renderProgramOptions();
     }
@@ -525,11 +583,13 @@ echo Program finished. Choose another program and click Run.
     }
 
     function loadSavedProgram() {
-      let saved = programs[0]?.path || '';
-      try { saved = localStorage.getItem(PROGRAM_KEY) || saved; } catch {}
+      let saved = defaultProgram;
+      try { saved = localStorage.getItem(PROGRAM_KEY) || defaultProgram; } catch {}
+      if (!programs.some((program) => program.path === saved)) saved = defaultProgram;
       if (!programs.some((program) => program.path === saved)) saved = programs[0]?.path || '';
       if (saved) programSelect.value = saved;
       updateProgramFooter();
+      updateProgramDescription();
     }
 
     function saveProgramChoice() {
@@ -537,17 +597,37 @@ echo Program finished. Choose another program and click Run.
       updateProgramFooter();
     }
 
-    function applyTheme(theme) {
-      html.setAttribute('data-theme', theme);
-      themeSelect.value = theme;
-      try { localStorage.setItem(THEME_KEY, theme); } catch {}
+    function updateSoundButton() {
+      soundBtnLabel.textContent = soundEnabled ? 'Sound On' : 'Sound Off';
+      soundBtn.setAttribute('aria-pressed', soundEnabled ? 'false' : 'true');
     }
 
-    function loadSavedTheme() {
-      let saved = 'green';
-      try { saved = localStorage.getItem(THEME_KEY) || 'green'; } catch {}
-      if (!['green', 'amber', 'mono'].includes(saved)) saved = 'green';
-      applyTheme(saved);
+    function applySoundState() {
+      if (dosPlayer && typeof dosPlayer.setVolume === 'function') {
+        dosPlayer.setVolume(soundEnabled ? 1 : 0);
+      }
+      if (dosCi) {
+        if (soundEnabled) {
+          dosCi.unmute();
+        } else {
+          dosCi.mute();
+        }
+      }
+    }
+
+    function setSoundEnabled(enabled) {
+      soundEnabled = enabled;
+      try { localStorage.setItem(SOUND_KEY, enabled ? 'on' : 'off'); } catch {}
+      updateSoundButton();
+      applySoundState();
+    }
+
+    function loadSavedSound() {
+      try {
+        const saved = localStorage.getItem(SOUND_KEY);
+        if (saved === 'off') soundEnabled = false;
+      } catch {}
+      updateSoundButton();
     }
 
     function getViewMode() {
@@ -619,6 +699,7 @@ echo Program finished. Choose another program and click Run.
 
     async function updateView() {
       saveProgramChoice();
+      updateProgramDescription();
       if (getViewMode() === 'source') {
         await showSourceView();
       } else {
@@ -627,9 +708,9 @@ echo Program finished. Choose another program and click Run.
     }
 
     function loadSavedView() {
-      let saved = 'run';
-      try { saved = localStorage.getItem(VIEW_KEY) || 'run'; } catch {}
-      if (!['run', 'source'].includes(saved)) saved = 'run';
+      let saved = 'source';
+      try { saved = localStorage.getItem(VIEW_KEY) || 'source'; } catch {}
+      if (!['run', 'source'].includes(saved)) saved = 'source';
       setViewMode(saved);
     }
 
@@ -662,6 +743,7 @@ echo Program finished. Choose another program and click Run.
         await dosPlayer.stop();
       } catch {}
       dosPlayer = null;
+      dosCi = null;
       container.replaceChildren();
     }
 
@@ -695,7 +777,12 @@ echo Program finished. Choose another program and click Run.
           countDownStart: 0,
           renderAspect: false,
           fullScreen: false,
-          onEvent: (event) => {
+          volume: soundEnabled ? 1 : 0,
+          onEvent: (event, arg) => {
+            if (event === 'ci-ready' && arg) {
+              dosCi = arg;
+              applySoundState();
+            }
             if (event === 'emu-ready') {
               ensureDosStarted(container);
             }
@@ -711,11 +798,13 @@ echo Program finished. Choose another program and click Run.
       }
     }
 
-    themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
-    programSelect.addEventListener('change', () => {
-      updateView();
+    soundBtn.addEventListener('click', () => {
+      setSoundEnabled(!soundEnabled);
     });
-    readBtn.addEventListener('click', async () => {
+    programSelect.addEventListener('change', async () => {
+      saveProgramChoice();
+      updateProgramDescription();
+      setViewMode('source');
       await showSourceView();
     });
     runBtn.addEventListener('click', async () => {
@@ -723,7 +812,7 @@ echo Program finished. Choose another program and click Run.
     });
 
     async function init() {
-      loadSavedTheme();
+      loadSavedSound();
       loadSavedView();
       try {
         await loadProgramManifest();
