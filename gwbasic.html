@@ -4,15 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GW-BASIC Runner | hevangel.github.io</title>
+  <link href="https://fonts.cdnfonts.com/css/perfect-dos-vga-437" rel="stylesheet" />
+  <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css" />
   <style>
     :root {
-      --bg: #050505;
       --panel: #0b0b0b;
       --frame: #2a2a2a;
       --text: #7CFF7A;
       --glow: rgba(124, 255, 122, 0.45);
       --accent: #7CFF7A;
-      --muted: #9ca3af;
+      --dos-font: "Perfect DOS VGA 437 Win", "Perfect DOS VGA 437", "Fixedsys Excelsior", monospace;
+      --dos-blue: #0000aa;
+      --dos-blue-light: #5555ff;
+      --dos-cyan: #55ffff;
     }
 
     html[data-theme="amber"] {
@@ -42,46 +46,83 @@
     }
 
     header {
-      padding: 1rem;
-      border-bottom: 1px solid #1f1f1f;
-      background: #060606;
+      padding: 0.55rem 0.85rem;
+      border-bottom: 2px solid var(--dos-blue-light);
+      background: var(--dos-blue);
+      color: #ffffff;
+      font-family: var(--dos-font);
+      font-size: 16px;
+      line-height: 16px;
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 2px 0 #000055;
     }
 
     .title {
       margin: 0;
-      font-size: 1rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px var(--glow);
+      font: inherit;
+      color: #ffffff;
+      letter-spacing: 0;
+      text-transform: none;
+      text-shadow: none;
     }
 
     .controls {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.55rem;
       align-items: center;
       flex-wrap: wrap;
     }
 
-    label {
-      font-size: 0.85rem;
-      color: var(--muted);
+    .controls label {
+      font: inherit;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: var(--dos-cyan);
+      text-shadow: none;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
     }
 
     select, button, a.button {
-      background: #0e0e0e;
-      color: var(--text);
-      border: 1px solid #2c2c2c;
-      border-radius: 6px;
-      padding: 0.45rem 0.6rem;
+      background: var(--dos-blue);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 0;
+      padding: 0.2rem 0.45rem;
       font: inherit;
       text-decoration: none;
       cursor: pointer;
-      text-shadow: 0 0 8px var(--glow);
+      text-shadow: none;
+      min-height: 20px;
+    }
+
+    select {
+      padding-right: 1.2rem;
+    }
+
+    button:hover,
+    a.button:hover,
+    select:hover {
+      background: var(--dos-blue-light);
+    }
+
+    button:active,
+    a.button:active {
+      background: #ffffff;
+      color: var(--dos-blue);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
     }
 
     select:focus, button:focus, a.button:focus {
@@ -96,7 +137,7 @@
     }
 
     .crt-frame {
-      width: min(980px, 100%);
+      width: min(calc(640px * 1.35 + 28px), 100%);
       background: var(--panel);
       border: 1px solid var(--frame);
       border-radius: 12px;
@@ -123,6 +164,7 @@
       pointer-events: none;
       mix-blend-mode: soft-light;
       opacity: 0.45;
+      z-index: 2;
     }
 
     .crt-frame::after {
@@ -131,11 +173,18 @@
       inset: 0;
       background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.35) 100%);
       pointer-events: none;
+      z-index: 2;
     }
 
     #container {
-      width: 100%;
-      min-height: 520px;
+      --console-scale: 1.35;
+      --dos-width: 640;
+      --dos-height: 400;
+      --console-width: calc(var(--dos-width) * 1px * var(--console-scale));
+      --console-height: calc(var(--dos-height) * 1px * var(--console-scale));
+      width: var(--console-width);
+      max-width: 100%;
+      height: var(--console-height);
       border: 1px solid #242424;
       border-radius: 8px;
       background: #000;
@@ -145,11 +194,148 @@
       box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
     }
 
+    #container .jsdos-rso,
+    #container .jsdos-rso > div,
+    #container .jsdos-rso .window,
+    #container .jsdos-rso .bg-black,
+    #container .jsdos-rso .flex-grow,
+    #container .dosbox-container,
+    #container iframe {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    #container .jsdos-rso .background-image,
+    #container .jsdos-rso .sidebar {
+      display: none !important;
+    }
+
+    #container .jsdos-rso .window,
+    #container .jsdos-rso .bg-black {
+      position: absolute !important;
+      inset: 0 !important;
+    }
+
+    #container canvas {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    #container .dos-editor {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #0000aa;
+      color: #ffffff;
+      font-family: var(--dos-font);
+      font-size: calc(16px * var(--console-scale) / 1.35);
+      line-height: 1;
+      letter-spacing: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0, 0, 80, 0.55);
+    }
+
+    #container .dos-editor-screen {
+      flex: 1;
+      overflow: auto;
+      padding: 0.35em 0.5em 0.25em;
+      white-space: pre;
+    }
+
+    #container .dos-editor-screen::-webkit-scrollbar {
+      width: 14px;
+      background: #0000aa;
+    }
+
+    #container .dos-editor-screen::-webkit-scrollbar-thumb {
+      background: #5555ff;
+      border: 2px solid #0000aa;
+    }
+
+    #container .dos-editor-prompt,
+    #container .dos-editor-cmd {
+      color: #ffffff;
+    }
+
+    #container .dos-editor-cmd {
+      margin-bottom: 0.15em;
+    }
+
+    #container .dos-line {
+      min-height: 1em;
+    }
+
+    #container .dos-linenum {
+      color: #ffff55;
+      display: inline-block;
+      min-width: 5ch;
+    }
+
+    #container .dos-code {
+      color: #ffffff;
+    }
+
+    #container .dos-editor-tail {
+      margin-top: 0.35em;
+    }
+
+    #container .dos-cursor {
+      display: inline-block;
+      width: 0.62em;
+      height: 1em;
+      margin-left: 0.1em;
+      background: #ffffff;
+      animation: dos-blink 1s step-end infinite;
+      vertical-align: bottom;
+    }
+
+    @keyframes dos-blink {
+      50% { opacity: 0; }
+    }
+
+    #container .dos-editor-status {
+      display: flex;
+      gap: 1.25em;
+      align-items: center;
+      padding: 0.2em 0.55em;
+      border-top: 2px solid #5555ff;
+      background: #0000aa;
+      color: #55ffff;
+      font-size: 0.92em;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    #container .dos-editor-file {
+      margin-left: auto;
+      color: #ffffff;
+      text-transform: none;
+    }
+
+    #container .dos-editor-error {
+      padding: 1rem;
+      color: #ff5555;
+      white-space: pre-wrap;
+    }
+
     footer {
       padding: 0.75rem 1rem 1rem;
       color: #a1a1aa;
       font-size: 0.8rem;
       text-align: center;
+    }
+
+    footer a {
+      color: var(--accent);
     }
 
     code { color: var(--accent); }
@@ -165,29 +351,191 @@
         <option value="amber">Amber phosphor</option>
         <option value="mono">Monochrome white</option>
       </select>
-      <button id="runBtn" type="button">Run Program</button>
+      <label for="program">Program</label>
+      <select id="program" aria-label="GW-BASIC Program" disabled>
+        <option value="">Loading programs...</option>
+      </select>
+      <div class="action-buttons">
+        <button id="readBtn" type="button">Read</button>
+        <button id="runBtn" type="button">Run</button>
+      </div>
       <a class="button" href="/">Back to Timeline</a>
     </div>
   </header>
 
   <main>
     <section class="crt-frame" aria-label="GW-BASIC terminal">
-      <div id="container"></div>
+      <div id="container" aria-live="polite"></div>
     </section>
   </main>
 
   <footer>
-    Placeholder source file: <code>programs/gwbasic-placeholder.bas</code>
+    Source file: <code id="programPath">programs/gwbasic-placeholder.bas</code>.
+    GW-BASIC runs in <a href="https://robhagemans.github.io/pcbasic/">DOSBox</a> via <a href="https://js-dos.com/">js-dos</a>.
   </footer>
 
-  <script src="https://unpkg.com/qb.js"></script>
+  <script src="js/gwbasic-detokenize.js"></script>
+  <script src="js/gwbasic-launcher.js"></script>
+  <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
   <script>
-    const PROGRAM_URL = 'programs/gwbasic-placeholder.bas';
+    const PROGRAM_MANIFEST_URL = 'programs/manifest.json';
+    const GWBASIC_EXE_URL = 'dos/GWBASIC.EXE';
     const THEME_KEY = 'gwbasicTheme';
+    const PROGRAM_KEY = 'gwbasicProgram';
+    const VIEW_KEY = 'gwbasicView';
 
     const html = document.documentElement;
     const themeSelect = document.getElementById('theme');
+    const programSelect = document.getElementById('program');
+    const readBtn = document.getElementById('readBtn');
+    const programPath = document.getElementById('programPath');
     const runBtn = document.getElementById('runBtn');
+    const container = document.getElementById('container');
+
+    let programs = [];
+    let dosPlayer = null;
+    let gwbasicExeBytes = null;
+    let currentMode = 'run';
+    const supportFilePattern = /\.(dat|fil|pic)$/i;
+
+    function setActionButtonsDisabled(disabled) {
+      readBtn.disabled = disabled;
+      runBtn.disabled = disabled;
+    }
+
+    const LAUNCHER_BAS = 'PLAY.BAS';
+
+    function buildLauncherBas(basName) {
+      return GwBasicLauncher.encodeLauncherBas(basName);
+    }
+
+    function buildDosboxConf() {
+      return `[sdl]
+output=surface
+fullscreen=false
+windowresolution=640x400
+autolock=true
+
+[dosbox]
+machine=vga
+memsize=16
+
+[render]
+scaler=none
+aspect=false
+
+[cpu]
+cycles=max
+
+[autoexec]
+@echo off
+mount c .
+c:
+gwbasic.exe ${LAUNCHER_BAS}
+echo.
+echo Program finished. Choose another program and click Run.
+`;
+    }
+
+    async function buildInitFs(programUrl) {
+      const basName = programUrl.split('/').pop();
+      const initFs = [
+        { path: 'GWBASIC.EXE', contents: await ensureGwBasicExe() },
+        { path: LAUNCHER_BAS, contents: buildLauncherBas(basName) },
+        { path: basName, contents: prepareBasForDos(await fetchBytes(programUrl)) },
+      ];
+
+      const supportFiles = programs
+        .map((program) => program.path.split('/').pop())
+        .filter((name) => name !== basName && supportFilePattern.test(name));
+
+      const supportContents = await Promise.all(
+        supportFiles.map(async (name) => ({
+          name,
+          bytes: await fetchBytes(`programs/${name}`),
+        })),
+      );
+
+      for (const file of supportContents) {
+        initFs.push({ path: file.name, contents: file.bytes });
+      }
+
+      return { basName, initFs };
+    }
+
+    function isTokenizedBas(bytes) {
+      // GW-BASIC saved programs start with 0xFF; pass binary through unchanged.
+      return bytes.length > 0 && bytes[0] === 0xFF;
+    }
+
+    function prepareBasForDos(bytes) {
+      if (isTokenizedBas(bytes)) {
+        return bytes;
+      }
+      // ASCII GW-BASIC sources use single-byte CP437; avoid UTF-8 round-trip.
+      const text = new TextDecoder('iso-8859-1').decode(bytes);
+      const normalized = text.replace(/\r?\n/g, '\r\n');
+      return Uint8Array.from(normalized, (ch) => ch.charCodeAt(0));
+    }
+
+    async function fetchBytes(url) {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Could not load ${url}`);
+      return new Uint8Array(await res.arrayBuffer());
+    }
+
+    async function ensureGwBasicExe() {
+      if (!gwbasicExeBytes) {
+        gwbasicExeBytes = await fetchBytes(GWBASIC_EXE_URL);
+      }
+      return new Uint8Array(gwbasicExeBytes);
+    }
+
+    function getSelectedProgramUrl() {
+      return programSelect.value;
+    }
+
+    function renderProgramOptions() {
+      programSelect.replaceChildren();
+      for (const program of programs) {
+        const option = document.createElement('option');
+        option.value = program.path;
+        option.textContent = program.label;
+        programSelect.appendChild(option);
+      }
+      programSelect.disabled = programs.length === 0;
+    }
+
+    async function loadProgramManifest() {
+      const res = await fetch(PROGRAM_MANIFEST_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Could not load ${PROGRAM_MANIFEST_URL}`);
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('Program manifest is empty.');
+      }
+      programs = data.filter((program) => program.path && program.label);
+      if (programs.length === 0) {
+        throw new Error('Program manifest has no valid entries.');
+      }
+      renderProgramOptions();
+    }
+
+    function updateProgramFooter() {
+      programPath.textContent = getSelectedProgramUrl() || PROGRAM_MANIFEST_URL;
+    }
+
+    function loadSavedProgram() {
+      let saved = programs[0]?.path || '';
+      try { saved = localStorage.getItem(PROGRAM_KEY) || saved; } catch {}
+      if (!programs.some((program) => program.path === saved)) saved = programs[0]?.path || '';
+      if (saved) programSelect.value = saved;
+      updateProgramFooter();
+    }
+
+    function saveProgramChoice() {
+      try { localStorage.setItem(PROGRAM_KEY, getSelectedProgramUrl()); } catch {}
+      updateProgramFooter();
+    }
 
     function applyTheme(theme) {
       html.setAttribute('data-theme', theme);
@@ -202,35 +550,197 @@
       applyTheme(saved);
     }
 
-    async function runProgram() {
-      const container = document.getElementById('container');
-      container.innerHTML = '';
+    function getViewMode() {
+      return currentMode;
+    }
+
+    function setViewMode(mode) {
+      currentMode = mode === 'source' ? 'source' : 'run';
+      try { localStorage.setItem(VIEW_KEY, currentMode); } catch {}
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function formatListingLine(line) {
+      const lineNum = line.lineNum == null ? '     ' : String(line.lineNum).padStart(5, ' ');
+      return `<div class="dos-line"><span class="dos-linenum">${escapeHtml(lineNum)}</span><span class="dos-code"> ${escapeHtml(line.text)}</span></div>`;
+    }
+
+    function renderDosEditor(fileName, lines) {
+      const listing = lines.map(formatListingLine).join('');
+      const firstLine = lines[0]?.lineNum ?? 1;
+      container.innerHTML = `
+        <div class="dos-editor" role="document" aria-label="GW-BASIC source listing">
+          <div class="dos-editor-screen">
+            <div class="dos-editor-prompt">OK</div>
+            <div class="dos-editor-cmd">LIST</div>
+            ${listing}
+            <div class="dos-editor-prompt dos-editor-tail">OK<span class="dos-cursor" aria-hidden="true"></span></div>
+          </div>
+          <div class="dos-editor-status">
+            <span>LINE ${firstLine}</span>
+            <span>COL 1</span>
+            <span>INS</span>
+            <span class="dos-editor-file">${escapeHtml(fileName)}</span>
+          </div>
+        </div>`;
+    }
+
+    async function showSourceView() {
+      const programUrl = getSelectedProgramUrl();
+      if (!programUrl) {
+        showError('No program selected.');
+        return;
+      }
+
+      setActionButtonsDisabled(true);
+      await stopDosPlayer();
 
       try {
-        const res = await fetch(PROGRAM_URL, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`Could not load ${PROGRAM_URL}`);
-        const source = await res.text();
+        const fileName = programUrl.split('/').pop();
+        const bytes = await fetchBytes(programUrl);
+        const lines = GwBasicSource.bytesToGwBasicListing(bytes);
+        if (lines.length === 0) {
+          throw new Error('Program file is empty.');
+        }
+        setViewMode('source');
+        renderDosEditor(fileName, lines);
+      } catch (err) {
+        showError(String(err.message || err));
+      } finally {
+        setActionButtonsDisabled(false);
+      }
+    }
 
-        if (!window.QB || typeof window.QB.start !== 'function') {
-          throw new Error('qb.js did not load correctly.');
+    async function updateView() {
+      saveProgramChoice();
+      if (getViewMode() === 'source') {
+        await showSourceView();
+      } else {
+        await runProgram();
+      }
+    }
+
+    function loadSavedView() {
+      let saved = 'run';
+      try { saved = localStorage.getItem(VIEW_KEY) || 'run'; } catch {}
+      if (!['run', 'source'].includes(saved)) saved = 'run';
+      setViewMode(saved);
+    }
+
+    function showError(message) {
+      container.innerHTML = `<pre class="dos-editor-error">${escapeHtml(message)}</pre>`;
+    }
+
+    function ensureDosStarted(mount) {
+      try {
+        const clickPlay = () => {
+          const playButton = mount.querySelector('.play-button');
+          if (!playButton) return false;
+          playButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          return true;
+        };
+
+        if (clickPlay()) return;
+
+        const observer = new MutationObserver(() => {
+          if (clickPlay()) observer.disconnect();
+        });
+        observer.observe(mount, { childList: true, subtree: true });
+        setTimeout(() => observer.disconnect(), 20000);
+      } catch {}
+    }
+
+    async function stopDosPlayer() {
+      if (!dosPlayer) return;
+      try {
+        await dosPlayer.stop();
+      } catch {}
+      dosPlayer = null;
+      container.replaceChildren();
+    }
+
+    async function runProgram() {
+      const programUrl = getSelectedProgramUrl();
+      if (!programUrl) {
+        showError('No program selected.');
+        return;
+      }
+
+      setActionButtonsDisabled(true);
+      container.replaceChildren();
+
+      try {
+        if (typeof Dos !== 'function') {
+          throw new Error('js-dos did not load correctly.');
         }
 
-        window.QB.start({
-          dom: container,
-          code: source,
-          width: 80,
-          height: 25
+        await stopDosPlayer();
+        setViewMode('run');
+
+        const { basName, initFs } = await buildInitFs(programUrl);
+        dosPlayer = Dos(container, {
+          dosboxConf: buildDosboxConf(),
+          initFs,
+          kiosk: true,
+          thinSidebar: true,
+          theme: 'dark',
+          mouseCapture: false,
+          autoStart: true,
+          countDownStart: 0,
+          renderAspect: false,
+          fullScreen: false,
+          onEvent: (event) => {
+            if (event === 'emu-ready') {
+              ensureDosStarted(container);
+            }
+            if (event === 'emu-ready' || event === 'ci-ready' || event === 'bnd-play') {
+              setActionButtonsDisabled(false);
+            }
+          },
         });
+        ensureDosStarted(container);
       } catch (err) {
-        container.innerHTML = `<pre style="padding:1rem;color:#fca5a5">${String(err.message || err)}</pre>`;
+        setActionButtonsDisabled(false);
+        showError(String(err.message || err));
       }
     }
 
     themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
-    runBtn.addEventListener('click', runProgram);
+    programSelect.addEventListener('change', () => {
+      updateView();
+    });
+    readBtn.addEventListener('click', async () => {
+      await showSourceView();
+    });
+    runBtn.addEventListener('click', async () => {
+      await runProgram();
+    });
 
-    loadSavedTheme();
-    runProgram();
+    async function init() {
+      loadSavedTheme();
+      loadSavedView();
+      try {
+        await loadProgramManifest();
+        loadSavedProgram();
+        await updateView();
+      } catch (err) {
+        programSelect.replaceChildren();
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Could not load programs';
+        programSelect.appendChild(option);
+        programSelect.disabled = true;
+        showError(String(err.message || err));
+      }
+    }
+
+    init();
   </script>
 </body>
 </html>
