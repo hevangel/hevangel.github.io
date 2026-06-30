@@ -1,240 +1,1052 @@
-<!doctype html>
+<![CDATA[<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Programming Journal | hevangel.github.io</title>
-  <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #121a33;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --line: #2a355d;
-      --accent: #60a5fa;
-      --accent2: #a78bfa;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>From BASIC to Silicon | hevangel.github.io</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #050505; color: #e8e8e8; overflow-x: hidden; line-height: 1.6;
+  }
 
-    * { box-sizing: border-box; }
+  /* HERO */
+  .hero {
+    position: sticky; top: 0; height: 100vh; width: 100%;
+    overflow: hidden; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; z-index: 1;
+    background:
+      linear-gradient(rgba(10,25,50,0.82), rgba(8,14,28,0.92)),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(96,165,250,0.06) 39px, rgba(96,165,250,0.06) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(96,165,250,0.06) 39px, rgba(96,165,250,0.06) 40px),
+      #08112a;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 25%, rgba(96,165,250,0.10) 0, transparent 9%),
+      radial-gradient(circle at 85% 70%, rgba(52,211,153,0.08) 0, transparent 9%),
+      radial-gradient(circle at 50% 50%, rgba(167,139,250,0.05) 0, transparent 6%);
+  }
+  .hero-schematic { position: absolute; inset: 0; pointer-events: none; opacity: 0.35; }
+  .hero h1 {
+    font-family: "Courier New", Consolas, monospace;
+    font-size: clamp(1.8rem, 5.5vw, 4.2rem);
+    letter-spacing: 0.08em; color: #7dd3fc;
+    text-shadow: 0 0 18px rgba(125,211,252,0.5), 0 0 40px rgba(56,189,248,0.25);
+    z-index: 2; line-height: 1.1;
+  }
+  .hero .underline-bar {
+    width: 0; height: 3px;
+    background: linear-gradient(90deg, #38bdf8, #34d399, #a78bfa);
+    margin: 1rem auto 1.5rem;
+    animation: drawLine 1.8s ease-out 0.3s forwards;
+    box-shadow: 0 0 12px rgba(56,189,248,0.6);
+  }
+  @keyframes drawLine { to { width: min(420px, 70%); } }
+  .hero .tagline {
+    font-family: "Courier New", monospace; color: #94a3b8;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    max-width: 700px; padding: 0 1.5rem; z-index: 2;
+  }
+  .hero .tagline .blink { animation: blink 1s steps(2) infinite; color: #34d399; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero .scroll-cue {
+    position: absolute; bottom: 2rem; font-family: "Courier New", monospace;
+    color: #64748b; font-size: 0.8rem; letter-spacing: 0.2em;
+    text-transform: uppercase; animation: bob 2s ease-in-out infinite; z-index: 2;
+  }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 20% -10%, rgba(96,165,250,0.18), transparent 60%),
-        radial-gradient(1000px 500px at 100% 0%, rgba(167,139,250,0.14), transparent 60%),
-        var(--bg);
-      min-height: 100vh;
-    }
+  /* NAV */
+  .nav-strip {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; justify-content: center; gap: 0.35rem; padding: 0.4rem;
+    background: rgba(5,8,16,0.8); backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(96,165,250,0.2);
+    font-family: "Courier New", monospace; font-size: 0.66rem; flex-wrap: wrap;
+  }
+  .nav-strip a { color: #7dd3fc; text-decoration: none; padding: 0.2rem 0.45rem; border-radius: 4px; transition: background 0.2s; }
+  .nav-strip a:hover { background: rgba(96,165,250,0.15); }
 
-    header {
-      padding: 2.2rem 1rem 1.2rem;
-      text-align: center;
-    }
+  /* SECTION */
+  .section {
+    position: relative; z-index: 2; min-height: 100vh;
+    padding: 4.5rem 1.5rem 3.5rem; overflow: hidden;
+  }
+  .bg-layer {
+    position: absolute; inset: -10% -5%; z-index: -1;
+    background-size: cover; background-position: center; will-change: transform;
+  }
+  .scanlines::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 3px);
+  }
+  .section-grid {
+    width: 100%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;
+    display: grid; grid-template-columns: 280px 1fr; gap: 2.5rem; align-items: start;
+  }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      letter-spacing: 0.02em;
-    }
+  /* LEFT sidebar — sticky */
+  .section-left {
+    position: sticky; top: 70px; text-align: center;
+  }
+  /* Real logo image (devicon) */
+  .big-logo {
+    width: 100%; max-width: 200px; margin: 0 auto 1.2rem;
+    aspect-ratio: 1 / 1;
+    filter: drop-shadow(0 0 22px var(--accent-soft, rgba(96,165,250,0.25)));
+  }
+  .big-logo img {
+    width: 100%; height: 100%; object-fit: contain; display: block;
+    border-radius: 20px; padding: 1.1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--accent-soft, rgba(96,165,250,0.2));
+  }
+  /* Branded wordmark card for languages with no official public logo */
+  .logo-card {
+    width: 100%; max-width: 200px; margin: 0 auto 1.2rem; aspect-ratio: 1 / 1;
+    border-radius: 22px; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.4); border: 2px solid var(--accent, #7dd3fc);
+    box-shadow: inset 0 0 40px var(--accent-soft, rgba(96,165,250,0.15)),
+                0 0 25px var(--accent-soft, rgba(96,165,250,0.2));
+    filter: drop-shadow(0 0 20px var(--accent-soft, rgba(96,165,250,0.2)));
+  }
+  .logo-card .lc-text {
+    font-family: "Courier New", monospace; font-weight: bold;
+    font-size: clamp(1.5rem, 6vw, 2.6rem); color: var(--accent, #7dd3fc);
+    text-shadow: 0 0 18px var(--accent-soft, rgba(96,165,250,0.5));
+    letter-spacing: 0.05em;
+  }
+  .logo-card .lc-sub {
+    font-family: "Courier New", monospace; font-size: 0.6rem; opacity: 0.6;
+    margin-top: 0.4rem; letter-spacing: 0.2em; text-transform: uppercase;
+  }
 
-    .subtitle {
-      margin-top: 0.45rem;
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
+  .section-left .section-title {
+    font-size: clamp(1.3rem, 3.5vw, 1.9rem); margin-bottom: 0.2rem; letter-spacing: 0.04em;
+  }
+  .section-left .section-era {
+    font-family: "Courier New", monospace; font-size: 0.7rem; opacity: 0.7;
+    margin-bottom: 1.3rem; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .launch-link {
+    display: block; width: 100%; padding: 0.8rem 1rem; border-radius: 12px;
+    font-family: "Courier New", monospace; font-size: 0.85rem; font-weight: bold;
+    text-align: center; text-decoration: none; letter-spacing: 0.06em;
+    text-transform: uppercase; border: 2px solid var(--accent, #7dd3fc);
+    color: var(--accent, #7dd3fc); background: rgba(0,0,0,0.3);
+    box-shadow: 0 0 20px var(--accent-soft, rgba(96,165,250,0.15));
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .launch-link:hover {
+    transform: translateY(-2px);
+    background: var(--accent-soft, rgba(96,165,250,0.15));
+    box-shadow: 0 0 30px var(--accent-soft, rgba(96,165,250,0.4));
+  }
+  .launch-link.disabled {
+    opacity: 0.35; cursor: not-allowed; pointer-events: none; border-style: dashed;
+  }
 
-    .timeline-wrap {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 1rem 1rem 3rem;
-    }
+  /* RIGHT — scrolling chunks */
+  .section-right { min-width: 0; }
+  .chunks { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+  .chunk { padding: 1.8rem; border-radius: 14px; backdrop-filter: blur(6px); }
+  .chunk-label {
+    font-family: "Courier New", monospace; font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; opacity: 0.85; margin-bottom: 0.5rem;
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px;
+  }
+  .chunk h3 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); margin-bottom: 0.7rem; }
+  .chunk p { margin-bottom: 0.7rem; }
+  .lang-visual { margin-bottom: 1rem; }
 
-    /* Parallel vertical tracks */
-    .timeline {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(180px, 1fr));
-      gap: 1rem;
-      align-items: start;
-    }
+  /* PER-SECTION THEMES */
+  #gwbasic { background: radial-gradient(ellipse at 50% 30%, #0a1f0a 0%, #050a05 70%); color: #b6ffb6; --accent: #5fff5f; --accent-soft: rgba(95,255,95,0.15); }
+  #gwbasic .section-title { font-family: "Courier New", monospace; color: #5fff5f; text-shadow: 0 0 12px rgba(95,255,95,0.5); }
+  #gwbasic .bg-layer { background: repeating-linear-gradient(0deg, rgba(0,40,0,0.3) 0 2px, transparent 2px 4px); opacity: 0.4; }
+  #gwbasic .chunk { background: rgba(0, 20, 0, 0.65); border: 1px solid rgba(95,255,95,0.25); }
+  #gwbasic .chunk-label { background: rgba(95,255,95,0.15); color: #5fff5f; }
 
-    .track {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 0.8rem;
-      min-height: 65vh;
-      position: relative;
-      overflow: hidden;
-    }
+  #dbase { background: radial-gradient(ellipse at 50% 30%, #1a1a1a 0%, #050505 70%); color: #e8e8e8; --accent: #e8e8e8; --accent-soft: rgba(232,232,232,0.18); }
+  #dbase .section-title { font-family: "Courier New", monospace; color: #e8e8e8; text-shadow: 0 0 12px rgba(232,232,232,0.3); }
+  #dbase .bg-layer { background: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 4px); opacity: 0.4; }
+  #dbase .chunk { background: rgba(25, 25, 25, 0.8); border: 1px solid rgba(232,232,232,0.2); }
+  #dbase .chunk-label { background: rgba(232,232,232,0.12); color: #e8e8e8; }
 
-    .track::before {
-      content: "";
-      position: absolute;
-      left: 16px;
-      top: 12px;
-      bottom: 12px;
-      width: 2px;
-      background: linear-gradient(180deg, var(--accent), transparent 85%);
-      opacity: 0.45;
-    }
+  #shell { background: radial-gradient(ellipse at 50% 30%, #0a0f1a 0%, #04060c 70%); color: #cfd8e3; --accent: #4ad06a; --accent-soft: rgba(74,208,106,0.15); }
+  #shell .section-title { font-family: "Courier New", monospace; color: #4ad06a; text-shadow: 0 0 12px rgba(74,208,106,0.4); }
+  #shell .bg-layer { background: repeating-linear-gradient(0deg, rgba(0,20,40,0.3) 0 2px, transparent 2px 4px); opacity: 0.35; }
+  #shell .chunk { background: rgba(6, 12, 22, 0.8); border: 1px solid rgba(74,208,106,0.2); }
+  #shell .chunk-label { background: rgba(74,208,106,0.15); color: #4ad06a; }
 
-    .track:nth-child(2)::before { background: linear-gradient(180deg, #22d3ee, transparent 85%); }
-    .track:nth-child(3)::before { background: linear-gradient(180deg, #f59e0b, transparent 85%); }
-    .track:nth-child(4)::before { background: linear-gradient(180deg, var(--accent2), transparent 85%); }
+  #tcl { background: radial-gradient(ellipse at 50% 0%, #221032 0%, #0e0618 70%); color: #e8d8f5; --accent: #c084fc; --accent-soft: rgba(192,132,252,0.15); }
+  #tcl .section-title { font-family: "Courier New", monospace; color: #c084fc; text-shadow: 0 0 12px rgba(192,132,252,0.4); }
+  #tcl .bg-layer { background: radial-gradient(circle at 70% 60%, rgba(192,132,252,0.08) 0, transparent 40%); }
+  #tcl .chunk { background: rgba(30, 14, 40, 0.65); border: 1px solid rgba(192,132,252,0.25); }
+  #tcl .chunk-label { background: rgba(192,132,252,0.15); color: #c084fc; }
 
-    .track h2 {
-      margin: 0 0 0.75rem 0;
-      padding-left: 0.75rem;
-      font-size: 1rem;
-    }
+  #cpp { background: radial-gradient(ellipse at 50% 30%, #0a0a2a 0%, #04041a 70%); color: #d8d8f5; --accent: #6ca0ff; --accent-soft: rgba(108,160,255,0.15); }
+  #cpp .section-title { font-family: "Courier New", monospace; color: #6ca0ff; text-shadow: 0 0 12px rgba(108,160,255,0.4); }
+  #cpp .bg-layer { background: repeating-linear-gradient(0deg, rgba(0,0,60,0.3) 0 2px, transparent 2px 4px); opacity: 0.3; }
+  #cpp .chunk { background: rgba(0, 4, 30, 0.8); border: 1px solid rgba(108,160,255,0.25); }
+  #cpp .chunk-label { background: rgba(108,160,255,0.15); color: #6ca0ff; }
 
-    .entry {
-      margin: 0.75rem 0 0.95rem;
-      padding: 0.7rem 0.7rem 0.7rem 0.95rem;
-      margin-left: 0.5rem;
-      border: 1px solid #263156;
-      border-radius: 10px;
-      background: rgba(13, 20, 40, 0.75);
-      position: relative;
-    }
+  #java { background: radial-gradient(ellipse at 50% 0%, #3a1d05 0%, #1a0d02 60%); color: #f5e6d3; --accent: #ed8936; --accent-soft: rgba(237,137,54,0.15); }
+  #java .section-title { font-family: Georgia, "Times New Roman", serif; color: #ed8936; font-style: italic; }
+  #java .bg-layer { background: radial-gradient(circle at 30% 50%, rgba(237,137,54,0.08) 0, transparent 40%), radial-gradient(circle at 70% 80%, rgba(66,153,225,0.08) 0, transparent 40%); }
+  #java .chunk { background: rgba(245, 230, 210, 0.08); border: 1px solid rgba(237,137,54,0.3); }
+  #java .chunk-label { background: rgba(237,137,54,0.2); color: #ed8936; }
 
-    .entry::before {
-      content: "";
-      position: absolute;
-      left: -0.72rem;
-      top: 1rem;
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
-    }
+  #javascript { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #e8e8e8; --accent: #f7df1e; --accent-soft: rgba(247,223,30,0.15); }
+  #javascript .section-title { font-family: "Trebuchet MS", "Lucida Grande", sans-serif; background: linear-gradient(90deg, #f7df1e, #f0a500); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; }
+  #javascript .bg-layer { background: radial-gradient(circle at 20% 80%, rgba(247,223,30,0.06) 0, transparent 35%), radial-gradient(circle at 80% 20%, rgba(96,165,250,0.1) 0, transparent 35%); }
+  #javascript .chunk { background: rgba(22, 33, 62, 0.75); border: 1px solid rgba(247,223,30,0.25); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  #javascript .chunk-label { background: rgba(247,223,30,0.15); color: #f7df1e; }
 
-    .date {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-bottom: 0.25rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
+  #ruby { background: linear-gradient(160deg, #2a0a14 0%, #1a0610 50%, #0e0408 100%); color: #f5d8d8; --accent: #f87171; --accent-soft: rgba(248,113,113,0.15); }
+  #ruby .section-title { font-family: Georgia, serif; color: #ef4444; }
+  #ruby .bg-layer { background: radial-gradient(circle at 30% 40%, rgba(239,68,68,0.1) 0, transparent 40%), radial-gradient(circle at 75% 70%, rgba(251,191,36,0.06) 0, transparent 40%); }
+  #ruby .chunk { background: rgba(40, 8, 16, 0.7); border: 1px solid rgba(239,68,68,0.25); }
+  #ruby .chunk-label { background: rgba(239,68,68,0.15); color: #f87171; }
 
-    .title {
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-      font-size: 0.95rem;
-    }
+  #python { background: linear-gradient(160deg, #0a1424 0%, #0e1a30 50%, #0a1020 100%); color: #e0e8f0; --accent: #4b8bbe; --accent-soft: rgba(75,139,190,0.15); }
+  #python .section-title { font-family: "Segoe UI", Roboto, sans-serif; color: #4b8bbe; text-shadow: 0 0 20px rgba(75,139,190,0.3); }
+  #python .bg-layer { background: radial-gradient(circle at 25% 70%, rgba(75,139,190,0.1) 0, transparent 40%), radial-gradient(circle at 80% 30%, rgba(255,212,59,0.08) 0, transparent 40%); }
+  #python .chunk { background: rgba(14, 26, 48, 0.75); border: 1px solid rgba(75,139,190,0.25); }
+  #python .chunk-label { background: rgba(75,139,190,0.15); color: #4b8bbe; }
 
-    .desc {
-      margin: 0;
-      color: #c7cfdd;
-      font-size: 0.9rem;
-      line-height: 1.35;
-    }
+  #assembly { background: #000; color: #33ff33; --accent: #33ff33; --accent-soft: rgba(51,255,51,0.15); }
+  #assembly .section-title { font-family: "Courier New", monospace; color: #33ff33; text-shadow: 0 0 15px rgba(51,255,51,0.6); }
+  #assembly .bg-layer { background: linear-gradient(rgba(0,20,0,0.5), rgba(0,0,0,0.95)), repeating-linear-gradient(0deg, rgba(0,40,0,0.2) 0 1px, transparent 1px 3px); }
+  #assembly .chunk { background: rgba(0, 15, 0, 0.85); border: 1px solid rgba(51,255,51,0.2); }
+  #assembly .chunk-label { background: rgba(51,255,51,0.15); color: #33ff33; }
 
-    a.button, span.button-disabled {
-      display: inline-block;
-      margin-top: 0.65rem;
-      font-size: 0.84rem;
-      padding: 0.4rem 0.6rem;
-      border-radius: 8px;
-      text-decoration: none;
-      border: 1px solid #33406d;
-    }
+  #vhdl { background: linear-gradient(160deg, #0c1424 0%, #0a0f1c 50%, #060912 100%); color: #c9d7e8; --accent: #58a6ff; --accent-soft: rgba(88,166,255,0.15); }
+  #vhdl .section-title { font-family: "Segoe UI", Roboto, sans-serif; color: #58a6ff; text-shadow: 0 0 20px rgba(88,166,255,0.3); }
+  #vhdl .bg-layer { background: linear-gradient(rgba(10,20,40,0.6), rgba(6,9,18,0.9)), repeating-linear-gradient(0deg, transparent 0 24px, rgba(88,166,255,0.05) 24px 25px), repeating-linear-gradient(90deg, transparent 0 24px, rgba(88,166,255,0.04) 24px 25px); }
+  #vhdl .chunk { background: rgba(12, 20, 36, 0.8); border: 1px solid rgba(88,166,255,0.25); box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+  #vhdl .chunk-label { background: rgba(88,166,255,0.15); color: #58a6ff; }
 
-    a.button {
-      color: #dbeafe;
-      background: rgba(37, 99, 235, 0.25);
-    }
+  #sv { background: linear-gradient(160deg, #081018 0%, #0a1820 50%, #050a10 100%); color: #b8d8e8; --accent: #2dd4bf; --accent-soft: rgba(45,212,191,0.15); }
+  #sv .section-title { font-family: "Segoe UI", Roboto, sans-serif; color: #2dd4bf; text-shadow: 0 0 20px rgba(45,212,191,0.3); }
+  #sv .bg-layer { background: radial-gradient(circle at 60% 30%, rgba(45,212,191,0.08) 0, transparent 40%), radial-gradient(circle at 20% 80%, rgba(96,165,250,0.06) 0, transparent 40%); }
+  #sv .chunk { background: rgba(8, 24, 32, 0.78); border: 1px solid rgba(45,212,191,0.22); }
+  #sv .chunk-label { background: rgba(45,212,191,0.15); color: #2dd4bf; }
 
-    a.button:hover { filter: brightness(1.08); }
+  #specman { background: linear-gradient(160deg, #180a20 0%, #100618 50%, #080410 100%); color: #e8d0f0; --accent: #e879f9; --accent-soft: rgba(232,121,249,0.15); }
+  #specman .section-title { font-family: "Segoe UI", Roboto, sans-serif; color: #e879f9; text-shadow: 0 0 20px rgba(232,121,249,0.3); }
+  #specman .bg-layer { background: radial-gradient(circle at 70% 40%, rgba(232,121,249,0.1) 0, transparent 40%), radial-gradient(circle at 30% 70%, rgba(34,211,238,0.06) 0, transparent 40%); }
+  #specman .chunk { background: rgba(24, 10, 32, 0.78); border: 1px solid rgba(232,121,249,0.22); }
+  #specman .chunk-label { background: rgba(232,121,249,0.15); color: #e879f9; }
 
-    span.button-disabled {
-      color: #9aa3b2;
-      background: rgba(148, 163, 184, 0.12);
-      border-color: #3a455f;
-      cursor: not-allowed;
-    }
+  /* VISUAL MOCKS */
+  .crt-screen { background: #012501; border: 6px solid #1a1a1a; border-radius: 16px; padding: 1.2rem; font-family: "Courier New", monospace; font-size: 0.82rem; color: #5fff5f; box-shadow: inset 0 0 40px rgba(95,255,95,0.15), 0 0 30px rgba(0,0,0,0.6); min-height: 180px; overflow: hidden; }
+  .crt-screen .prompt { color: #ffd25f; } .crt-screen .kw { color: #ff9d5f; } .crt-screen .cursor { display: inline-block; width: 8px; height: 1em; background: #5fff5f; vertical-align: text-bottom; animation: blink 1s steps(2) infinite; }
 
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 0 1rem 2rem;
-      font-size: 0.86rem;
-    }
+  .dbase-screen { background: #0a0a0a; border: 4px solid #2a2a2a; border-radius: 6px; padding: 1rem; font-family: "Courier New", monospace; font-size: 0.8rem; color: #e8e8e8; box-shadow: inset 0 0 30px rgba(232,232,232,0.05); min-height: 180px; }
+  .dbase-screen .bar { background: #e8e8e8; color: #0a0a0a; padding: 0.15rem 0.5rem; font-weight: bold; margin-bottom: 0.6rem; }
+  .dbase-screen table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; }
+  .dbase-screen th, .dbase-screen td { border: 1px solid #555; padding: 0.2rem 0.4rem; text-align: left; font-size: 0.72rem; }
+  .dbase-screen th { background: rgba(232,232,232,0.15); }
 
-    @media (max-width: 980px) {
-      .timeline {
-        grid-template-columns: 1fr 1fr;
-      }
-      .track { min-height: 48vh; }
-    }
+  .unix-term { background: #06080f; border: 1px solid #1c2740; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.5); font-family: "Courier New", monospace; font-size: 0.78rem; }
+  .unix-titlebar { background: #131c2e; padding: 0.35rem 0.7rem; color: #8b9bbf; border-bottom: 1px solid #1c2740; display: flex; justify-content: space-between; }
+  .unix-body { padding: 1rem; color: #cfd8e3; min-height: 180px; }
+  .unix-body .uuser { color: #4ad06a; } .unix-body .uhost { color: #4ad0d0; } .unix-body .upath { color: #d0c14a; }
+  .unix-body .ucom { color: #7d8590; } .unix-body .uok { color: #4ad06a; }
 
-    @media (max-width: 620px) {
-      .timeline {
-        grid-template-columns: 1fr;
-      }
-      .track { min-height: auto; }
-    }
-  </style>
+  .tk-window { background: #b8b8c0; border: 2px solid #888; border-top-color: #f0f0f0; border-left-color: #f0f0f0; border-radius: 3px; box-shadow: 4px 4px 0 rgba(0,0,0,0.3); font-family: "Courier New", monospace; font-size: 0.78rem; color: #000; overflow: hidden; }
+  .tk-titlebar { background: #6a5acd; color: #fff; padding: 0.3rem 0.6rem; font-weight: bold; }
+  .tk-body { padding: 1rem; }
+  .tk-canvas { background: #fff; border: 2px inset #999; height: 80px; margin-bottom: 0.7rem; }
+  .tk-btn { display: inline-block; background: #d0d0d8; border: 2px solid; border-color: #fff #555 #555 #fff; padding: 0.25rem 0.8rem; margin-right: 0.4rem; color: #000; }
+
+  .tc-ide { background: #00007b; border-radius: 4px; overflow: hidden; font-family: "Courier New", monospace; font-size: 0.76rem; color: #d8d8f5; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+  .tc-menubar { background: #00007b; color: #fff; padding: 0.2rem 0.5rem; border-bottom: 1px solid #aaaaff; display: flex; gap: 0.9rem; }
+  .tc-edit { background: #00007b; color: #ffffd0; padding: 0.8rem 1rem; min-height: 160px; }
+  .tc-edit .cpp-kw { color: #ff8cff; } .tc-edit .cpp-type { color: #5fff5f; } .tc-edit .cpp-com { color: #8888dd; } .tc-edit .cpp-num { color: #ffff5f; }
+  .tc-statusbar { background: #5555ff; color: #fff; padding: 0.15rem 0.5rem; font-size: 0.66rem; display: flex; justify-content: space-between; }
+
+  .applet-window { background: #d4d0c8; border: 2px solid #808080; border-top-color: #fff; border-left-color: #fff; border-radius: 2px; box-shadow: 3px 3px 0 rgba(0,0,0,0.3); overflow: hidden; color: #000; font-family: "MS Sans Serif", Tahoma, sans-serif; font-size: 0.78rem; }
+  .applet-titlebar { background: linear-gradient(90deg, #00087a, #3556c9); color: #fff; padding: 0.3rem 0.6rem; display: flex; justify-content: space-between; font-weight: bold; }
+  .applet-menubar { background: #d4d0c8; border-bottom: 1px solid #808080; padding: 0.2rem 0.5rem; display: flex; gap: 0.8rem; font-size: 0.72rem; }
+  .applet-menubar span { text-decoration: underline; }
+  .applet-body { background: #f0f0f0; padding: 1rem; min-height: 120px; font-family: "Courier New", monospace; color: #2a4a8a; }
+  .applet-statusbar { background: #d4d0c8; border-top: 1px solid #fff; padding: 0.2rem 0.5rem; font-size: 0.7rem; color: #404040; display: flex; justify-content: space-between; }
+
+  .browser-window { background: #2a2a3a; border-radius: 10px 10px 0 0; overflow: hidden; border: 1px solid #444; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+  .browser-chrome { background: #3a3a4a; padding: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+  .browser-chrome .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .browser-chrome .r { background: #ff5f56; } .browser-chrome .y { background: #ffbd2e; } .browser-chrome .g { background: #27c93f; }
+  .browser-url { flex: 1; background: #1e1e2e; color: #8be9fd; font-family: "Courier New", monospace; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 6px; margin-left: 0.5rem; }
+  .code-editor { background: #1e1e2e; color: #e8e8e8; font-family: "Courier New", "Fira Code", monospace; font-size: 0.8rem; padding: 1rem; line-height: 1.5; }
+  .code-editor .js-kw { color: #ff79c6; } .code-editor .js-fn { color: #50fa7b; } .code-editor .js-str { color: #f1fa8c; } .code-editor .js-com { color: #6272a4; } .code-editor .js-num { color: #bd93f9; }
+  .code-editor .gutter { color: #444; user-select: none; margin-right: 1rem; display: inline-block; width: 1.5rem; text-align: right; }
+
+  .ruby-term { background: #14060a; border: 1px solid #4a1a22; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.5); font-family: "Courier New", monospace; font-size: 0.78rem; }
+  .ruby-titlebar { background: #2a0a14; padding: 0.35rem 0.7rem; color: #f87171; border-bottom: 1px solid #4a1a22; }
+  .ruby-body { padding: 1rem; color: #f5d8d8; min-height: 180px; }
+  .ruby-body .rb-prompt { color: #fbbf24; } .ruby-body .rb-sym { color: #f472b6; } .ruby-body .rb-str { color: #86efac; } .ruby-body .rb-kw { color: #f87171; }
+
+  .py-repl { background: #0a1424; border: 1px solid #1e3a5a; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.5); font-family: "Courier New", monospace; font-size: 0.78rem; }
+  .py-titlebar { background: #0e1a30; padding: 0.35rem 0.7rem; color: #ffd43b; border-bottom: 1px solid #1e3a5a; display: flex; justify-content: space-between; }
+  .py-body { padding: 1rem; color: #e0e8f0; min-height: 180px; }
+  .py-body .py-prompt { color: #4b8bbe; } .py-body .py-kw { color: #ff7b72; } .py-body .py-str { color: #a5d6ff; } .py-body .py-fn { color: #d2a8ff; } .py-body .py-com { color: #6e7681; } .py-body .py-num { color: #79c0ff; }
+
+  .asm-screen { background: #000; border: 1px solid rgba(51,255,51,0.3); border-radius: 4px; padding: 1rem; font-family: "Courier New", monospace; font-size: 0.78rem; color: #33ff33; min-height: 180px; }
+  .asm-screen .addr { color: #ff3333; } .asm-screen .hex { color: #ffff33; } .asm-screen .reg { color: #33ffff; } .asm-screen .cmt { color: #888; }
+
+  .waveform-viewer { background: #0a1020; border: 1px solid #1e2a44; border-radius: 6px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.5); font-family: "Courier New", monospace; font-size: 0.75rem; }
+  .wave-toolbar { background: linear-gradient(180deg, #1a2338, #121a2e); padding: 0.4rem 0.7rem; border-bottom: 1px solid #2a3556; display: flex; justify-content: space-between; align-items: center; color: #8b9bbf; }
+  .wave-toolbar .btn { background: #1e2a44; padding: 0.15rem 0.5rem; border-radius: 3px; border: 1px solid #2e3a56; color: #a0b4d8; }
+  .wave-body { display: grid; grid-template-columns: 120px 1fr; }
+  .wave-names { background: #0d1426; border-right: 1px solid #1e2a44; padding: 0.5rem; }
+  .wave-names div { padding: 0.3rem 0; color: #c9d7e8; }
+  .wave-traces { position: relative; background: repeating-linear-gradient(90deg, transparent 0 47px, rgba(88,166,255,0.08) 47px 48px); padding: 0.5rem; }
+  .wave-traces svg { width: 100%; height: 140px; display: block; }
+  .wave-statusbar { background: #0d1426; border-top: 1px solid #1e2a44; padding: 0.3rem 0.7rem; color: #58a6ff; font-size: 0.7rem; display: flex; justify-content: space-between; }
+
+  .sv-ide { background: #0a141c; border: 1px solid #1a2a34; border-radius: 6px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.5); font-family: "Courier New", monospace; font-size: 0.74rem; }
+  .sv-ide .sv-tabs { background: #0d1820; padding: 0.3rem 0.5rem; border-bottom: 1px solid #1a2a34; display: flex; gap: 0.4rem; }
+  .sv-ide .sv-tab { padding: 0.2rem 0.6rem; background: #1a2a34; color: #2dd4bf; border-radius: 3px 3px 0 0; }
+  .sv-ide .sv-code { padding: 1rem; color: #cfe8e0; min-height: 180px; }
+  .sv-kw { color: #ff79c6; } .sv-type { color: #2dd4bf; } .sv-str { color: #a5d6ff; } .sv-com { color: #5a7080; } .sv-cov { color: #fbbf24; }
+
+  .e-ide { background: #14081c; border: 1px solid #2a1a34; border-radius: 6px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.5); font-family: "Courier New", monospace; font-size: 0.74rem; }
+  .e-titlebar { background: #1c0e26; padding: 0.35rem 0.7rem; color: #e879f9; border-bottom: 1px solid #2a1a34; display: flex; justify-content: space-between; }
+  .e-body { padding: 1rem; color: #e8d0f0; min-height: 180px; }
+  .e-kw { color: #ff79c6; } .e-type { color: #22d3ee; } .e-str { color: #a5d6ff; } .e-com { color: #705a7a; } .e-cov { color: #fbbf24; }
+
+  /* FOOTER & DIVIDER */
+  footer { position: relative; z-index: 2; background: #050810; text-align: center; padding: 3rem 1.5rem 2rem; color: #64748b; font-family: "Courier New", monospace; font-size: 0.82rem; border-top: 1px solid rgba(96,165,250,0.15); }
+  footer a { color: #7dd3fc; text-decoration: none; }
+  .era-divider { position: relative; z-index: 2; text-align: center; padding: 1.5rem; font-family: "Courier New", monospace; font-size: 0.8rem; color: #475569; letter-spacing: 0.3em; background: #050810; }
+  .era-divider::before, .era-divider::after { content: ""; display: inline-block; width: 60px; height: 1px; background: #2a3556; vertical-align: middle; margin: 0 1rem; }
+
+  @media (max-width: 860px) {
+    .section-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .section-left { position: relative; top: 0; display: flex; flex-direction: column; align-items: center; }
+    .big-logo, .logo-card { max-width: 150px; }
+  }
+  @media (max-width: 600px) {
+    .section { padding: 4rem 1rem 3rem; }
+    .chunk { padding: 1.3rem; }
+    .nav-strip { font-size: 0.58rem; gap: 0.2rem; }
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>My Programming Journal</h1>
-    <div class="subtitle">Chronological tracks (parallel scrolling layout) • Start with four sections</div>
-  </header>
 
-  <main class="timeline-wrap">
-    <section class="timeline" aria-label="Programming journal timeline">
-      <!-- 1) GW-BASIC -->
-      <article class="track">
-        <h2>GW-BASIC</h2>
-        <div class="entry">
-          <div class="date">First language</div>
-          <div class="title">Getting started with GW-BASIC</div>
-          <p class="desc">Foundational experiments, loops, and small console programs.</p>
-          <a class="button" href="/gwbasic.html">Open GW-BASIC Runner</a>
+<nav class="nav-strip">
+  <a href="#hero">TOP</a>
+  <a href="#gwbasic">BASIC</a>
+  <a href="#dbase">dBASE</a>
+  <a href="#shell">SHELL</a>
+  <a href="#tcl">TCL</a>
+  <a href="#cpp">C++</a>
+  <a href="#java">JAVA</a>
+  <a href="#javascript">JS</a>
+  <a href="#ruby">RUBY</a>
+  <a href="#python">PYTHON</a>
+  <a href="#assembly">ASM</a>
+  <a href="#vhdl">VHDL</a>
+  <a href="#sv">SV</a>
+  <a href="#specman">e</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <svg class="hero-schematic" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <g fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.5">
+      <rect x="120" y="180" width="140" height="80" />
+      <rect x="940" y="520" width="160" height="90" />
+      <rect x="500" y="620" width="100" height="60" />
+      <line x1="140" y1="180" x2="140" y2="150" /><line x1="160" y1="180" x2="160" y2="150" />
+      <line x1="180" y1="180" x2="180" y2="150" /><line x1="200" y1="180" x2="200" y2="150" />
+      <line x1="220" y1="180" x2="220" y2="150" /><line x1="240" y1="180" x2="240" y2="150" />
+      <path d="M190 150 L190 100 L600 100 L600 620 L520 620" />
+      <path d="M950 520 L950 480 L700 480" />
+      <path d="M950 610 L950 660 L620 660 L620 680" />
+    </g>
+    <text x="170" y="225" fill="#38bdf8" font-family="monospace" font-size="11" opacity="0.6">CPU CORE</text>
+    <text x="970" y="570" fill="#38bdf8" font-family="monospace" font-size="11" opacity="0.6">CACHE</text>
+    <text x="525" y="655" fill="#38bdf8" font-family="monospace" font-size="9" opacity="0.6">PLL</text>
+  </svg>
+  <h1>FROM BASIC<br>TO SILICON</h1>
+  <div class="underline-bar"></div>
+  <p class="tagline">
+    One engineer's lifelong journey through countless languages —<br>
+    from green phosphor terminals to building the silicon that<br>
+    powers the world's most powerful AI.<span class="blink">_</span>
+  </p>
+  <div class="scroll-cue">▼ scroll to boot ▼</div>
+</section>
+
+<!-- =========================== 1 GW-BASIC =========================== -->
+<section class="section scanlines" id="gwbasic">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://ih1.redbubble.net/image.4070246215.9501/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="BASIC logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>GW</span><span class=\'lc-sub\'>BASIC</span></div>'" />
+      </div>
+      <h2 class="section-title">GW-BASIC</h2>
+      <div class="section-era">circa 1983 · MS-DOS</div>
+      <a class="launch-link" href="/gwbasic.html">▶ Launch Runner</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="crt-screen">
+            <span class="kw">10</span> PRINT "HELLO WORLD"<br>
+            <span class="kw">20</span> FOR I=1 TO 10<br>
+            <span class="kw">30</span> PRINT I; I*I<br>
+            <span class="kw">40</span> NEXT I<br>
+            <span class="kw">50</span> GOTO 10<br><br>
+            <span class="prompt">Ok</span><br><span class="prompt">RUN</span><br>
+            HELLO WORLD<br>1&nbsp;&nbsp;1<br>2&nbsp;&nbsp;4<br>3&nbsp;&nbsp;9<span class="cursor"></span>
+          </div></div>
+          <h3>Where It All Began</h3>
+          <p>GW-BASIC — bundled with IBM PCs and MS-DOS — was the very first screen that ever blinked back at an entire generation. Descended from Altair BASIC (1975), it was an <em>interpreter</em>: type, RUN, obey. No compiler, no build step. It taught millions that a computer was a thing you could <strong>talk to</strong>.</p>
         </div>
-      </article>
-
-      <!-- 2) Pascal -->
-      <article class="track">
-        <h2>Pascal</h2>
-        <div class="entry">
-          <div class="date">Next step</div>
-          <div class="title">Structured programming era</div>
-          <p class="desc">Types, procedures, and stronger program structure.</p>
-          <span class="button-disabled">Page coming soon</span>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>The Immediate-Feedback Machine</h3>
+          <p>GW-BASIC's genius was <strong>instant gratification</strong>. Line numbers were the file system, the version control, the whole mental model. <code>GOTO</code>, <code>GOSUB</code>, <code>PEEK</code>/<code>POKE</code>: raw, unfiltered control over the hardware, with built-in graphics and sound. A teenager alone in a bedroom could make a game and watch it work in seconds.</p>
         </div>
-      </article>
-
-<!-- 3) dBASE IV+ -->
-      <article class="track">
-        <h2>dBASE IV+</h2>
-        <div class="entry">
-          <div class="date">Database phase</div>
-          <div class="title">Data-driven workflows</div>
-          <p class="desc">Forms, records, and report-oriented app building.</p>
-          <a class="button" href="/dbase.html">Open dBASE III+ Runner</a>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>The First Spark</h3>
+          <p>GW-BASIC was my "hello, world" — the moment a glowing green screen became a <em>canvas</em>. Today I design chips where a signal flip takes weeks to verify, but the instinct is the same: <em>formulate, run, read the output, iterate</em>. The loop times got longer, the dopamine hit of "it works!" was forged right here.</p>
         </div>
-      </article>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <!-- 4) Placeholder -->
-      <article class="track">
-        <h2>Section 4</h2>
-        <div class="entry">
-          <div class="date">Reserved</div>
-          <div class="title">Future language / era</div>
-          <p class="desc">Keep this section as a placeholder for the next chapter.</p>
-          <span class="button-disabled">Page coming soon</span>
+<div class="era-divider"><span>··· the prompt evolves ···</span></div>
+
+<!-- =========================== 2 dBASE =========================== -->
+<section class="section scanlines" id="dbase">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo" style="filter: drop-shadow(0 0 22px rgba(232,232,232,0.25));">
+        <img style="filter: brightness(0) invert(1);" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Ashton-Tate_logo.svg/250px-Ashton-Tate_logo.svg.png" alt="Ashton-Tate logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>dBASE</span><span class=\'lc-sub\'>III+</span></div>'" />
+      </div>
+      <h2 class="section-title">dBASE III+</h2>
+      <div class="section-era">circa 1988 · Ashton-Tate</div>
+      <a class="launch-link" href="/dbase.html">▶ Launch Runner</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="dbase-screen">
+            <div class="bar">dBASE III+ · Command Mode</div>
+            . USE STUDENT<br>. LIST NEXT 5<br>
+            <table>
+              <tr><th>Record#</th><th>NAME</th><th>GRADE</th></tr>
+              <tr><td>1</td><td>HEVANGEL</td><td>A</td></tr>
+              <tr><td>2</td><td>ALAN</td><td>B+</td></tr>
+              <tr><td>3</td><td>GRACE</td><td>A</td></tr>
+            </table>
+            ._ <span style="animation:blink 1s steps(2) infinite;">█</span>
+          </div></div>
+          <h3>The Data Awakens</h3>
+          <p>dBASE was the <strong>killer app</strong> of the pre-Windows business world. Born as Vulcan (1978), it turned the IBM PC into a <em>database</em> machine. Its terse dot-prompt language shipped real accounting and inventory systems. It quietly invented the <em>4GL</em> — describe <em>what</em> you want the data to do, not <em>how</em>.</p>
         </div>
-      </article>
-    </section>
-  </main>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Persistent Records & the Dot Prompt</h3>
+          <p>A <code>.DBF</code> file was a real table on disk — fields, types, records. You could index it and query it relationally decades before SQL was common on PCs. The xBase dialect (FoxPro, Clipper) outlived Ashton-Tate itself.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Learning That Data Has Shape</h3>
+          <p>dBASE taught me that programming isn't only about <em>logic</em> — it's about <em>information</em>. A record has a schema, a lifecycle; you index for speed. Today, when I debug cache-coherency bugs that span firmware, OS, and silicon, every one is at heart a <em>data integrity</em> problem. I started asking "what is canonical?" at an amber dot prompt.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    © Programming Journal • hevangel.github.io
-  </footer>
+<div class="era-divider"><span>··· enter the Unix shell ···</span></div>
+
+<!-- =========================== 3 Shell / tcsh =========================== -->
+<section class="section scanlines" id="shell">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" alt="Shell (bash/tcsh) logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>$_</span></div>'" />
+      </div>
+      <h2 class="section-title">Shell · tcsh</h2>
+      <div class="section-era">circa 1989 · Berkeley Unix</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="unix-term">
+            <div class="unix-titlebar"><span>hevan@vax — /bin/tcsh</span><span>— □ ✕</span></div>
+            <div class="unix-body">
+              <span class="uuser">hevan</span>@<span class="uhost">vax</span>:<span class="upath">~/tapeout</span>% <span style="color:#cfd8e3;">ls -la *.v</span><br>
+              -rw-r--r--&nbsp; 1 hevan  4096 top.v<br>
+              <span class="uuser">hevan</span>@<span class="uhost">vax</span>:<span class="upath">~/tapeout</span>% <span style="color:#cfd8e3;">make sim | tee run.log</span><br>
+              <span class="ucom"># compiling...</span><br>
+              <span class="uok">PASS</span> — 1024 vectors, 0 fails<br>
+              <span class="uuser">hevan</span>@<span class="uhost">vax</span>:<span class="upath">~/tapeout</span>% <span style="animation:blink 1s steps(2) infinite;">█</span>
+            </div>
+          </div></div>
+          <h3>The Pipe & the Filter</h3>
+          <p>The Unix shell — <code>sh</code>, <code>csh</code>, and especially <strong>tcsh</strong> on Berkeley Unix — is the original "glue language." Chain tiny tools with <code>|</code>: <code>grep</code>, <code>sed</code>, <code>awk</code>, <code>sort</code>. Composability as a philosophy. tcsh added filename completion, history editing, and job control.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Composable Automation</h3>
+          <p>The shell's superpower is <strong>orthogonal composition</strong>: every tool reads stdin and writes stdout, so any pipeline <em>just works</em>. It is the duct tape that has held engineering together for fifty years.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Automation as a Reflex</h3>
+          <p>The shell is where I learned that <strong>if you do it twice, script it</strong>. Every chip project I run is stitched together by tcsh and Make — nightly regressions, coverage merges, log scraping. The AI chips I help build are born inside shell scripts that kick off a thousand simulations and report back in green <code>PASS</code>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· the GUI workstation ···</span></div>
+
+<!-- =========================== 4 Tcl/Tk =========================== -->
+<section class="section" id="tcl">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Tcl.svg/250px-Tcl.svg.png" alt="Tcl logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Tcl</span></div>'" />
+      </div>
+      <h2 class="section-title">Tcl / Tk</h2>
+      <div class="section-era">circa 1988 · UC Berkeley</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="tk-window">
+            <div class="tk-titlebar">♦ waveform_panel.tcl</div>
+            <div class="tk-body">
+              <div class="tk-canvas">
+                <svg viewBox="0 0 240 70" style="width:100%;height:100%;">
+                  <path d="M10,35 L40,35 L40,15 L80,15 L80,55 L120,55 L120,25 L160,25 L160,45 L210,45" stroke="#6a5acd" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+              <span class="tk-btn">Run</span><span class="tk-btn">Step</span><span class="tk-btn">Quit</span>
+            </div>
+          </div></div>
+          <h3>Embeddable Glue</h3>
+          <p>Tcl — the <em>Tool Command Language</em> — was created by John Ousterhout at Berkeley as a tiny, embeddable scripting engine. Pair it with <strong>Tk</strong>, its GUI toolkit, and you could build a cross-platform windowed app in a dozen lines. EDA vendors <em>loved</em> it — the command consoles inside virtually every chip-design tool speak Tcl.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>The Language Inside the Tools</h3>
+          <p>Tcl's specialty is <strong>being hosted</strong>. "Everything is a command, everything is a string." Minimalist enough to drive a tool, flexible enough to script complex flows. Tk proved GUIs didn't require C++ and a week of boilerplate.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Driving the EDA Engines</h3>
+          <p>Tcl is the <strong>common tongue of chip design</strong>. Whether I'm scripting synthesis or automating place-and-route, the console is almost always Tcl. It taught me that a powerful tool is really a <em>programmable</em> tool — the best engineers don't click buttons, they script the engine. Every tapeout I've shipped has Tcl threading through its spine.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· systems programming arrives ···</span></div>
+
+<!-- =========================== 5 C++ =========================== -->
+<section class="section scanlines" id="cpp">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++ logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>C++</span></div>'" />
+      </div>
+      <h2 class="section-title">C++</h2>
+      <div class="section-era">circa 1990 · Stroustrup</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="tc-ide">
+            <div class="tc-menubar"><span>File</span><span>Edit</span><span>Run</span><span>Compile</span><span>Debug</span></div>
+            <div class="tc-edit">
+              <span class="cpp-com">// fibonacci.cpp</span><br>
+              <span class="cpp-kw">#include</span> <iostream><br><br>
+              <span class="cpp-type">int</span> fib(<span class="cpp-type">int</span> n) {<br>
+              &nbsp;&nbsp;<span class="cpp-kw">return</span> n < <span class="cpp-num">2</span> ? n : fib(n-<span class="cpp-num">1</span>)+fib(n-<span class="cpp-num">2</span>);<br>
+              }
+            </div>
+            <div class="tc-statusbar"><span>● Ready</span><span>Line 4  Col 18</span></div>
+          </div></div>
+          <h3>C with Classes</h3>
+          <p>C++ began in 1979 as "C with Classes" and grew into the heavyweight champion of systems programming. It gave C a layer of <strong>object orientation, templates, and RAII</strong>. Browsers, databases, game engines, OSes — and crucially, <em>EDA tools themselves</em> — are written in C++. It is the bedrock language of performance.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Zero-Cost Abstraction</h3>
+          <p>C++ promises towering abstractions that compile down to code as tight as hand-written C. <strong>"You don't pay for what you don't use."</strong> It's the language for when performance is non-negotiable.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Building the Tools That Build Chips</h3>
+          <p>The simulators and synthesizers I use every day — the tools that model a billion-transistor chip — are themselves C++ programs. Writing C++ taught me to design fast, layered systems, which is exactly the mindset RTL demands. When I optimize a datapath for timing, I'm thinking in the same cache-lines-and-throughput mental model C++ beat into me.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· the network arrives ···</span></div>
+
+<!-- =========================== 6 Java =========================== -->
+<section class="section" id="java">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Java</span></div>'" />
+      </div>
+      <h2 class="section-title">Java</h2>
+      <div class="section-era">circa 1995 · Sun Microsystems</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="applet-window">
+            <div class="applet-titlebar"><span>☕ HelloWorld — Applet Viewer</span><span>— □ ✕</span></div>
+            <div class="applet-menubar"><span>File</span><span>Edit</span><span>Run</span><span>Help</span></div>
+            <div class="applet-body">
+              <span style="color:#aa5500;">public class</span> Hello <span style="color:#aa5500;">extends</span> Applet {<br>
+              &nbsp;&nbsp;<span style="color:#aa5500;">public void</span> paint(Graphics g) {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;g.drawString(<span style="color:#00aa00;">"Hello, Web!"</span>, 50, 25);<br>
+              &nbsp;&nbsp;}<br>}
+            </div>
+            <div class="applet-statusbar"><span>Applet started</span><span>JVM 1.0 · 16 MB</span></div>
+          </div></div>
+          <h3>Write Once, Run Anywhere</h3>
+          <p>Java landed in 1995 like a meteor. Repackaged for the Web with mascot <strong>Duke</strong> and a steaming coffee cup, its pitch was almost religious: compile to a virtual machine and run on <em>any</em> device. Applets put code inside the browser; then Java quietly conquered the <strong>server</strong>, where it rules enterprise back-ends to this day.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>The JVM & Garbage Collection</h3>
+          <p>Java's gifts were the <strong>JVM</strong> — abstracting the OS, pioneering JIT — and <strong>automatic garbage collection</strong> as a default. Spring, Hadoop, Kafka, Android all run on its descendants.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Abstraction as Leverage</h3>
+          <p>Java taught me that <strong>abstraction is leverage, not laziness</strong>. GC freed my brain to think about <em>behavior</em>, not <em>memory</em> — exactly the headroom I need to reason about a billion-transistor chip. But Java also taught me the <em>cost</em> of abstraction: every layer hides latency. In silicon, those hidden costs are nanoseconds and watts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· the browser takes over ···</span></div>
+
+<!-- =========================== 7 JavaScript =========================== -->
+<section class="section" id="javascript">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>JS</span></div>'" />
+      </div>
+      <h2 class="section-title">JavaScript</h2>
+      <div class="section-era">circa 2005 · Web 2.0</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="browser-window">
+            <div class="browser-chrome">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="browser-url">https://dev.local/app.js</span>
+            </div>
+            <div class="code-editor">
+              <span class="gutter">1</span><span class="js-com">// the web woke up</span><br>
+              <span class="gutter">2</span><span class="js-kw">async function</span> <span class="js-fn">fetchUser</span>(id) {<br>
+              <span class="gutter">3</span>&nbsp;&nbsp;<span class="js-kw">const</span> res = <span class="js-kw">await</span> fetch(<span class="js-str">`/api/u/${id}`</span>);<br>
+              <span class="gutter">4</span>&nbsp;&nbsp;<span class="js-kw">return</span> res.<span class="js-fn">json</span>();<br>
+              <span class="gutter">5</span>}<br>
+              <span class="gutter">6</span><span class="js-fn">fetchUser</span>(<span class="js-num">42</span>).<span class="js-fn">then</span>(u => console.<span class="js-fn">log</span>(u));
+            </div>
+          </div></div>
+          <h3>Brendan Eich's Ten Days</h3>
+          <p>JavaScript was written in <strong>ten days</strong> in 1995 — originally Mocha, renamed to ride Java's coattails, with nothing to do with Java. A joke for a decade, then <em>Ajax</em> and Gmail proved the browser was a real platform. With Node.js it escaped the browser and became the <strong>most widely deployed runtime in history</strong>.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>The Event Loop & Universal Reach</h3>
+          <p>JS's superpower is its <strong>single-threaded event loop</strong> — a model built for <em>waiting</em>. Its other superpower is <strong>ubiquity</strong>: every device has a JS engine. One language, front to back.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Thinking in Events, End to End</h3>
+          <p>JS rewired my brain to think in <strong>events and reactions</strong>: a promise resolves, a clock edge arrives, a signal settles — the next stage reacts. It also made me a full-stack generalist. Holding the speed of the web and the rigor of silicon in one head keeps me humble — and this very page is hand-written JS.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· elegance and developer happiness ···</span></div>
+
+<!-- =========================== 8 Ruby =========================== -->
+<section class="section" id="ruby">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg" alt="Ruby logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Ruby</span></div>'" />
+      </div>
+      <h2 class="section-title">Ruby</h2>
+      <div class="section-era">circa 2005 · Matz</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="ruby-term">
+            <div class="ruby-titlebar">◆ irb — interactive ruby</div>
+            <div class="ruby-body">
+              <span class="rb-prompt">irb></span> <span style="color:#f5d8d8;">[1,2,3].map { |n| n**2 }</span><br>
+              => [1, 4, 9]<br>
+              <span class="rb-prompt">irb></span> <span style="color:#f5d8d8;">:silicon</span>.class<br>
+              => Symbol<br>
+              <span class="rb-prompt">irb></span> <span style="color:#f5d8d8;">class Chip</span><br>
+              <span class="rb-prompt">irb></span>&nbsp;&nbsp;&nbsp;<span class="rb-kw">attr_accessor</span> <span class="rb-sym">:name</span><br>
+              <span class="rb-prompt">irb></span> <span style="animation:blink 1s steps(2) infinite;">█</span>
+            </div>
+          </div></div>
+          <h3>Optimized for Joy</h3>
+          <p>Yukihiro "Matz" Matsumoto designed Ruby with one goal: <strong>programmer happiness</strong>. Everything is an object. Blocks, closures, and a syntax that reads almost like English. When <strong>Rails</strong> arrived in 2004, Ruby became the fastest way to ship a web app, and a generation of startups was born on it.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Expressiveness & DSLs</h3>
+          <p>Ruby's specialty is <strong>malleability</strong> — you can bend its syntax into a domain-specific language. Rails reads like declarative poetry: <code>has_many :comments</code>. It prioritized developer <em>flow</em> over machine speed, a radical idea at the time.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>The Value of Beauty</h3>
+          <p>Ruby taught me that <strong>code can be beautiful, and beauty matters</strong>. After years of terse C and rigid Java, Ruby's expressiveness felt like oxygen. It trained me to value readability and developer experience — principles I now apply to RTL testbenches and build scripts. Elegance is a form of engineering discipline, not vanity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· the era of glue and data ···</span></div>
+
+<!-- =========================== 9 Python =========================== -->
+<section class="section" id="python">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Py</span></div>'" />
+      </div>
+      <h2 class="section-title">Python</h2>
+      <div class="section-era">circa 1991 · Guido van Rossum</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="py-repl">
+            <div class="py-titlebar"><span>🐍 python3 — REPL</span><span>3.12.0</span></div>
+            <div class="py-body">
+              <span class="py-prompt">>>></span> <span class="py-kw">def</span> <span class="py-fn">softmax</span>(x):<br>
+              ...&nbsp;&nbsp;&nbsp;&nbsp;e = np.<span class="py-fn">exp</span>(x - x.<span class="py-fn">max</span>())<br>
+              ...&nbsp;&nbsp;&nbsp;&nbsp;<span class="py-kw">return</span> e / e.<span class="py-fn">sum</span>()<br>
+              <span class="py-prompt">>>></span> <span class="py-fn">softmax</span>([<span class="py-num">1.0</span>, <span class="py-num">2.0</span>, <span class="py-num">3.0</span>])<br>
+              array([0.09, 0.24, 0.67])<br>
+              <span class="py-prompt">>>></span> <span class="py-com"># the lingua franca of AI</span><br>
+              <span class="py-prompt">>>></span> <span style="animation:blink 1s steps(2) infinite;">█</span>
+            </div>
+          </div></div>
+          <h3>Batteries Included</h3>
+          <p>Python, named after Monty Python, was built to be <strong>readable above all</strong>. NumPy, Pandas, and PyTorch made it the <strong>lingua franca of AI</strong>. Today, every neural network training run on Earth begins with <code>import torch</code>.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>The Universal Glue</h3>
+          <p>Python's specialty is <strong>breadth</strong>: it wraps C/C++/Fortran libraries, scripts EDA flows, runs web servers, and trains trillion-parameter models. Readable enough for a beginner, powerful enough to run the world's AI.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>The Bridge to AI Silicon</h3>
+          <p>Python is the <strong>bridge between my two worlds</strong>. The AI models that my chips accelerate are defined and trained in Python; the scripts that verify those same chips are Python too. The engineer who speaks both PyTorch <em>and</em> RTL is the one who can actually ship the silicon that powers it. Python closed that loop for me.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· descending to bare metal ···</span></div>
+
+<!-- =========================== 10 Assembly =========================== -->
+<section class="section scanlines" id="assembly">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="logo-card" style="padding:1rem;">
+        <svg viewBox="0 0 100 110" style="width:80%;height:auto;" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="50,5 95,32 95,78 50,105 5,78 5,32" fill="#0a1a3a" stroke="#1e90ff" stroke-width="2.5"/>
+          <polygon points="50,5 95,32 95,78 50,105 5,78 5,32" fill="none" stroke="#1e90ff" stroke-width="1" opacity="0.4" transform="scale(0.85) translate(8.8,8.2)"/>
+          <text x="50" y="50" fill="#1e90ff" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">1010</text>
+          <text x="50" y="72" fill="#1e90ff" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">0x7C</text>
+        </svg>
+      </div>
+      <h2 class="section-title">Assembly</h2>
+      <div class="section-era">circa always · bare metal</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="asm-screen">
+            <span class="cmt">; bootloader.asm — 16-bit real mode</span><br>
+            <span class="addr">0x7C00</span>&nbsp;&nbsp;<span class="hex">mov ax, 0x07C0</span><br>
+            <span class="addr">0x7C03</span>&nbsp;&nbsp;<span class="hex">mov ds, ax</span><br>
+            <span class="addr">0x7C05</span>&nbsp;&nbsp;<span class="hex">mov si, msg</span><br>
+            <span class="addr">0x7C08</span>&nbsp;&nbsp;<span class="hex">call print</span><br>
+            <span class="addr">0x7C0B</span>&nbsp;&nbsp;<span class="hex">cli ; hlt</span><br><br>
+            <span class="reg">AX=07C0</span> <span class="reg">BX=0000</span> <span class="reg">IP=7C0B</span><br>
+            <span class="cmt">> halted_</span><span style="animation:blink 1s steps(2) infinite;">█</span>
+          </div></div>
+          <h3>The Machine's Native Tongue</h3>
+          <p>Assembly is the <strong>human-readable shadow</strong> of the CPU's actual instruction set. Each maps almost one-to-one onto the binary opcodes the silicon executes. Before compilers were trustworthy, it was how <em>everything</em> got written — OSes, games, BIOS routines.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Total Control, Zero Safety Net</h3>
+          <p>Every register, every flag, every memory address — no GC, no type system, no bounds check. Its specialty is <strong>transparency</strong>: reading disassembly is how you learn what a compiler really did. The basement beneath every other language here.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Where Software Meets Silicon</h3>
+          <p>Assembly was the bridge that turned me from a <em>programmer</em> into an <em>engineer</em>. The day <code>0x7C00</code> lit up in a debugger, the abstraction curtain tore. Today, when a branch predictor mispredicts, the debug trail ends in instruction-level behavior — and I can draw a straight line from the RTL waveform to the disassembly. It's the Rosetta Stone between my day job and everything else.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· describing the hardware itself ···</span></div>
+
+<!-- =========================== 11 VHDL =========================== -->
+<section class="section" id="vhdl">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="big-logo">
+        <img src="https://avatars.githubusercontent.com/u/21169439?v=4" alt="VHDL logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>VHDL</span><span class=\'lc-sub\'>IEEE 1076</span></div>'" />
+      </div>
+      <h2 class="section-title">VHDL</h2>
+      <div class="section-era">circa 1987 · IEEE 1076</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="waveform-viewer">
+            <div class="wave-toolbar"><span>⚡ waveform.vcd — sim_top</span><span><span class="btn">▶</span> 100 ns/div</span></div>
+            <div class="wave-body">
+              <div class="wave-names"><div>clk</div><div>reset_n</div><div>count[7:0]</div><div>done</div></div>
+              <div class="wave-traces">
+                <svg viewBox="0 0 600 140" preserveAspectRatio="none">
+                  <path d="M0,20 L40,20 L40,5 L80,5 L80,20 L120,20 L120,5 L160,5 L160,20 L200,20 L200,5 L240,5 L240,20 L280,20 L280,5 L320,5 L320,20 L360,20 L360,5 L400,5 L400,20 L440,20 L440,5 L480,5 L480,20 L520,20 L520,5 L560,5 L560,20 L600,20" stroke="#58a6ff" fill="none" stroke-width="1.5"/>
+                  <path d="M0,55 L20,55 L20,40 L40,40 L80,40 L80,55 L600,55" stroke="#f0883e" fill="none" stroke-width="1.5"/>
+                  <path d="M0,90 L80,90 L80,75 L520,75 L520,90 L600,90" stroke="#3fb950" fill="none" stroke-width="1.5"/>
+                  <path d="M0,125 L515,125 L515,115 L540,115 L540,125 L600,125" stroke="#f85149" fill="none" stroke-width="1.5"/>
+                </svg>
+              </div>
+            </div>
+            <div class="wave-statusbar"><span>Simulation: 600 ns</span><span>PASSED · 0 errors</span></div>
+          </div></div>
+          <h3>Describing Silicon Before It Exists</h3>
+          <p>VHDL — IEEE 1076, 1987 — is one of two languages used to design <strong>every digital chip on Earth</strong>. The mind-flip: it's not a program that <em>runs</em> — it's a description of a circuit that <em>exists</em>. Write <code>c <= a and b;</code> and you've specified a physical AND gate etched into silicon.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Concurrency, Signals & Simulation</h3>
+          <p>Everything in VHDL happens <strong>in parallel</strong> — because that's how hardware works. You simulate before fabrication because you <em>can't patch silicon</em>. A bug costs millions and months.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>My Day Job, My Native Layer</h3>
+          <p>VHDL is where my journey <em>converges</em>. Everything above is built on hardware described in languages like this. When a bug spans firmware, OS, and silicon, I chase it from RTL waveform up to the JS console and back. Fifty years in, the loop is closed: <em>the kid who typed <code>GOTO 10</code> now designs the gates that fetch it.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· the verification revolution ···</span></div>
+
+<!-- =========================== 12 SystemVerilog =========================== -->
+<section class="section" id="sv">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="logo-card" style="padding:1.2rem;">
+        <svg viewBox="0 0 120 120" style="width:85%;height:auto;" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="100" height="100" rx="14" fill="#052326" stroke="#2dd4bf" stroke-width="2.5"/>
+          <text x="60" y="60" fill="#2dd4bf" font-family="monospace" font-size="30" font-weight="bold" text-anchor="middle">SV</text>
+          <text x="60" y="82" fill="#2dd4bf" font-family="monospace" font-size="10" text-anchor="middle" opacity="0.7">IEEE 1800</text>
+        </svg>
+      </div>
+      <h2 class="section-title">SystemVerilog</h2>
+      <div class="section-era">circa 2002 · IEEE 1800</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="sv-ide">
+            <div class="sv-tabs"><span class="sv-tab">alu_driver.sv</span><span class="sv-tab" style="opacity:0.6;">uvm_pkg.sv</span></div>
+            <div class="sv-code">
+              <span class="sv-com">// UVM sequence drives the ALU</span><br>
+              <span class="sv-kw">class</span> <span class="sv-type">alu_seq</span> <span class="sv-kw">extends</span> uvm_sequence;<br>
+              &nbsp;&nbsp;<span class="sv-kw">task</span> body();<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="sv-kw">req</span>.op = ADD;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;start_item(<span class="sv-kw">req</span>); finish_item(<span class="sv-kw">req</span>);<br>
+              &nbsp;&nbsp;<span class="sv-kw">endtask</span><br>
+              }<br><br>
+              <span class="sv-cov">// Coverage: 98.7% — 2 holes in flag paths</span>
+            </div>
+          </div></div>
+          <h3>One Language, Two Jobs</h3>
+          <p>SystemVerilog (IEEE 1800) merged Verilog's design syntax with a powerful OOP verification layer. Then <strong>UVM</strong> made it possible to build reusable, randomized test environments for the most complex chips ever built. It is the industry standard for taping out modern silicon.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Constrained-Random Verification</h3>
+          <p>SystemVerilog's superpower is <strong>constrained random</strong> testing: describe the legal input space, and the solver blasts millions of edge-case scenarios at your design, hunting bugs no human would think to write. Combined with functional <strong>coverage</strong>, it turns "did we test enough?" into a measurable number.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Proving the Chip Before It's Real</h3>
+          <p>SystemVerilog + UVM is how I <em>sleep at night</em> before a tapeout. On an AI accelerator, you can't test every MAC by hand — you let the randomized environment find the one-in-a-billion collision. <strong>Verification is harder than design</strong>, and coverage is a moral contract with the silicon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="era-divider"><span>··· the dark art of coverage ···</span></div>
+
+<!-- =========================== 13 Specman e =========================== -->
+<section class="section" id="specman">
+  <div class="bg-layer" data-parallax="0.4"></div>
+  <div class="section-grid">
+    <aside class="section-left">
+      <div class="logo-card" style="padding:1.2rem;">
+        <svg viewBox="0 0 120 120" style="width:85%;height:auto;" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="50" fill="#0a0214" stroke="#e879f9" stroke-width="2.5"/>
+          <text x="60" y="78" fill="#e879f9" font-family="Georgia,serif" font-size="52" font-weight="bold" text-anchor="middle" font-style="italic">e</text>
+        </svg>
+      </div>
+      <h2 class="section-title">Specman e</h2>
+      <div class="section-era">circa 1996 · Verisity</div>
+      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
+    </aside>
+    <div class="section-right">
+      <div class="chunks">
+        <div class="chunk">
+          <span class="chunk-label">▸ 01 / History</span>
+          <div class="lang-visual"><div class="e-ide">
+            <div class="e-titlebar"><span>◆ specman — cpu_test.e</span><span>vrun -f</span></div>
+            <div class="e-body">
+              <span class="e-com">' — constrained random CPU test</span><br>
+              <span class="e-kw">struct</span> <span class="e-type">cpu_instr</span> <span class="e-kw">like</span> <span class="e-type">base_instr</span> {<br>
+              &nbsp;&nbsp;<span class="e-kw">opcode</span> : <span class="e-type">op_e</span>;<br>
+              &nbsp;&nbsp;<span class="e-kw">keep</span> opcode != NOP;<br>
+              &nbsp;&nbsp;<span class="e-kw">event</span> cov_op <span class="e-kw">is</span> cover(opcode) {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="e-kw">cross</span> opcode, mode;<br>
+              &nbsp;&nbsp;};<br>
+              };<br><br>
+              <span class="e-cov">// Coverage: 94.2% — temporal holes</span>
+            </div>
+          </div></div>
+          <h3>The Pioneer of Random Verification</h3>
+          <p>The <strong>e</strong> language, created by Yoav Hollander at Verisity (later Cadence), was the <em>original</em> constrained-random verification language — predating SystemVerilog/UVM by years. Its Aspect-Oriented features let engineers inject checks anywhere without touching the original code.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 02 / Specialty</span>
+          <h3>Aspects & Temporal Checking</h3>
+          <p>e's specialties are <strong>Aspect-Oriented Programming</strong> — weave new behavior into existing code without modifying it — and powerful <strong>temporal assertions</strong> that check sequences over time. It made verification a first-class engineering discipline.</p>
+        </div>
+        <div class="chunk">
+          <span class="chunk-label">▸ 03 / My Take</span>
+          <h3>Learning to Trust Randomness</h3>
+          <p>e taught me a counterintuitive truth: <strong>the best tester is one that surprises you</strong>. Hand-written tests find the bugs you imagined; random verification finds the ones you didn't. That philosophy — define the rules, then let the machine explore — is exactly how I think about AI today.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© hevangel.github.io · From GW-BASIC to silicon — one engineer's loop, closed.</p>
+  <p style="margin-top:0.5rem;">13 languages · countless chips · one unbroken thread: <em>the kid who typed <code style="color:#7dd3fc;">GOTO 10</code> now builds the silicon that runs the AI.</em></p>
+  <p style="margin-top:0.8rem;"><a href="#hero">▲ back to top</a></p>
+</footer>
+
+<script>
+  (function () {
+    var sections = document.querySelectorAll('.section');
+    function update() {
+      var vh = window.innerHeight;
+      sections.forEach(function (sec) {
+        var rect = sec.getBoundingClientRect();
+        if (rect.bottom < -200 || rect.top > vh + 200) return;
+        var progress = (rect.top + rect.height / 2 - vh / 2) / ((rect.height + vh) / 2);
+        var bg = sec.querySelector('[data-parallax]');
+        if (!bg) return;
+        var factor = parseFloat(bg.getAttribute('data-parallax')) || 0.4;
+        bg.style.transform = 'translate3d(0,' + (progress * 100 * factor) + 'px,0) scale(1.1)';
+      });
+    }
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) { window.requestAnimationFrame(function () { update(); ticking = false; }); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  })();
+</script>
+
 </body>
 </html>
+]]>

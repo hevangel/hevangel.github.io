@@ -197,7 +197,7 @@
       box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
     }
 
-    .program-description {
+    .project-description {
       margin: -0.35rem 0 0.15rem;
       padding: 0 0.15em;
       width: 100%;
@@ -208,6 +208,23 @@
       letter-spacing: 0;
       text-align: center;
       text-shadow: 0 0 8px var(--glow);
+    }
+
+    .program-description {
+      margin: 0;
+      padding: 0 0.15em;
+      width: 100%;
+      color: var(--dos-cyan);
+      font-family: var(--dos-font);
+      font-size: calc(14px * var(--console-scale) / 1.35);
+      line-height: 1.15;
+      letter-spacing: 0;
+      text-align: center;
+      text-shadow: none;
+    }
+
+    .program-description:empty {
+      display: none;
     }
 
     #container {
@@ -409,6 +426,7 @@
 
   <main>
     <div class="console-area">
+      <p class="project-description">This was my final project for Grade 13 Computer Science. At the time, I wondered why the teacher chose such an obscure language as dBASE to teach us. In hindsight, I had unknowingly learned SQL before I even knew what SQL was. This early exposure eventually made me one of the few hardware engineers who knows SQL well.</p>
       <p id="programDescription" class="program-description" aria-live="polite"></p>
       <section class="crt-frame" aria-label="dBASE III+ terminal">
         <div class="crt-bezel">
@@ -599,9 +617,9 @@
     }
 
     async function updateView() {
-      saveProgramChoice();
-      updateProgramDescription();
       if (getViewMode() === 'source') {
+        saveProgramChoice();
+        updateProgramDescription();
         await showSourceView();
       } else {
         await runProgram();
@@ -609,9 +627,9 @@
     }
 
     function loadSavedView() {
-      let saved = 'source';
-      try { saved = localStorage.getItem(VIEW_KEY) || 'source'; } catch {}
-      if (!['run', 'source'].includes(saved)) saved = 'source';
+      let saved = 'run';
+      try { saved = localStorage.getItem(VIEW_KEY) || 'run'; } catch {}
+      if (!['run', 'source'].includes(saved)) saved = 'run';
       setViewMode(saved);
     }
 
@@ -697,13 +715,15 @@ dbase.exe ${prgName}
       return { prgName, initFs };
     }
 
-    async function runProgram(forceProgramUrl = FALLBACK_DEFAULT_PROGRAM) {
-      const programUrl = forceProgramUrl;
+    async function runProgram(forceProgramUrl = null) {
+      const programUrl = forceProgramUrl || defaultProgram;
       if (!programUrl) {
         showError('No program selected.');
         return;
       }
 
+      programPath.textContent = programUrl;
+      programDescription.textContent = '';
       setActionButtonsDisabled(true);
       container.replaceChildren();
 
