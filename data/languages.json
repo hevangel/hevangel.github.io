@@ -7,7 +7,7 @@
     "logoHtml": "<div class='big-logo'><img src='/images/basic_logo.png' alt='BASIC logo' /></div>",
     "title": "GW-BASIC",
     "era": "circa 1983 · MS-DOS",
-    "launch": { "href": "/gwbasic.html", "label": "▶ Launch Runner", "disabled": false },
+    "launch": { "href": "/gwbasic.html", "label": "▶ Show Case", "disabled": false },
     "chunks": [
       {
         "label": "▸ 01 / History",
@@ -35,7 +35,7 @@
     "logoHtml": "<div class='big-logo' style='filter: drop-shadow(0 0 22px rgba(232,232,232,0.25));'><img style='filter: brightness(0) invert(1);' src='/images/dbase_logo.png' alt='Ashton-Tate logo' /></div>",
     "title": "dBASE III+",
     "era": "circa 1988 · Ashton-Tate",
-    "launch": { "href": "/dbase.html", "label": "▶ Launch Runner", "disabled": false },
+    "launch": { "href": "/dbase.html", "label": "▶ Show Case", "disabled": false },
     "chunks": [
       {
         "label": "▸ 01 / History",
@@ -63,7 +63,7 @@
     "logoHtml": "<div class='big-logo'><img src='/images/cpp_logo.svg' alt='C++ logo' /></div>",
     "title": "C++",
     "era": "circa 1990 · Stroustrup",
-    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "launch": { "href": "/cpp.html", "label": "▶ Show Case", "disabled": false },
     "chunks": [
       {
         "label": "▸ 01 / History",
