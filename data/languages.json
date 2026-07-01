@@ -1,0 +1,366 @@
+[
+  {
+    "id": "gwbasic",
+    "navLabel": "BASIC",
+    "sectionClass": "scanlines",
+    "dividerBefore": null,
+    "logoHtml": "<div class='big-logo'><img src='/images/basic_logo.png' alt='BASIC logo' /></div>",
+    "title": "GW-BASIC",
+    "era": "circa 1983 · MS-DOS",
+    "launch": { "href": "/gwbasic.html", "label": "▶ Launch Runner", "disabled": false },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='crt-screen'><span class='kw'>10</span> PRINT \"HELLO WORLD\"<br><span class='kw'>20</span> FOR I=1 TO 10<br><span class='kw'>30</span> PRINT I; I*I<br><span class='kw'>40</span> NEXT I<br><span class='kw'>50</span> GOTO 10<br><br><span class='prompt'>Ok</span><br><span class='prompt'>RUN</span><br>HELLO WORLD<br>1&nbsp;&nbsp;1<br>2&nbsp;&nbsp;4<br>3&nbsp;&nbsp;9<span class='cursor'></span></div>",
+        "heading": "Where It All Began",
+        "bodyHtml": "GW-BASIC — bundled with IBM PCs and MS-DOS — was the very first screen that ever blinked back at an entire generation. Descended from Altair BASIC (1975), it was an <em>interpreter</em>: type, RUN, obey. No compiler, no build step. It taught millions that a computer was a thing you could <strong>talk to</strong>."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "The Immediate-Feedback Machine",
+        "bodyHtml": "GW-BASIC's genius was <strong>instant gratification</strong>. Line numbers were the file system, the version control, the whole mental model. <code>GOTO</code>, <code>GOSUB</code>, <code>PEEK</code>/<code>POKE</code>: raw, unfiltered control over the hardware, with built-in graphics and sound. A teenager alone in a bedroom could make a game and watch it work in seconds."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "The First Spark",
+        "bodyHtml": "GW-BASIC was my \"hello, world\" — the moment a glowing green screen became a <em>canvas</em>. Today I design chips where a signal flip takes weeks to verify, but the instinct is the same: <em>formulate, run, read the output, iterate</em>. The loop times got longer, the dopamine hit of \"it works!\" was forged right here."
+      }
+    ]
+  },
+  {
+    "id": "dbase",
+    "navLabel": "dBASE",
+    "sectionClass": "scanlines",
+    "dividerBefore": "the prompt evolves",
+    "logoHtml": "<div class='big-logo' style='filter: drop-shadow(0 0 22px rgba(232,232,232,0.25));'><img style='filter: brightness(0) invert(1);' src='/images/dbase_logo.png' alt='Ashton-Tate logo' /></div>",
+    "title": "dBASE III+",
+    "era": "circa 1988 · Ashton-Tate",
+    "launch": { "href": "/dbase.html", "label": "▶ Launch Runner", "disabled": false },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='dbase-screen'><div class='bar'>dBASE III+ · Command Mode</div>. USE STUDENT<br>. LIST NEXT 5<br><table><tr><th>Record#</th><th>NAME</th><th>GRADE</th></tr><tr><td>1</td><td>HEVANGEL</td><td>A</td></tr><tr><td>2</td><td>ALAN</td><td>B+</td></tr><tr><td>3</td><td>GRACE</td><td>A</td></tr></table>._ <span style='animation:blink 1s steps(2) infinite;'>█</span></div>",
+        "heading": "The Data Awakens",
+        "bodyHtml": "dBASE was the <strong>killer app</strong> of the pre-Windows business world. Born as Vulcan (1978), it turned the IBM PC into a <em>database</em> machine. Its terse dot-prompt language shipped real accounting and inventory systems. It quietly invented the <em>4GL</em> — describe <em>what</em> you want the data to do, not <em>how</em>."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Persistent Records & the Dot Prompt",
+        "bodyHtml": "A <code>.DBF</code> file was a real table on disk — fields, types, records. You could index it and query it relationally decades before SQL was common on PCs. The xBase dialect (FoxPro, Clipper) outlived Ashton-Tate itself."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Learning That Data Has Shape",
+        "bodyHtml": "dBASE taught me that programming isn't only about <em>logic</em> — it's about <em>information</em>. A record has a schema, a lifecycle; you index for speed. Today, when I debug cache-coherency bugs that span firmware, OS, and silicon, every one is at heart a <em>data integrity</em> problem. I started asking \"what is canonical?\" at an amber dot prompt."
+      }
+    ]
+  },
+  {
+    "id": "cpp",
+    "navLabel": "C++",
+    "sectionClass": "scanlines",
+    "dividerBefore": "systems programming arrives",
+    "logoHtml": "<div class='big-logo'><img src='/images/cpp_logo.svg' alt='C++ logo' /></div>",
+    "title": "C++",
+    "era": "circa 1990 · Stroustrup",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='tc-ide'><div class='tc-menubar'><span>File</span><span>Edit</span><span>Run</span><span>Compile</span><span>Debug</span></div><div class='tc-edit'><span class='cpp-com'>// fibonacci.cpp</span><br><span class='cpp-kw'>#include</span> <iostream><br><br><span class='cpp-type'>int</span> fib(<span class='cpp-type'>int</span> n) {<br>&nbsp;&nbsp;<span class='cpp-kw'>return</span> n < <span class='cpp-num'>2</span> ? n : fib(n-<span class='cpp-num'>1</span>)+fib(n-<span class='cpp-num'>2</span>);<br>}</div><div class='tc-statusbar'><span>● Ready</span><span>Line 4  Col 18</span></div></div>",
+        "heading": "C with Classes",
+        "bodyHtml": "C++ began in 1979 as \"C with Classes\" and grew into the heavyweight champion of systems programming. It gave C a layer of <strong>object orientation, templates, and RAII</strong>. Browsers, databases, game engines, OSes — and crucially, <em>EDA tools themselves</em> — are written in C++. It is the bedrock language of performance."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Zero-Cost Abstraction",
+        "bodyHtml": "C++ promises towering abstractions that compile down to code as tight as hand-written C. <strong>\"You don't pay for what you don't use.\"</strong> It's the language for when performance is non-negotiable."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Building the Tools That Build Chips",
+        "bodyHtml": "The simulators and synthesizers I use every day — the tools that model a billion-transistor chip — are themselves C++ programs. Writing C++ taught me to design fast, layered systems, which is exactly the mindset RTL demands. When I optimize a datapath for timing, I'm thinking in the same cache-lines-and-throughput mental model C++ beat into me."
+      }
+    ]
+  },
+  {
+    "id": "java",
+    "navLabel": "JAVA",
+    "sectionClass": "",
+    "dividerBefore": "the network arrives",
+    "logoHtml": "<div class='big-logo'><img src='/images/java_logo.svg' alt='Java logo' /></div>",
+    "title": "Java",
+    "era": "circa 1995 · Sun Microsystems",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='applet-window'><div class='applet-titlebar'><span>☕ HelloWorld — Applet Viewer</span><span>— □ ✕</span></div><div class='applet-menubar'><span>File</span><span>Edit</span><span>Run</span><span>Help</span></div><div class='applet-body'><span style='color:#aa5500;'>public class</span> Hello <span style='color:#aa5500;'>extends</span> Applet {<br>&nbsp;&nbsp;<span style='color:#aa5500;'>public void</span> paint(Graphics g) {<br>&nbsp;&nbsp;&nbsp;&nbsp;g.drawString(<span style='color:#00aa00;'>\"Hello, Web!\"</span>, 50, 25);<br>&nbsp;&nbsp;}<br>}</div><div class='applet-statusbar'><span>Applet started</span><span>JVM 1.0 · 16 MB</span></div></div>",
+        "heading": "Write Once, Run Anywhere",
+        "bodyHtml": "Java landed in 1995 like a meteor. Repackaged for the Web with mascot <strong>Duke</strong> and a steaming coffee cup, its pitch was almost religious: compile to a virtual machine and run on <em>any</em> device. Applets put code inside the browser; then Java quietly conquered the <strong>server</strong>, where it rules enterprise back-ends to this day."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "The JVM & Garbage Collection",
+        "bodyHtml": "Java's gifts were the <strong>JVM</strong> — abstracting the OS, pioneering JIT — and <strong>automatic garbage collection</strong> as a default. Spring, Hadoop, Kafka, Android all run on its descendants."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Abstraction as Leverage",
+        "bodyHtml": "Java taught me that <strong>abstraction is leverage, not laziness</strong>. GC freed my brain to think about <em>behavior</em>, not <em>memory</em> — exactly the headroom I need to reason about a billion-transistor chip. But Java also taught me the <em>cost</em> of abstraction: every layer hides latency. In silicon, those hidden costs are nanoseconds and watts."
+      }
+    ]
+  },
+  {
+    "id": "javascript",
+    "navLabel": "JS",
+    "sectionClass": "",
+    "dividerBefore": "the browser takes over",
+    "logoHtml": "<div class='big-logo'><img src='/images/javascript_logo.svg' alt='JavaScript logo' /></div>",
+    "title": "JavaScript",
+    "era": "circa 2005 · Web 2.0",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='browser-window'><div class='browser-chrome'><span class='dot r'></span><span class='dot y'></span><span class='dot g'></span><span class='browser-url'>https://dev.local/app.js</span></div><div class='code-editor'><span class='gutter'>1</span><span class='js-com'>// the web woke up</span><br><span class='gutter'>2</span><span class='js-kw'>async function</span> <span class='js-fn'>fetchUser</span>(id) {<br><span class='gutter'>3</span>&nbsp;&nbsp;<span class='js-kw'>const</span> res = <span class='js-kw'>await</span> fetch(<span class='js-str'>`/api/u/${id}`</span>);<br><span class='gutter'>4</span>&nbsp;&nbsp;<span class='js-kw'>return</span> res.<span class='js-fn'>json</span>();<br><span class='gutter'>5</span>}<br><span class='gutter'>6</span><span class='js-fn'>fetchUser</span>(<span class='js-num'>42</span>).<span class='js-fn'>then</span>(u => console.<span class='js-fn'>log</span>(u));</div></div>",
+        "heading": "Brendan Eich's Ten Days",
+        "bodyHtml": "JavaScript was written in <strong>ten days</strong> in 1995 — originally Mocha, renamed to ride Java's coattails, with nothing to do with Java. A joke for a decade, then <em>Ajax</em> and Gmail proved the browser was a real platform. With Node.js it escaped the browser and became the <strong>most widely deployed runtime in history</strong>."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "The Event Loop & Universal Reach",
+        "bodyHtml": "JS's superpower is its <strong>single-threaded event loop</strong> — a model built for <em>waiting</em>. Its other superpower is <strong>ubiquity</strong>: every device has a JS engine. One language, front to back."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Thinking in Events, End to End",
+        "bodyHtml": "JS rewired my brain to think in <strong>events and reactions</strong>: a promise resolves, a clock edge arrives, a signal settles — the next stage reacts. It also made me a full-stack generalist. Holding the speed of the web and the rigor of silicon in one head keeps me humble — and this very page is hand-written JS."
+      }
+    ]
+  },
+  {
+    "id": "vhdl",
+    "navLabel": "VHDL",
+    "sectionClass": "",
+    "dividerBefore": "describing the hardware itself",
+    "logoHtml": "<div class='big-logo'><img src='/images/vhdl_logo.png' alt='VHDL logo' /></div>",
+    "title": "VHDL",
+    "era": "circa 1987 · IEEE 1076",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='waveform-viewer'><div class='wave-toolbar'><span>⚡ waveform.vcd — sim_top</span><span><span class='btn'>▶</span> 100 ns/div</span></div><div class='wave-body'><div class='wave-names'><div>clk</div><div>reset_n</div><div>count[7:0]</div><div>done</div></div><div class='wave-traces'><svg viewBox='0 0 600 140' preserveAspectRatio='none'><path d='M0,20 L40,20 L40,5 L80,5 L80,20 L120,20 L120,5 L160,5 L160,20 L200,20 L200,5 L240,5 L240,20 L280,20 L280,5 L320,5 L320,20 L360,20 L360,5 L400,5 L400,20 L440,20 L440,5 L480,5 L480,20 L520,20 L520,5 L560,5 L560,20 L600,20' stroke='#58a6ff' fill='none' stroke-width='1.5'/><path d='M0,55 L20,55 L20,40 L40,40 L80,40 L80,55 L600,55' stroke='#f0883e' fill='none' stroke-width='1.5'/><path d='M0,90 L80,90 L80,75 L520,75 L520,90 L600,90' stroke='#3fb950' fill='none' stroke-width='1.5'/><path d='M0,125 L515,125 L515,115 L540,115 L540,125 L600,125' stroke='#f85149' fill='none' stroke-width='1.5'/></svg></div></div><div class='wave-statusbar'><span>Simulation: 600 ns</span><span>PASSED · 0 errors</span></div></div>",
+        "heading": "Describing Silicon Before It Exists",
+        "bodyHtml": "VHDL — IEEE 1076, 1987 — is one of two languages used to design <strong>every digital chip on Earth</strong>. The mind-flip: it's not a program that <em>runs</em> — it's a description of a circuit that <em>exists</em>. Write <code>c <= a and b;</code> and you've specified a physical AND gate etched into silicon."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Concurrency, Signals & Simulation",
+        "bodyHtml": "Everything in VHDL happens <strong>in parallel</strong> — because that's how hardware works. You simulate before fabrication because you <em>can't patch silicon</em>. A bug costs millions and months."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "My Day Job, My Native Layer",
+        "bodyHtml": "VHDL is where my journey <em>converges</em>. Everything above is built on hardware described in languages like this. When a bug spans firmware, OS, and silicon, I chase it from RTL waveform up to the JS console and back. Fifty years in, the loop is closed: <em>the kid who typed <code>GOTO 10</code> now designs the gates that fetch it.</em>"
+      }
+    ]
+  },
+  {
+    "id": "assembly",
+    "navLabel": "ASM",
+    "sectionClass": "scanlines",
+    "dividerBefore": "descending to bare metal",
+    "logoHtml": "<div class='big-logo'><img src='/images/assembly_logo.png' alt='Assembly logo' /></div>",
+    "title": "Assembly",
+    "era": "circa always · bare metal",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='asm-screen'><span class='cmt'>; bootloader.asm — 16-bit real mode</span><br><span class='addr'>0x7C00</span>&nbsp;&nbsp;<span class='hex'>mov ax, 0x07C0</span><br><span class='addr'>0x7C03</span>&nbsp;&nbsp;<span class='hex'>mov ds, ax</span><br><span class='addr'>0x7C05</span>&nbsp;&nbsp;<span class='hex'>mov si, msg</span><br><span class='addr'>0x7C08</span>&nbsp;&nbsp;<span class='hex'>call print</span><br><span class='addr'>0x7C0B</span>&nbsp;&nbsp;<span class='hex'>cli ; hlt</span><br><br><span class='reg'>AX=07C0</span> <span class='reg'>BX=0000</span> <span class='reg'>IP=7C0B</span><br><span class='cmt'>> halted_</span><span style='animation:blink 1s steps(2) infinite;'>█</span></div>",
+        "heading": "The Machine's Native Tongue",
+        "bodyHtml": "Assembly is the <strong>human-readable shadow</strong> of the CPU's actual instruction set. Each maps almost one-to-one onto the binary opcodes the silicon executes. Before compilers were trustworthy, it was how <em>everything</em> got written — OSes, games, BIOS routines."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Total Control, Zero Safety Net",
+        "bodyHtml": "Every register, every flag, every memory address — no GC, no type system, no bounds check. Its specialty is <strong>transparency</strong>: reading disassembly is how you learn what a compiler really did. The basement beneath every other language here."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Where Software Meets Silicon",
+        "bodyHtml": "Assembly was the bridge that turned me from a <em>programmer</em> into an <em>engineer</em>. The day <code>0x7C00</code> lit up in a debugger, the abstraction curtain tore. Today, when a branch predictor mispredicts, the debug trail ends in instruction-level behavior — and I can draw a straight line from the RTL waveform to the disassembly. It's the Rosetta Stone between my day job and everything else."
+      }
+    ]
+  },
+  {
+    "id": "tcl",
+    "navLabel": "TCL",
+    "sectionClass": "",
+    "dividerBefore": "into the toolchains",
+    "logoHtml": "<div class='big-logo'><img src='/images/tcl_logo.png' alt='Tcl logo' /></div>",
+    "title": "Tcl / Tk",
+    "era": "circa 1988 · UC Berkeley",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='tk-window'><div class='tk-titlebar'>♦ waveform_panel.tcl</div><div class='tk-body'><div class='tk-canvas'><svg viewBox='0 0 240 70' style='width:100%;height:100%;'><path d='M10,35 L40,35 L40,15 L80,15 L80,55 L120,55 L120,25 L160,25 L160,45 L210,45' stroke='#6a5acd' stroke-width='2' fill='none'/></svg></div><span class='tk-btn'>Run</span><span class='tk-btn'>Step</span><span class='tk-btn'>Quit</span></div></div>",
+        "heading": "Embeddable Glue",
+        "bodyHtml": "Tcl — the <em>Tool Command Language</em> — was created by John Ousterhout at Berkeley as a tiny, embeddable scripting engine. Pair it with <strong>Tk</strong>, its GUI toolkit, and you could build a cross-platform windowed app in a dozen lines. EDA vendors <em>loved</em> it — the command consoles inside virtually every chip-design tool speak Tcl."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "The Language Inside the Tools",
+        "bodyHtml": "Tcl's specialty is <strong>being hosted</strong>. \"Everything is a command, everything is a string.\" Minimalist enough to drive a tool, flexible enough to script complex flows. Tk proved GUIs didn't require C++ and a week of boilerplate."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Driving the EDA Engines",
+        "bodyHtml": "Tcl is the <strong>common tongue of chip design</strong>. Whether I'm scripting synthesis or automating place-and-route, the console is almost always Tcl. It taught me that a powerful tool is really a <em>programmable</em> tool — the best engineers don't click buttons, they script the engine. Every tapeout I've shipped has Tcl threading through its spine."
+      }
+    ]
+  },
+  {
+    "id": "shell",
+    "navLabel": "SHELL",
+    "sectionClass": "scanlines",
+    "dividerBefore": "back to the terminal",
+    "logoHtml": "<div class='big-logo'><img src='/images/shell_logo.svg' alt='Shell (bash/tcsh) logo' /></div>",
+    "title": "Shell · tcsh",
+    "era": "circa 1989 · Berkeley Unix",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='unix-term'><div class='unix-titlebar'><span>hevan@vax — /bin/tcsh</span><span>— □ ✕</span></div><div class='unix-body'><span class='uuser'>hevan</span>@<span class='uhost'>vax</span>:<span class='upath'>~/tapeout</span>% <span style='color:#cfd8e3;'>ls -la *.v</span><br>-rw-r--r--&nbsp; 1 hevan  4096 top.v<br><span class='uuser'>hevan</span>@<span class='uhost'>vax</span>:<span class='upath'>~/tapeout</span>% <span style='color:#cfd8e3;'>make sim | tee run.log</span><br><span class='ucom'># compiling...</span><br><span class='uok'>PASS</span> — 1024 vectors, 0 fails<br><span class='uuser'>hevan</span>@<span class='uhost'>vax</span>:<span class='upath'>~/tapeout</span>% <span style='animation:blink 1s steps(2) infinite;'>█</span></div></div>",
+        "heading": "The Pipe & the Filter",
+        "bodyHtml": "The Unix shell — <code>sh</code>, <code>csh</code>, and especially <strong>tcsh</strong> on Berkeley Unix — is the original \"glue language.\" Chain tiny tools with <code>|</code>: <code>grep</code>, <code>sed</code>, <code>awk</code>, <code>sort</code>. Composability as a philosophy. tcsh added filename completion, history editing, and job control."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Composable Automation",
+        "bodyHtml": "The shell's superpower is <strong>orthogonal composition</strong>: every tool reads stdin and writes stdout, so any pipeline <em>just works</em>. It is the duct tape that has held engineering together for fifty years."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Automation as a Reflex",
+        "bodyHtml": "The shell is where I learned that <strong>if you do it twice, script it</strong>. Every chip project I run is stitched together by tcsh and Make — nightly regressions, coverage merges, log scraping. The AI chips I help build are born inside shell scripts that kick off a thousand simulations and report back in green <code>PASS</code>."
+      }
+    ]
+  },
+  {
+    "id": "specman",
+    "navLabel": "e",
+    "sectionClass": "",
+    "dividerBefore": "the verification revolution",
+    "logoHtml": "<div class='big-logo'><img src='/images/specman_logo.jpg' alt='Specman e logo' /></div>",
+    "title": "Specman e",
+    "era": "circa 1996 · Verisity",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='e-ide'><div class='e-titlebar'><span>◆ specman — cpu_test.e</span><span>vrun -f</span></div><div class='e-body'><span class='e-com'>' — constrained random CPU test</span><br><span class='e-kw'>struct</span> <span class='e-type'>cpu_instr</span> <span class='e-kw'>like</span> <span class='e-type'>base_instr</span> {<br>&nbsp;&nbsp;<span class='e-kw'>opcode</span> : <span class='e-type'>op_e</span>;<br>&nbsp;&nbsp;<span class='e-kw'>keep</span> opcode != NOP;<br>&nbsp;&nbsp;<span class='e-kw'>event</span> cov_op <span class='e-kw'>is</span> cover(opcode) {<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class='e-kw'>cross</span> opcode, mode;<br>&nbsp;&nbsp;};<br>};<br><br><span class='e-cov'>// Coverage: 94.2% — temporal holes</span></div></div>",
+        "heading": "The Pioneer of Random Verification",
+        "bodyHtml": "The <strong>e</strong> language, created by Yoav Hollander at Verisity (later Cadence), was the <em>original</em> constrained-random verification language — predating SystemVerilog/UVM by years. Its Aspect-Oriented features let engineers inject checks anywhere without touching the original code."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Aspects & Temporal Checking",
+        "bodyHtml": "e's specialties are <strong>Aspect-Oriented Programming</strong> — weave new behavior into existing code without modifying it — and powerful <strong>temporal assertions</strong> that check sequences over time. It made verification a first-class engineering discipline."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Learning to Trust Randomness",
+        "bodyHtml": "e taught me a counterintuitive truth: <strong>the best tester is one that surprises you</strong>. Hand-written tests find the bugs you imagined; random verification finds the ones you didn't. That philosophy — define the rules, then let the machine explore — is exactly how I think about AI today."
+      }
+    ]
+  },
+  {
+    "id": "sv",
+    "navLabel": "SV",
+    "sectionClass": "",
+    "dividerBefore": "the next generation of verification",
+    "logoHtml": "<div class='big-logo'><img src='/images/systemverilog-logo.jpg' alt='SystemVerilog logo' /></div>",
+    "title": "SystemVerilog",
+    "era": "circa 2002 · IEEE 1800",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='sv-ide'><div class='sv-tabs'><span class='sv-tab'>alu_driver.sv</span><span class='sv-tab' style='opacity:0.6;'>uvm_pkg.sv</span></div><div class='sv-code'><span class='sv-com'>// UVM sequence drives the ALU</span><br><span class='sv-kw'>class</span> <span class='sv-type'>alu_seq</span> <span class='sv-kw'>extends</span> uvm_sequence;<br>&nbsp;&nbsp;<span class='sv-kw'>task</span> body();<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class='sv-kw'>req</span>.op = ADD;<br>&nbsp;&nbsp;&nbsp;&nbsp;start_item(<span class='sv-kw'>req</span>); finish_item(<span class='sv-kw'>req</span>);<br>&nbsp;&nbsp;<span class='sv-kw'>endtask</span><br>}<br><br><span class='sv-cov'>// Coverage: 98.7% — 2 holes in flag paths</span></div></div>",
+        "heading": "One Language, Two Jobs",
+        "bodyHtml": "SystemVerilog (IEEE 1800) merged Verilog's design syntax with a powerful OOP verification layer. Then <strong>UVM</strong> made it possible to build reusable, randomized test environments for the most complex chips ever built. It is the industry standard for taping out modern silicon."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Constrained-Random Verification",
+        "bodyHtml": "SystemVerilog's superpower is <strong>constrained random</strong> testing: describe the legal input space, and the solver blasts millions of edge-case scenarios at your design, hunting bugs no human would think to write. Combined with functional <strong>coverage</strong>, it turns \"did we test enough?\" into a measurable number."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "Proving the Chip Before It's Real",
+        "bodyHtml": "SystemVerilog + UVM is how I <em>sleep at night</em> before a tapeout. On an AI accelerator, you can't test every MAC by hand — you let the randomized environment find the one-in-a-billion collision. <strong>Verification is harder than design</strong>, and coverage is a moral contract with the silicon."
+      }
+    ]
+  },
+  {
+    "id": "ruby",
+    "navLabel": "RUBY",
+    "sectionClass": "",
+    "dividerBefore": "elegance and developer happiness",
+    "logoHtml": "<div class='big-logo'><img src='/images/ruby_logo.svg' alt='Ruby logo' /></div>",
+    "title": "Ruby",
+    "era": "circa 2005 · Matz",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='ruby-term'><div class='ruby-titlebar'>◆ irb — interactive ruby</div><div class='ruby-body'><span class='rb-prompt'>irb></span> <span style='color:#f5d8d8;'>[1,2,3].map { |n| n**2 }</span><br>=> [1, 4, 9]<br><span class='rb-prompt'>irb></span> <span style='color:#f5d8d8;'>:silicon</span>.class<br>=> Symbol<br><span class='rb-prompt'>irb></span> <span style='color:#f5d8d8;'>class Chip</span><br><span class='rb-prompt'>irb></span>&nbsp;&nbsp;&nbsp;<span class='rb-kw'>attr_accessor</span> <span class='rb-sym'>:name</span><br><span class='rb-prompt'>irb></span> <span style='animation:blink 1s steps(2) infinite;'>█</span></div></div>",
+        "heading": "Optimized for Joy",
+        "bodyHtml": "Yukihiro \"Matz\" Matsumoto designed Ruby with one goal: <strong>programmer happiness</strong>. Everything is an object. Blocks, closures, and a syntax that reads almost like English. When <strong>Rails</strong> arrived in 2004, Ruby became the fastest way to ship a web app, and a generation of startups was born on it."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "Expressiveness & DSLs",
+        "bodyHtml": "Ruby's specialty is <strong>malleability</strong> — you can bend its syntax into a domain-specific language. Rails reads like declarative poetry: <code>has_many :comments</code>. It prioritized developer <em>flow</em> over machine speed, a radical idea at the time."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "The Value of Beauty",
+        "bodyHtml": "Ruby taught me that <strong>code can be beautiful, and beauty matters</strong>. After years of terse C and rigid Java, Ruby's expressiveness felt like oxygen. It trained me to value readability and developer experience — principles I now apply to RTL testbenches and build scripts. Elegance is a form of engineering discipline, not vanity."
+      }
+    ]
+  },
+  {
+    "id": "python",
+    "navLabel": "PYTHON",
+    "sectionClass": "",
+    "dividerBefore": "the era of glue and data",
+    "logoHtml": "<div class='big-logo'><img src='/images/python_logo.svg' alt='Python logo' /></div>",
+    "title": "Python",
+    "era": "circa 1991 · Guido van Rossum",
+    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "chunks": [
+      {
+        "label": "▸ 01 / History",
+        "visualHtml": "<div class='py-repl'><div class='py-titlebar'><span>🐍 python3 — REPL</span><span>3.12.0</span></div><div class='py-body'><span class='py-prompt'>>>></span> <span class='py-kw'>def</span> <span class='py-fn'>softmax</span>(x):<br>...&nbsp;&nbsp;&nbsp;&nbsp;e = np.<span class='py-fn'>exp</span>(x - x.<span class='py-fn'>max</span>())<br>...&nbsp;&nbsp;&nbsp;&nbsp;<span class='py-kw'>return</span> e / e.<span class='py-fn'>sum</span>()<br><span class='py-prompt'>>>></span> <span class='py-fn'>softmax</span>([<span class='py-num'>1.0</span>, <span class='py-num'>2.0</span>, <span class='py-num'>3.0</span>])<br>array([0.09, 0.24, 0.67])<br><span class='py-prompt'>>>></span> <span class='py-com'># the lingua franca of AI</span><br><span class='py-prompt'>>>></span> <span style='animation:blink 1s steps(2) infinite;'>█</span></div></div>",
+        "heading": "Batteries Included",
+        "bodyHtml": "Python, named after Monty Python, was built to be <strong>readable above all</strong>. NumPy, Pandas, and PyTorch made it the <strong>lingua franca of AI</strong>. Today, every neural network training run on Earth begins with <code>import torch</code>."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "The Universal Glue",
+        "bodyHtml": "Python's specialty is <strong>breadth</strong>: it wraps C/C++/Fortran libraries, scripts EDA flows, runs web servers, and trains trillion-parameter models. Readable enough for a beginner, powerful enough to run the world's AI."
+      },
+      {
+        "label": "▸ 03 / My Take",
+        "heading": "The Bridge to AI Silicon",
+        "bodyHtml": "Python is the <strong>bridge between my two worlds</strong>. The AI models that my chips accelerate are defined and trained in Python; the scripts that verify those same chips are Python too. The engineer who speaks both PyTorch <em>and</em> RTL is the one who can actually ship the silicon that powers it. Python closed that loop for me."
+      }
+    ]
+  }
+]

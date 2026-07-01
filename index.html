@@ -30,7 +30,7 @@
       radial-gradient(circle at 85% 70%, rgba(52,211,153,0.08) 0, transparent 9%),
       radial-gradient(circle at 50% 50%, rgba(167,139,250,0.05) 0, transparent 6%);
   }
-  .hero-schematic { position: absolute; inset: 0; pointer-events: none; opacity: 0.35; }
+  .hero-schematic { position: absolute; inset: 0; pointer-events: none; opacity: 0.55; }
   .hero h1 {
     font-family: "Courier New", Consolas, monospace;
     font-size: clamp(1.8rem, 5.5vw, 4.2rem);
@@ -340,40 +340,212 @@
 </head>
 <body>
 
-<nav class="nav-strip">
+<nav class="nav-strip" id="nav-root">
   <a href="#hero">TOP</a>
-  <a href="#gwbasic">BASIC</a>
-  <a href="#dbase">dBASE</a>
-  <a href="#shell">SHELL</a>
-  <a href="#tcl">TCL</a>
-  <a href="#cpp">C++</a>
-  <a href="#java">JAVA</a>
-  <a href="#javascript">JS</a>
-  <a href="#ruby">RUBY</a>
-  <a href="#python">PYTHON</a>
-  <a href="#assembly">ASM</a>
-  <a href="#vhdl">VHDL</a>
-  <a href="#sv">SV</a>
-  <a href="#specman">e</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <svg class="hero-schematic" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-    <g fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.5">
-      <rect x="120" y="180" width="140" height="80" />
-      <rect x="940" y="520" width="160" height="90" />
-      <rect x="500" y="620" width="100" height="60" />
-      <line x1="140" y1="180" x2="140" y2="150" /><line x1="160" y1="180" x2="160" y2="150" />
-      <line x1="180" y1="180" x2="180" y2="150" /><line x1="200" y1="180" x2="200" y2="150" />
-      <line x1="220" y1="180" x2="220" y2="150" /><line x1="240" y1="180" x2="240" y2="150" />
-      <path d="M190 150 L190 100 L600 100 L600 620 L520 620" />
-      <path d="M950 520 L950 480 L700 480" />
-      <path d="M950 610 L950 660 L620 660 L620 680" />
+  <svg class="hero-schematic" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="pcbDots" width="26" height="26" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="1.1" fill="#38bdf8" opacity="0.35" />
+      </pattern>
+      <radialGradient id="dieGlow" cx="50%" cy="42%" r="65%">
+        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.10" />
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="fadeOutDown" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+        <stop offset="40%" stop-color="#fff" stop-opacity="1" />
+        <stop offset="72%" stop-color="#fff" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient id="fadeInDown" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fff" stop-opacity="0" />
+        <stop offset="30%" stop-color="#fff" stop-opacity="0" />
+        <stop offset="62%" stop-color="#fff" stop-opacity="1" />
+        <stop offset="100%" stop-color="#fff" stop-opacity="1" />
+      </linearGradient>
+      <mask id="maskLeftTop"><rect x="0" y="0" width="800" height="900" fill="url(#fadeOutDown)" /></mask>
+      <mask id="maskLeftBottom"><rect x="0" y="0" width="800" height="900" fill="url(#fadeInDown)" /></mask>
+      <mask id="maskRightTop"><rect x="800" y="0" width="800" height="900" fill="url(#fadeOutDown)" /></mask>
+      <mask id="maskRightBottom"><rect x="800" y="0" width="800" height="900" fill="url(#fadeInDown)" /></mask>
+
+      <!-- reusable logic-gate glyphs -->
+      <g id="gateAND"><path d="M0,0 H35 A30,30 0 0 1 35,60 H0 Z" /></g>
+      <g id="gateOR"><path d="M0,0 C25,0 45,10 65,30 C45,50 25,60 0,60 C13,45 13,15 0,0 Z" /></g>
+      <g id="gateXOR">
+        <path d="M8,0 C33,0 53,10 73,30 C53,50 33,60 8,60 C21,45 21,15 8,0 Z" />
+        <path d="M-5,0 C8,15 8,45 -5,60" fill="none" />
+      </g>
+      <g id="gateNOT"><path d="M0,0 L32,18 L0,36 Z" /><circle cx="36" cy="18" r="4" /></g>
+    </defs>
+
+    <rect x="0" y="0" width="1600" height="900" fill="url(#dieGlow)" />
+
+    <!-- lithography alignment marks -->
+    <g stroke="#38bdf8" stroke-width="1.2" opacity="0.4">
+      <path d="M36 60 h26 M49 47 v26" />
+      <path d="M1564 60 h-26 M1551 47 v26" />
+      <path d="M36 840 h26 M49 827 v26" />
+      <path d="M1564 840 h-26 M1551 827 v26" />
     </g>
-    <text x="170" y="225" fill="#38bdf8" font-family="monospace" font-size="11" opacity="0.6">CPU CORE</text>
-    <text x="970" y="570" fill="#38bdf8" font-family="monospace" font-size="11" opacity="0.6">CACHE</text>
-    <text x="525" y="655" fill="#38bdf8" font-family="monospace" font-size="9" opacity="0.6">PLL</text>
+
+    <!-- ============ TOP-LEFT: PCB traces & chip packages ============ -->
+    <g mask="url(#maskLeftTop)">
+      <rect x="0" y="0" width="800" height="600" fill="url(#pcbDots)" opacity="0.5" />
+      <g stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M40,70 H150 V140" />
+        <path d="M150,140 H300" />
+        <path d="M300,140 V60 H430" />
+        <path d="M300,140 V260 H180 V400" />
+        <path d="M430,220 V340 H620" />
+        <path d="M620,340 V150 H720" />
+        <path d="M180,400 H360 V500 H540" />
+        <path d="M540,500 V420 H700" />
+        <path d="M60,260 H140" />
+        <path d="M60,260 V460" />
+      </g>
+      <g stroke="#34d399" stroke-width="1" fill="none" opacity="0.4">
+        <path d="M300,60 V20" /><path d="M430,220 H370" />
+        <path d="M620,150 V90 H540" /><path d="M360,500 V560" />
+      </g>
+      <g fill="#38bdf8" opacity="0.65">
+        <circle cx="150" cy="140" r="3" /><circle cx="300" cy="140" r="3" />
+        <circle cx="300" cy="60" r="3" /><circle cx="300" cy="260" r="3" />
+        <circle cx="180" cy="400" r="3" /><circle cx="430" cy="220" r="3" />
+        <circle cx="430" cy="340" r="3" /><circle cx="620" cy="340" r="3" />
+        <circle cx="620" cy="150" r="3" /><circle cx="360" cy="500" r="3" />
+        <circle cx="540" cy="500" r="3" /><circle cx="540" cy="420" r="3" />
+        <circle cx="60" cy="260" r="3" />
+      </g>
+      <!-- chip packages -->
+      <g stroke="#7dd3fc" stroke-width="1.4" opacity="0.75">
+        <rect x="40" y="30" width="150" height="90" rx="4" fill="#0a1626" />
+        <rect x="330" y="20" width="100" height="70" rx="4" fill="#0a1626" />
+        <rect x="470" y="150" width="150" height="100" rx="4" fill="#0a1626" />
+        <rect x="140" y="330" width="120" height="140" rx="4" fill="#0a1626" />
+        <rect x="560" y="330" width="140" height="90" rx="4" fill="#0a1626" />
+      </g>
+      <g stroke="#38bdf8" stroke-width="1.6" opacity="0.6">
+        <path d="M52,30 V14 M72,30 V14 M92,30 V14 M112,30 V14 M132,30 V14 M152,30 V14 M172,30 V14" />
+        <path d="M52,120 V136 M72,120 V136 M92,120 V136 M112,120 V136 M132,120 V136 M152,120 V136 M172,120 V136" />
+        <path d="M342,20 V6 M362,20 V6 M382,20 V6 M402,20 V6 M418,20 V6" />
+        <path d="M342,90 V104 M362,90 V104 M382,90 V104 M402,90 V104 M418,90 V104" />
+        <path d="M482,150 V134 M502,150 V134 M522,150 V134 M542,150 V134 M562,150 V134 M582,150 V134 M602,150 V134" />
+        <path d="M482,250 V266 M502,250 V266 M522,250 V266 M542,250 V266 M562,250 V266 M582,250 V266 M602,250 V266" />
+        <path d="M152,330 V314 M172,330 V314 M192,330 V314 M212,330 V314 M232,330 V314" />
+        <path d="M152,470 V486 M172,470 V486 M192,470 V486 M212,470 V486 M232,470 V486" />
+        <path d="M572,330 V314 M592,330 V314 M612,330 V314 M632,330 V314 M652,330 V314 M672,330 V314" />
+        <path d="M572,420 V436 M592,420 V436 M612,420 V436 M632,420 V436 M652,420 V436 M672,420 V436" />
+      </g>
+      <g fill="#7dd3fc" font-family="monospace" font-size="11" opacity="0.6">
+        <text x="60" y="82">MCU-32</text>
+        <text x="345" y="60">RAM</text>
+        <text x="495" y="205">FPGA</text>
+        <text x="160" y="405">ASIC</text>
+        <text x="580" y="380">I/O CTRL</text>
+      </g>
+      <!-- animated pulse travelling the traces -->
+      <circle r="3.2" fill="#34d399" opacity="0.85">
+        <animateMotion dur="6s" repeatCount="indefinite"
+          path="M40,70 H150 V140 H300 V60 H430 M300,140 V260 H180 V400 H360 V500 H540 V420 H700" />
+      </circle>
+    </g>
+
+    <!-- ============ BOTTOM-LEFT: VHDL / SystemVerilog code, angled & overlapping ============ -->
+    <g mask="url(#maskLeftBottom)">
+      <g transform="rotate(-8 180 620)" opacity="0.55" fill="#58a6ff" font-family="'Courier New',monospace" font-size="14">
+        <text x="30" y="560">architecture rtl of alu is</text>
+        <text x="30" y="580">begin</text>
+        <text x="30" y="600">  process(clk, rst)</text>
+        <text x="30" y="620">  begin</text>
+        <text x="30" y="640">    if rst = '1' then</text>
+        <text x="30" y="660">      acc &lt;= (others =&gt; '0');</text>
+        <text x="30" y="680">    elsif rising_edge(clk) then</text>
+        <text x="30" y="700">      acc &lt;= acc + operand;</text>
+        <text x="30" y="720">    end if;</text>
+        <text x="30" y="740">  end process;</text>
+        <text x="30" y="760">end rtl;</text>
+      </g>
+      <g transform="rotate(6 520 760)" opacity="0.42" fill="#2dd4bf" font-family="'Courier New',monospace" font-size="14">
+        <text x="300" y="690">module alu #(parameter W=32)(</text>
+        <text x="300" y="710">  input  logic clk, rst_n,</text>
+        <text x="300" y="730">  input  logic [W-1:0] a, b,</text>
+        <text x="300" y="750">  output logic [W-1:0] y);</text>
+        <text x="300" y="770">  always_ff @(posedge clk)</text>
+        <text x="300" y="790">    if (!rst_n) y &lt;= '0;</text>
+        <text x="300" y="810">    else y &lt;= a + b;</text>
+        <text x="300" y="830">endmodule</text>
+      </g>
+      <text x="40" y="530" transform="rotate(-8 180 620)" fill="#58a6ff" font-family="monospace" font-size="11" letter-spacing="2" opacity="0.6">VHDL</text>
+      <text x="310" y="668" transform="rotate(6 520 760)" fill="#2dd4bf" font-family="monospace" font-size="11" letter-spacing="2" opacity="0.5">SYSTEMVERILOG</text>
+    </g>
+
+    <!-- ============ TOP-RIGHT: logic-gate schematic ============ -->
+    <g mask="url(#maskRightTop)" font-family="'Courier New',monospace">
+      <g stroke="#a78bfa" stroke-width="1.6" fill="rgba(167,139,250,0.08)" opacity="0.7">
+        <use href="#gateAND" x="960" y="60" />
+        <use href="#gateOR" x="960" y="190" />
+        <use href="#gateXOR" x="960" y="330" />
+        <use href="#gateNOT" x="1230" y="220" />
+      </g>
+      <g stroke="#a78bfa" stroke-width="1.3" fill="none" opacity="0.55">
+        <path d="M900,75 H960 M900,105 H960" />
+        <path d="M900,205 H960 M900,235 H960" />
+        <path d="M900,345 H968 M900,375 H968" />
+        <path d="M1025,90 H1080 V210 H1230" />
+        <path d="M1025,220 H1170 V225 H1230" />
+        <path d="M1041,360 H1080 V430 H1230 V236" />
+        <path d="M1266,220 H1340 V120 H1420" />
+        <path d="M1266,220 H1340 V330 H1420" />
+      </g>
+      <g fill="#c4b5fd" opacity="0.6">
+        <circle cx="900" cy="75" r="2.6" /><circle cx="900" cy="105" r="2.6" />
+        <circle cx="900" cy="205" r="2.6" /><circle cx="900" cy="235" r="2.6" />
+        <circle cx="900" cy="345" r="2.6" /><circle cx="900" cy="375" r="2.6" />
+        <circle cx="1230" cy="225" r="2.6" /><circle cx="1420" cy="120" r="2.6" /><circle cx="1420" cy="330" r="2.6" />
+      </g>
+      <g fill="#c4b5fd" font-size="11" opacity="0.65">
+        <text x="878" y="79">A</text><text x="878" y="109">B</text>
+        <text x="878" y="209">C</text><text x="878" y="239">D</text>
+        <text x="878" y="349">E</text><text x="878" y="379">F</text>
+        <text x="1000" y="95">&amp;</text><text x="1005" y="225">&#8805;1</text><text x="1010" y="365">=1</text>
+        <text x="1430" y="124">Y0</text><text x="1430" y="334">Y1</text>
+      </g>
+      <text x="960" y="470" fill="#a78bfa" font-size="11" letter-spacing="2" opacity="0.55">GATE-LEVEL NETLIST</text>
+      <circle r="3" fill="#e879f9" opacity="0.85">
+        <animateMotion dur="5.5s" repeatCount="indefinite"
+          path="M900,75 H960 M1025,90 H1080 V210 H1230 H1266 H1340 V120 H1420" />
+      </circle>
+    </g>
+
+    <!-- ============ BOTTOM-RIGHT: hex → asm → C++ → python evolution ============ -->
+    <g mask="url(#maskRightBottom)">
+      <path d="M900,560 C1050,600 1200,660 1420,760" stroke="#94a3b8" stroke-width="1.2" fill="none" opacity="0.35" stroke-dasharray="4 5" />
+      <g transform="rotate(-10 980 590)" opacity="0.32" font-family="'Courier New',monospace" font-size="13">
+        <text x="900" y="560" fill="#fbbf24">0040: 8B 44 24 04 89 04 24</text>
+        <text x="900" y="580" fill="#fbbf24">0048: 03 44 24 08 C3 90 90</text>
+        <text x="900" y="540" fill="#f59e0b" font-size="10" letter-spacing="2">HEX</text>
+      </g>
+      <g transform="rotate(5 1150 660)" opacity="0.4" font-family="'Courier New',monospace" font-size="13">
+        <text x="1030" y="630" fill="#33ff33">MOV EAX, [ESP+4]</text>
+        <text x="1030" y="650" fill="#33ff33">ADD EAX, [ESP+8]</text>
+        <text x="1030" y="670" fill="#33ff33">RET</text>
+        <text x="1030" y="612" fill="#5fff5f" font-size="10" letter-spacing="2">ASM</text>
+      </g>
+      <g transform="rotate(-6 1280 730)" opacity="0.5" font-family="'Courier New',monospace" font-size="13">
+        <text x="1160" y="700" fill="#6ca0ff">int add(int a, int b) {</text>
+        <text x="1160" y="720" fill="#e8e8f5">&#160;&#160;return a + b;</text>
+        <text x="1160" y="740" fill="#6ca0ff">}</text>
+        <text x="1160" y="682" fill="#8cb4ff" font-size="10" letter-spacing="2">C++</text>
+      </g>
+      <g transform="rotate(7 1400 800)" opacity="0.6" font-family="'Courier New',monospace" font-size="14">
+        <text x="1280" y="770" fill="#ffd43b">def add(a, b):</text>
+        <text x="1280" y="792" fill="#e0e8f0">&#160;&#160;&#160;&#160;return a + b</text>
+        <text x="1280" y="752" fill="#ffd43b" font-size="10" letter-spacing="2">PYTHON</text>
+      </g>
+    </g>
   </svg>
   <h1>FROM BASIC<br>TO SILICON</h1>
   <div class="underline-bar"></div>
@@ -385,668 +557,105 @@
   <div class="scroll-cue">▼ scroll to boot ▼</div>
 </section>
 
-<!-- =========================== 1 GW-BASIC =========================== -->
-<section class="section scanlines" id="gwbasic">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://ih1.redbubble.net/image.4070246215.9501/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="BASIC logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>GW</span><span class=\'lc-sub\'>BASIC</span></div>'" />
-      </div>
-      <h2 class="section-title">GW-BASIC</h2>
-      <div class="section-era">circa 1983 · MS-DOS</div>
-      <a class="launch-link" href="/gwbasic.html">▶ Launch Runner</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="crt-screen">
-            <span class="kw">10</span> PRINT "HELLO WORLD"<br>
-            <span class="kw">20</span> FOR I=1 TO 10<br>
-            <span class="kw">30</span> PRINT I; I*I<br>
-            <span class="kw">40</span> NEXT I<br>
-            <span class="kw">50</span> GOTO 10<br><br>
-            <span class="prompt">Ok</span><br><span class="prompt">RUN</span><br>
-            HELLO WORLD<br>1&nbsp;&nbsp;1<br>2&nbsp;&nbsp;4<br>3&nbsp;&nbsp;9<span class="cursor"></span>
-          </div></div>
-          <h3>Where It All Began</h3>
-          <p>GW-BASIC — bundled with IBM PCs and MS-DOS — was the very first screen that ever blinked back at an entire generation. Descended from Altair BASIC (1975), it was an <em>interpreter</em>: type, RUN, obey. No compiler, no build step. It taught millions that a computer was a thing you could <strong>talk to</strong>.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>The Immediate-Feedback Machine</h3>
-          <p>GW-BASIC's genius was <strong>instant gratification</strong>. Line numbers were the file system, the version control, the whole mental model. <code>GOTO</code>, <code>GOSUB</code>, <code>PEEK</code>/<code>POKE</code>: raw, unfiltered control over the hardware, with built-in graphics and sound. A teenager alone in a bedroom could make a game and watch it work in seconds.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>The First Spark</h3>
-          <p>GW-BASIC was my "hello, world" — the moment a glowing green screen became a <em>canvas</em>. Today I design chips where a signal flip takes weeks to verify, but the instinct is the same: <em>formulate, run, read the output, iterate</em>. The loop times got longer, the dopamine hit of "it works!" was forged right here.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the prompt evolves ···</span></div>
-
-<!-- =========================== 2 dBASE =========================== -->
-<section class="section scanlines" id="dbase">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo" style="filter: drop-shadow(0 0 22px rgba(232,232,232,0.25));">
-        <img style="filter: brightness(0) invert(1);" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Ashton-Tate_logo.svg/250px-Ashton-Tate_logo.svg.png" alt="Ashton-Tate logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>dBASE</span><span class=\'lc-sub\'>III+</span></div>'" />
-      </div>
-      <h2 class="section-title">dBASE III+</h2>
-      <div class="section-era">circa 1988 · Ashton-Tate</div>
-      <a class="launch-link" href="/dbase.html">▶ Launch Runner</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="dbase-screen">
-            <div class="bar">dBASE III+ · Command Mode</div>
-            . USE STUDENT<br>. LIST NEXT 5<br>
-            <table>
-              <tr><th>Record#</th><th>NAME</th><th>GRADE</th></tr>
-              <tr><td>1</td><td>HEVANGEL</td><td>A</td></tr>
-              <tr><td>2</td><td>ALAN</td><td>B+</td></tr>
-              <tr><td>3</td><td>GRACE</td><td>A</td></tr>
-            </table>
-            ._ <span style="animation:blink 1s steps(2) infinite;">█</span>
-          </div></div>
-          <h3>The Data Awakens</h3>
-          <p>dBASE was the <strong>killer app</strong> of the pre-Windows business world. Born as Vulcan (1978), it turned the IBM PC into a <em>database</em> machine. Its terse dot-prompt language shipped real accounting and inventory systems. It quietly invented the <em>4GL</em> — describe <em>what</em> you want the data to do, not <em>how</em>.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Persistent Records & the Dot Prompt</h3>
-          <p>A <code>.DBF</code> file was a real table on disk — fields, types, records. You could index it and query it relationally decades before SQL was common on PCs. The xBase dialect (FoxPro, Clipper) outlived Ashton-Tate itself.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Learning That Data Has Shape</h3>
-          <p>dBASE taught me that programming isn't only about <em>logic</em> — it's about <em>information</em>. A record has a schema, a lifecycle; you index for speed. Today, when I debug cache-coherency bugs that span firmware, OS, and silicon, every one is at heart a <em>data integrity</em> problem. I started asking "what is canonical?" at an amber dot prompt.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· enter the Unix shell ···</span></div>
-
-<!-- =========================== 3 Shell / tcsh =========================== -->
-<section class="section scanlines" id="shell">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" alt="Shell (bash/tcsh) logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>$_</span></div>'" />
-      </div>
-      <h2 class="section-title">Shell · tcsh</h2>
-      <div class="section-era">circa 1989 · Berkeley Unix</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="unix-term">
-            <div class="unix-titlebar"><span>hevan@vax — /bin/tcsh</span><span>— □ ✕</span></div>
-            <div class="unix-body">
-              <span class="uuser">hevan</span>@<span class="uhost">vax</span>:<span class="upath">~/tapeout</span>% <span style="color:#cfd8e3;">ls -la *.v</span><br>
-              -rw-r--r--&nbsp; 1 hevan  4096 top.v<br>
-              <span class="uuser">hevan</span>@<span class="uhost">vax</span>:<span class="upath">~/tapeout</span>% <span style="color:#cfd8e3;">make sim | tee run.log</span><br>
-              <span class="ucom"># compiling...</span><br>
-              <span class="uok">PASS</span> — 1024 vectors, 0 fails<br>
-              <span class="uuser">hevan</span>@<span class="uhost">vax</span>:<span class="upath">~/tapeout</span>% <span style="animation:blink 1s steps(2) infinite;">█</span>
-            </div>
-          </div></div>
-          <h3>The Pipe & the Filter</h3>
-          <p>The Unix shell — <code>sh</code>, <code>csh</code>, and especially <strong>tcsh</strong> on Berkeley Unix — is the original "glue language." Chain tiny tools with <code>|</code>: <code>grep</code>, <code>sed</code>, <code>awk</code>, <code>sort</code>. Composability as a philosophy. tcsh added filename completion, history editing, and job control.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Composable Automation</h3>
-          <p>The shell's superpower is <strong>orthogonal composition</strong>: every tool reads stdin and writes stdout, so any pipeline <em>just works</em>. It is the duct tape that has held engineering together for fifty years.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Automation as a Reflex</h3>
-          <p>The shell is where I learned that <strong>if you do it twice, script it</strong>. Every chip project I run is stitched together by tcsh and Make — nightly regressions, coverage merges, log scraping. The AI chips I help build are born inside shell scripts that kick off a thousand simulations and report back in green <code>PASS</code>.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the GUI workstation ···</span></div>
-
-<!-- =========================== 4 Tcl/Tk =========================== -->
-<section class="section" id="tcl">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Tcl.svg/250px-Tcl.svg.png" alt="Tcl logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Tcl</span></div>'" />
-      </div>
-      <h2 class="section-title">Tcl / Tk</h2>
-      <div class="section-era">circa 1988 · UC Berkeley</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="tk-window">
-            <div class="tk-titlebar">♦ waveform_panel.tcl</div>
-            <div class="tk-body">
-              <div class="tk-canvas">
-                <svg viewBox="0 0 240 70" style="width:100%;height:100%;">
-                  <path d="M10,35 L40,35 L40,15 L80,15 L80,55 L120,55 L120,25 L160,25 L160,45 L210,45" stroke="#6a5acd" stroke-width="2" fill="none"/>
-                </svg>
-              </div>
-              <span class="tk-btn">Run</span><span class="tk-btn">Step</span><span class="tk-btn">Quit</span>
-            </div>
-          </div></div>
-          <h3>Embeddable Glue</h3>
-          <p>Tcl — the <em>Tool Command Language</em> — was created by John Ousterhout at Berkeley as a tiny, embeddable scripting engine. Pair it with <strong>Tk</strong>, its GUI toolkit, and you could build a cross-platform windowed app in a dozen lines. EDA vendors <em>loved</em> it — the command consoles inside virtually every chip-design tool speak Tcl.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>The Language Inside the Tools</h3>
-          <p>Tcl's specialty is <strong>being hosted</strong>. "Everything is a command, everything is a string." Minimalist enough to drive a tool, flexible enough to script complex flows. Tk proved GUIs didn't require C++ and a week of boilerplate.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Driving the EDA Engines</h3>
-          <p>Tcl is the <strong>common tongue of chip design</strong>. Whether I'm scripting synthesis or automating place-and-route, the console is almost always Tcl. It taught me that a powerful tool is really a <em>programmable</em> tool — the best engineers don't click buttons, they script the engine. Every tapeout I've shipped has Tcl threading through its spine.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· systems programming arrives ···</span></div>
-
-<!-- =========================== 5 C++ =========================== -->
-<section class="section scanlines" id="cpp">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++ logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>C++</span></div>'" />
-      </div>
-      <h2 class="section-title">C++</h2>
-      <div class="section-era">circa 1990 · Stroustrup</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="tc-ide">
-            <div class="tc-menubar"><span>File</span><span>Edit</span><span>Run</span><span>Compile</span><span>Debug</span></div>
-            <div class="tc-edit">
-              <span class="cpp-com">// fibonacci.cpp</span><br>
-              <span class="cpp-kw">#include</span> <iostream><br><br>
-              <span class="cpp-type">int</span> fib(<span class="cpp-type">int</span> n) {<br>
-              &nbsp;&nbsp;<span class="cpp-kw">return</span> n < <span class="cpp-num">2</span> ? n : fib(n-<span class="cpp-num">1</span>)+fib(n-<span class="cpp-num">2</span>);<br>
-              }
-            </div>
-            <div class="tc-statusbar"><span>● Ready</span><span>Line 4  Col 18</span></div>
-          </div></div>
-          <h3>C with Classes</h3>
-          <p>C++ began in 1979 as "C with Classes" and grew into the heavyweight champion of systems programming. It gave C a layer of <strong>object orientation, templates, and RAII</strong>. Browsers, databases, game engines, OSes — and crucially, <em>EDA tools themselves</em> — are written in C++. It is the bedrock language of performance.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Zero-Cost Abstraction</h3>
-          <p>C++ promises towering abstractions that compile down to code as tight as hand-written C. <strong>"You don't pay for what you don't use."</strong> It's the language for when performance is non-negotiable.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Building the Tools That Build Chips</h3>
-          <p>The simulators and synthesizers I use every day — the tools that model a billion-transistor chip — are themselves C++ programs. Writing C++ taught me to design fast, layered systems, which is exactly the mindset RTL demands. When I optimize a datapath for timing, I'm thinking in the same cache-lines-and-throughput mental model C++ beat into me.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the network arrives ···</span></div>
-
-<!-- =========================== 6 Java =========================== -->
-<section class="section" id="java">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Java</span></div>'" />
-      </div>
-      <h2 class="section-title">Java</h2>
-      <div class="section-era">circa 1995 · Sun Microsystems</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="applet-window">
-            <div class="applet-titlebar"><span>☕ HelloWorld — Applet Viewer</span><span>— □ ✕</span></div>
-            <div class="applet-menubar"><span>File</span><span>Edit</span><span>Run</span><span>Help</span></div>
-            <div class="applet-body">
-              <span style="color:#aa5500;">public class</span> Hello <span style="color:#aa5500;">extends</span> Applet {<br>
-              &nbsp;&nbsp;<span style="color:#aa5500;">public void</span> paint(Graphics g) {<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;g.drawString(<span style="color:#00aa00;">"Hello, Web!"</span>, 50, 25);<br>
-              &nbsp;&nbsp;}<br>}
-            </div>
-            <div class="applet-statusbar"><span>Applet started</span><span>JVM 1.0 · 16 MB</span></div>
-          </div></div>
-          <h3>Write Once, Run Anywhere</h3>
-          <p>Java landed in 1995 like a meteor. Repackaged for the Web with mascot <strong>Duke</strong> and a steaming coffee cup, its pitch was almost religious: compile to a virtual machine and run on <em>any</em> device. Applets put code inside the browser; then Java quietly conquered the <strong>server</strong>, where it rules enterprise back-ends to this day.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>The JVM & Garbage Collection</h3>
-          <p>Java's gifts were the <strong>JVM</strong> — abstracting the OS, pioneering JIT — and <strong>automatic garbage collection</strong> as a default. Spring, Hadoop, Kafka, Android all run on its descendants.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Abstraction as Leverage</h3>
-          <p>Java taught me that <strong>abstraction is leverage, not laziness</strong>. GC freed my brain to think about <em>behavior</em>, not <em>memory</em> — exactly the headroom I need to reason about a billion-transistor chip. But Java also taught me the <em>cost</em> of abstraction: every layer hides latency. In silicon, those hidden costs are nanoseconds and watts.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the browser takes over ···</span></div>
-
-<!-- =========================== 7 JavaScript =========================== -->
-<section class="section" id="javascript">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>JS</span></div>'" />
-      </div>
-      <h2 class="section-title">JavaScript</h2>
-      <div class="section-era">circa 2005 · Web 2.0</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="browser-window">
-            <div class="browser-chrome">
-              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-              <span class="browser-url">https://dev.local/app.js</span>
-            </div>
-            <div class="code-editor">
-              <span class="gutter">1</span><span class="js-com">// the web woke up</span><br>
-              <span class="gutter">2</span><span class="js-kw">async function</span> <span class="js-fn">fetchUser</span>(id) {<br>
-              <span class="gutter">3</span>&nbsp;&nbsp;<span class="js-kw">const</span> res = <span class="js-kw">await</span> fetch(<span class="js-str">`/api/u/${id}`</span>);<br>
-              <span class="gutter">4</span>&nbsp;&nbsp;<span class="js-kw">return</span> res.<span class="js-fn">json</span>();<br>
-              <span class="gutter">5</span>}<br>
-              <span class="gutter">6</span><span class="js-fn">fetchUser</span>(<span class="js-num">42</span>).<span class="js-fn">then</span>(u => console.<span class="js-fn">log</span>(u));
-            </div>
-          </div></div>
-          <h3>Brendan Eich's Ten Days</h3>
-          <p>JavaScript was written in <strong>ten days</strong> in 1995 — originally Mocha, renamed to ride Java's coattails, with nothing to do with Java. A joke for a decade, then <em>Ajax</em> and Gmail proved the browser was a real platform. With Node.js it escaped the browser and became the <strong>most widely deployed runtime in history</strong>.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>The Event Loop & Universal Reach</h3>
-          <p>JS's superpower is its <strong>single-threaded event loop</strong> — a model built for <em>waiting</em>. Its other superpower is <strong>ubiquity</strong>: every device has a JS engine. One language, front to back.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Thinking in Events, End to End</h3>
-          <p>JS rewired my brain to think in <strong>events and reactions</strong>: a promise resolves, a clock edge arrives, a signal settles — the next stage reacts. It also made me a full-stack generalist. Holding the speed of the web and the rigor of silicon in one head keeps me humble — and this very page is hand-written JS.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· elegance and developer happiness ···</span></div>
-
-<!-- =========================== 8 Ruby =========================== -->
-<section class="section" id="ruby">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg" alt="Ruby logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Ruby</span></div>'" />
-      </div>
-      <h2 class="section-title">Ruby</h2>
-      <div class="section-era">circa 2005 · Matz</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="ruby-term">
-            <div class="ruby-titlebar">◆ irb — interactive ruby</div>
-            <div class="ruby-body">
-              <span class="rb-prompt">irb></span> <span style="color:#f5d8d8;">[1,2,3].map { |n| n**2 }</span><br>
-              => [1, 4, 9]<br>
-              <span class="rb-prompt">irb></span> <span style="color:#f5d8d8;">:silicon</span>.class<br>
-              => Symbol<br>
-              <span class="rb-prompt">irb></span> <span style="color:#f5d8d8;">class Chip</span><br>
-              <span class="rb-prompt">irb></span>&nbsp;&nbsp;&nbsp;<span class="rb-kw">attr_accessor</span> <span class="rb-sym">:name</span><br>
-              <span class="rb-prompt">irb></span> <span style="animation:blink 1s steps(2) infinite;">█</span>
-            </div>
-          </div></div>
-          <h3>Optimized for Joy</h3>
-          <p>Yukihiro "Matz" Matsumoto designed Ruby with one goal: <strong>programmer happiness</strong>. Everything is an object. Blocks, closures, and a syntax that reads almost like English. When <strong>Rails</strong> arrived in 2004, Ruby became the fastest way to ship a web app, and a generation of startups was born on it.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Expressiveness & DSLs</h3>
-          <p>Ruby's specialty is <strong>malleability</strong> — you can bend its syntax into a domain-specific language. Rails reads like declarative poetry: <code>has_many :comments</code>. It prioritized developer <em>flow</em> over machine speed, a radical idea at the time.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>The Value of Beauty</h3>
-          <p>Ruby taught me that <strong>code can be beautiful, and beauty matters</strong>. After years of terse C and rigid Java, Ruby's expressiveness felt like oxygen. It trained me to value readability and developer experience — principles I now apply to RTL testbenches and build scripts. Elegance is a form of engineering discipline, not vanity.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the era of glue and data ···</span></div>
-
-<!-- =========================== 9 Python =========================== -->
-<section class="section" id="python">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>Py</span></div>'" />
-      </div>
-      <h2 class="section-title">Python</h2>
-      <div class="section-era">circa 1991 · Guido van Rossum</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="py-repl">
-            <div class="py-titlebar"><span>🐍 python3 — REPL</span><span>3.12.0</span></div>
-            <div class="py-body">
-              <span class="py-prompt">>>></span> <span class="py-kw">def</span> <span class="py-fn">softmax</span>(x):<br>
-              ...&nbsp;&nbsp;&nbsp;&nbsp;e = np.<span class="py-fn">exp</span>(x - x.<span class="py-fn">max</span>())<br>
-              ...&nbsp;&nbsp;&nbsp;&nbsp;<span class="py-kw">return</span> e / e.<span class="py-fn">sum</span>()<br>
-              <span class="py-prompt">>>></span> <span class="py-fn">softmax</span>([<span class="py-num">1.0</span>, <span class="py-num">2.0</span>, <span class="py-num">3.0</span>])<br>
-              array([0.09, 0.24, 0.67])<br>
-              <span class="py-prompt">>>></span> <span class="py-com"># the lingua franca of AI</span><br>
-              <span class="py-prompt">>>></span> <span style="animation:blink 1s steps(2) infinite;">█</span>
-            </div>
-          </div></div>
-          <h3>Batteries Included</h3>
-          <p>Python, named after Monty Python, was built to be <strong>readable above all</strong>. NumPy, Pandas, and PyTorch made it the <strong>lingua franca of AI</strong>. Today, every neural network training run on Earth begins with <code>import torch</code>.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>The Universal Glue</h3>
-          <p>Python's specialty is <strong>breadth</strong>: it wraps C/C++/Fortran libraries, scripts EDA flows, runs web servers, and trains trillion-parameter models. Readable enough for a beginner, powerful enough to run the world's AI.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>The Bridge to AI Silicon</h3>
-          <p>Python is the <strong>bridge between my two worlds</strong>. The AI models that my chips accelerate are defined and trained in Python; the scripts that verify those same chips are Python too. The engineer who speaks both PyTorch <em>and</em> RTL is the one who can actually ship the silicon that powers it. Python closed that loop for me.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· descending to bare metal ···</span></div>
-
-<!-- =========================== 10 Assembly =========================== -->
-<section class="section scanlines" id="assembly">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="logo-card" style="padding:1rem;">
-        <svg viewBox="0 0 100 110" style="width:80%;height:auto;" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="50,5 95,32 95,78 50,105 5,78 5,32" fill="#0a1a3a" stroke="#1e90ff" stroke-width="2.5"/>
-          <polygon points="50,5 95,32 95,78 50,105 5,78 5,32" fill="none" stroke="#1e90ff" stroke-width="1" opacity="0.4" transform="scale(0.85) translate(8.8,8.2)"/>
-          <text x="50" y="50" fill="#1e90ff" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">1010</text>
-          <text x="50" y="72" fill="#1e90ff" font-family="monospace" font-size="16" font-weight="bold" text-anchor="middle">0x7C</text>
-        </svg>
-      </div>
-      <h2 class="section-title">Assembly</h2>
-      <div class="section-era">circa always · bare metal</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="asm-screen">
-            <span class="cmt">; bootloader.asm — 16-bit real mode</span><br>
-            <span class="addr">0x7C00</span>&nbsp;&nbsp;<span class="hex">mov ax, 0x07C0</span><br>
-            <span class="addr">0x7C03</span>&nbsp;&nbsp;<span class="hex">mov ds, ax</span><br>
-            <span class="addr">0x7C05</span>&nbsp;&nbsp;<span class="hex">mov si, msg</span><br>
-            <span class="addr">0x7C08</span>&nbsp;&nbsp;<span class="hex">call print</span><br>
-            <span class="addr">0x7C0B</span>&nbsp;&nbsp;<span class="hex">cli ; hlt</span><br><br>
-            <span class="reg">AX=07C0</span> <span class="reg">BX=0000</span> <span class="reg">IP=7C0B</span><br>
-            <span class="cmt">> halted_</span><span style="animation:blink 1s steps(2) infinite;">█</span>
-          </div></div>
-          <h3>The Machine's Native Tongue</h3>
-          <p>Assembly is the <strong>human-readable shadow</strong> of the CPU's actual instruction set. Each maps almost one-to-one onto the binary opcodes the silicon executes. Before compilers were trustworthy, it was how <em>everything</em> got written — OSes, games, BIOS routines.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Total Control, Zero Safety Net</h3>
-          <p>Every register, every flag, every memory address — no GC, no type system, no bounds check. Its specialty is <strong>transparency</strong>: reading disassembly is how you learn what a compiler really did. The basement beneath every other language here.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Where Software Meets Silicon</h3>
-          <p>Assembly was the bridge that turned me from a <em>programmer</em> into an <em>engineer</em>. The day <code>0x7C00</code> lit up in a debugger, the abstraction curtain tore. Today, when a branch predictor mispredicts, the debug trail ends in instruction-level behavior — and I can draw a straight line from the RTL waveform to the disassembly. It's the Rosetta Stone between my day job and everything else.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· describing the hardware itself ···</span></div>
-
-<!-- =========================== 11 VHDL =========================== -->
-<section class="section" id="vhdl">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="big-logo">
-        <img src="https://avatars.githubusercontent.com/u/21169439?v=4" alt="VHDL logo" onerror="this.parentElement.outerHTML='<div class=\'logo-card\'><span class=\'lc-text\'>VHDL</span><span class=\'lc-sub\'>IEEE 1076</span></div>'" />
-      </div>
-      <h2 class="section-title">VHDL</h2>
-      <div class="section-era">circa 1987 · IEEE 1076</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="waveform-viewer">
-            <div class="wave-toolbar"><span>⚡ waveform.vcd — sim_top</span><span><span class="btn">▶</span> 100 ns/div</span></div>
-            <div class="wave-body">
-              <div class="wave-names"><div>clk</div><div>reset_n</div><div>count[7:0]</div><div>done</div></div>
-              <div class="wave-traces">
-                <svg viewBox="0 0 600 140" preserveAspectRatio="none">
-                  <path d="M0,20 L40,20 L40,5 L80,5 L80,20 L120,20 L120,5 L160,5 L160,20 L200,20 L200,5 L240,5 L240,20 L280,20 L280,5 L320,5 L320,20 L360,20 L360,5 L400,5 L400,20 L440,20 L440,5 L480,5 L480,20 L520,20 L520,5 L560,5 L560,20 L600,20" stroke="#58a6ff" fill="none" stroke-width="1.5"/>
-                  <path d="M0,55 L20,55 L20,40 L40,40 L80,40 L80,55 L600,55" stroke="#f0883e" fill="none" stroke-width="1.5"/>
-                  <path d="M0,90 L80,90 L80,75 L520,75 L520,90 L600,90" stroke="#3fb950" fill="none" stroke-width="1.5"/>
-                  <path d="M0,125 L515,125 L515,115 L540,115 L540,125 L600,125" stroke="#f85149" fill="none" stroke-width="1.5"/>
-                </svg>
-              </div>
-            </div>
-            <div class="wave-statusbar"><span>Simulation: 600 ns</span><span>PASSED · 0 errors</span></div>
-          </div></div>
-          <h3>Describing Silicon Before It Exists</h3>
-          <p>VHDL — IEEE 1076, 1987 — is one of two languages used to design <strong>every digital chip on Earth</strong>. The mind-flip: it's not a program that <em>runs</em> — it's a description of a circuit that <em>exists</em>. Write <code>c <= a and b;</code> and you've specified a physical AND gate etched into silicon.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Concurrency, Signals & Simulation</h3>
-          <p>Everything in VHDL happens <strong>in parallel</strong> — because that's how hardware works. You simulate before fabrication because you <em>can't patch silicon</em>. A bug costs millions and months.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>My Day Job, My Native Layer</h3>
-          <p>VHDL is where my journey <em>converges</em>. Everything above is built on hardware described in languages like this. When a bug spans firmware, OS, and silicon, I chase it from RTL waveform up to the JS console and back. Fifty years in, the loop is closed: <em>the kid who typed <code>GOTO 10</code> now designs the gates that fetch it.</em></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the verification revolution ···</span></div>
-
-<!-- =========================== 12 SystemVerilog =========================== -->
-<section class="section" id="sv">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="logo-card" style="padding:1.2rem;">
-        <svg viewBox="0 0 120 120" style="width:85%;height:auto;" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="10" width="100" height="100" rx="14" fill="#052326" stroke="#2dd4bf" stroke-width="2.5"/>
-          <text x="60" y="60" fill="#2dd4bf" font-family="monospace" font-size="30" font-weight="bold" text-anchor="middle">SV</text>
-          <text x="60" y="82" fill="#2dd4bf" font-family="monospace" font-size="10" text-anchor="middle" opacity="0.7">IEEE 1800</text>
-        </svg>
-      </div>
-      <h2 class="section-title">SystemVerilog</h2>
-      <div class="section-era">circa 2002 · IEEE 1800</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="sv-ide">
-            <div class="sv-tabs"><span class="sv-tab">alu_driver.sv</span><span class="sv-tab" style="opacity:0.6;">uvm_pkg.sv</span></div>
-            <div class="sv-code">
-              <span class="sv-com">// UVM sequence drives the ALU</span><br>
-              <span class="sv-kw">class</span> <span class="sv-type">alu_seq</span> <span class="sv-kw">extends</span> uvm_sequence;<br>
-              &nbsp;&nbsp;<span class="sv-kw">task</span> body();<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;<span class="sv-kw">req</span>.op = ADD;<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;start_item(<span class="sv-kw">req</span>); finish_item(<span class="sv-kw">req</span>);<br>
-              &nbsp;&nbsp;<span class="sv-kw">endtask</span><br>
-              }<br><br>
-              <span class="sv-cov">// Coverage: 98.7% — 2 holes in flag paths</span>
-            </div>
-          </div></div>
-          <h3>One Language, Two Jobs</h3>
-          <p>SystemVerilog (IEEE 1800) merged Verilog's design syntax with a powerful OOP verification layer. Then <strong>UVM</strong> made it possible to build reusable, randomized test environments for the most complex chips ever built. It is the industry standard for taping out modern silicon.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Constrained-Random Verification</h3>
-          <p>SystemVerilog's superpower is <strong>constrained random</strong> testing: describe the legal input space, and the solver blasts millions of edge-case scenarios at your design, hunting bugs no human would think to write. Combined with functional <strong>coverage</strong>, it turns "did we test enough?" into a measurable number.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Proving the Chip Before It's Real</h3>
-          <p>SystemVerilog + UVM is how I <em>sleep at night</em> before a tapeout. On an AI accelerator, you can't test every MAC by hand — you let the randomized environment find the one-in-a-billion collision. <strong>Verification is harder than design</strong>, and coverage is a moral contract with the silicon.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="era-divider"><span>··· the dark art of coverage ···</span></div>
-
-<!-- =========================== 13 Specman e =========================== -->
-<section class="section" id="specman">
-  <div class="bg-layer" data-parallax="0.4"></div>
-  <div class="section-grid">
-    <aside class="section-left">
-      <div class="logo-card" style="padding:1.2rem;">
-        <svg viewBox="0 0 120 120" style="width:85%;height:auto;" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="60" cy="60" r="50" fill="#0a0214" stroke="#e879f9" stroke-width="2.5"/>
-          <text x="60" y="78" fill="#e879f9" font-family="Georgia,serif" font-size="52" font-weight="bold" text-anchor="middle" font-style="italic">e</text>
-        </svg>
-      </div>
-      <h2 class="section-title">Specman e</h2>
-      <div class="section-era">circa 1996 · Verisity</div>
-      <a class="launch-link disabled" href="#">Runner Coming Soon</a>
-    </aside>
-    <div class="section-right">
-      <div class="chunks">
-        <div class="chunk">
-          <span class="chunk-label">▸ 01 / History</span>
-          <div class="lang-visual"><div class="e-ide">
-            <div class="e-titlebar"><span>◆ specman — cpu_test.e</span><span>vrun -f</span></div>
-            <div class="e-body">
-              <span class="e-com">' — constrained random CPU test</span><br>
-              <span class="e-kw">struct</span> <span class="e-type">cpu_instr</span> <span class="e-kw">like</span> <span class="e-type">base_instr</span> {<br>
-              &nbsp;&nbsp;<span class="e-kw">opcode</span> : <span class="e-type">op_e</span>;<br>
-              &nbsp;&nbsp;<span class="e-kw">keep</span> opcode != NOP;<br>
-              &nbsp;&nbsp;<span class="e-kw">event</span> cov_op <span class="e-kw">is</span> cover(opcode) {<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;<span class="e-kw">cross</span> opcode, mode;<br>
-              &nbsp;&nbsp;};<br>
-              };<br><br>
-              <span class="e-cov">// Coverage: 94.2% — temporal holes</span>
-            </div>
-          </div></div>
-          <h3>The Pioneer of Random Verification</h3>
-          <p>The <strong>e</strong> language, created by Yoav Hollander at Verisity (later Cadence), was the <em>original</em> constrained-random verification language — predating SystemVerilog/UVM by years. Its Aspect-Oriented features let engineers inject checks anywhere without touching the original code.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 02 / Specialty</span>
-          <h3>Aspects & Temporal Checking</h3>
-          <p>e's specialties are <strong>Aspect-Oriented Programming</strong> — weave new behavior into existing code without modifying it — and powerful <strong>temporal assertions</strong> that check sequences over time. It made verification a first-class engineering discipline.</p>
-        </div>
-        <div class="chunk">
-          <span class="chunk-label">▸ 03 / My Take</span>
-          <h3>Learning to Trust Randomness</h3>
-          <p>e taught me a counterintuitive truth: <strong>the best tester is one that surprises you</strong>. Hand-written tests find the bugs you imagined; random verification finds the ones you didn't. That philosophy — define the rules, then let the machine explore — is exactly how I think about AI today.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- Language sections are rendered dynamically from data/languages.json (see script at bottom) -->
+<div id="sections-root"></div>
 
 <footer>
   <p>© hevangel.github.io · From GW-BASIC to silicon — one engineer's loop, closed.</p>
-  <p style="margin-top:0.5rem;">13 languages · countless chips · one unbroken thread: <em>the kid who typed <code style="color:#7dd3fc;">GOTO 10</code> now builds the silicon that runs the AI.</em></p>
+  <p style="margin-top:0.5rem;"><span id="lang-count">13</span> languages · countless chips · one unbroken thread: <em>the kid who typed <code style="color:#7dd3fc;">GOTO 10</code> now builds the silicon that runs the AI.</em></p>
   <p style="margin-top:0.8rem;"><a href="#hero">▲ back to top</a></p>
 </footer>
 
 <script>
   (function () {
-    var sections = document.querySelectorAll('.section');
-    function update() {
-      var vh = window.innerHeight;
-      sections.forEach(function (sec) {
-        var rect = sec.getBoundingClientRect();
-        if (rect.bottom < -200 || rect.top > vh + 200) return;
-        var progress = (rect.top + rect.height / 2 - vh / 2) / ((rect.height + vh) / 2);
-        var bg = sec.querySelector('[data-parallax]');
-        if (!bg) return;
-        var factor = parseFloat(bg.getAttribute('data-parallax')) || 0.4;
-        bg.style.transform = 'translate3d(0,' + (progress * 100 * factor) + 'px,0) scale(1.1)';
+    var navRoot = document.getElementById('nav-root');
+    var sectionsRoot = document.getElementById('sections-root');
+    var langCount = document.getElementById('lang-count');
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
       });
     }
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-      if (!ticking) { window.requestAnimationFrame(function () { update(); ticking = false; }); ticking = true; }
-    }, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
-    update();
+
+    function renderChunk(chunk) {
+      var visual = chunk.visualHtml ? '<div class="lang-visual">' + chunk.visualHtml + '</div>' : '';
+      return (
+        '<div class="chunk">' +
+          '<span class="chunk-label">' + escapeHtml(chunk.label) + '</span>' +
+          visual +
+          '<h3>' + escapeHtml(chunk.heading) + '</h3>' +
+          '<p>' + chunk.bodyHtml + '</p>' +
+        '</div>'
+      );
+    }
+
+    function renderSection(lang) {
+      var launchClass = 'launch-link' + (lang.launch.disabled ? ' disabled' : '');
+      var sectionClass = 'section' + (lang.sectionClass ? ' ' + lang.sectionClass : '');
+      var chunksHtml = lang.chunks.map(renderChunk).join('');
+      return (
+        '<section class="' + sectionClass + '" id="' + lang.id + '">' +
+          '<div class="bg-layer" data-parallax="0.4"></div>' +
+          '<div class="section-grid">' +
+            '<aside class="section-left">' +
+              lang.logoHtml +
+              '<h2 class="section-title">' + escapeHtml(lang.title) + '</h2>' +
+              '<div class="section-era">' + escapeHtml(lang.era) + '</div>' +
+              '<a class="' + launchClass + '" href="' + escapeHtml(lang.launch.href) + '">' + escapeHtml(lang.launch.label) + '</a>' +
+            '</aside>' +
+            '<div class="section-right"><div class="chunks">' + chunksHtml + '</div></div>' +
+          '</div>' +
+        '</section>'
+      );
+    }
+
+    fetch('/data/languages.json')
+      .then(function (res) { return res.json(); })
+      .then(function (languages) {
+        var navHtml = '<a href="#hero">TOP</a>';
+        var sectionsHtml = '';
+        languages.forEach(function (lang, i) {
+          navHtml += '<a href="#' + lang.id + '">' + escapeHtml(lang.navLabel) + '</a>';
+          if (lang.dividerBefore) {
+            sectionsHtml += '<div class="era-divider"><span>··· ' + escapeHtml(lang.dividerBefore) + ' ···</span></div>';
+          }
+          sectionsHtml += renderSection(lang);
+        });
+        navRoot.innerHTML = navHtml;
+        sectionsRoot.innerHTML = sectionsHtml;
+        if (langCount) langCount.textContent = languages.length;
+        initParallax();
+      })
+      .catch(function (err) {
+        console.error('Failed to load language data:', err);
+      });
+
+    function initParallax() {
+      var sections = document.querySelectorAll('.section');
+      function update() {
+        var vh = window.innerHeight;
+        sections.forEach(function (sec) {
+          var rect = sec.getBoundingClientRect();
+          if (rect.bottom < -200 || rect.top > vh + 200) return;
+          var progress = (rect.top + rect.height / 2 - vh / 2) / ((rect.height + vh) / 2);
+          var bg = sec.querySelector('[data-parallax]');
+          if (!bg) return;
+          var factor = parseFloat(bg.getAttribute('data-parallax')) || 0.4;
+          bg.style.transform = 'translate3d(0,' + (progress * 100 * factor) + 'px,0) scale(1.1)';
+        });
+      }
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) { window.requestAnimationFrame(function () { update(); ticking = false; }); ticking = true; }
+      }, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    }
   })();
 </script>
 
 </body>
 </html>
+</script>
 ]]>
