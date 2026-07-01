@@ -1,0 +1,69 @@
+{
+  "defaultProgram": "cpp/ENGLISH.EXE",
+  "supportFiles": [
+    "cpp/MENU.INI",
+    "cpp/TEST.DAT"
+  ],
+  "programs": [
+    {
+      "path": "cpp/ENGLISH.EXE",
+      "label": "English Word Collector",
+      "source": "cpp/ENGMAIN.CPP",
+      "description": "My Grade 12 final project: \"English Word Collector\" v1.5b, a vocabulary database with a full menu system (enter, delete, edit, print, list, quiz/test, a learning game, save/load, search, help and about screens). Built from ~40 Turbo C++ source files."
+    },
+    {
+      "path": "cpp/ENG1.EXE",
+      "label": "English Word Collector (Earlier Build)",
+      "source": "cpp/ENGMAIN.CPP",
+      "description": "An earlier compiled build of the same word collector project, kept alongside the final version to show how the program evolved."
+    },
+    {
+      "path": "cpp/MENUEDIT.EXE",
+      "label": "Menu Editor",
+      "source": "cpp/MENUEDIT.CPP",
+      "description": "A standalone utility I wrote to build and edit the binary .INI menu files (colors, hotkeys, item layout) consumed by my \"Main Menu V2.1\" menu engine, instead of hand-editing the binary format."
+    },
+    {
+      "path": "cpp/ENGBOX.EXE",
+      "label": "Box Drawing Demo",
+      "source": "cpp/ENGBOX.CPP",
+      "description": "A test program for the bordered-box-with-title-and-shadow routine used to draw every window in the word collector's UI."
+    },
+    {
+      "path": "cpp/ENGBOX2.EXE",
+      "label": "Box Drawing Demo v2",
+      "source": "cpp/ENGBOX2.CPP",
+      "description": "A follow-up version of the box-drawing routine, adding single/double border styles and title framing options."
+    },
+    {
+      "path": "cpp/ENGBUT.EXE",
+      "label": "Button Demo",
+      "source": "cpp/ENGBUT.CPP",
+      "description": "A test program for the clickable-looking \"button\" UI widget (with highlight and shadow) used for Yes/No prompts."
+    },
+    {
+      "path": "cpp/ENGLOGO.EXE",
+      "label": "Splash Logo v1",
+      "source": "cpp/ENGLOGO.CPP",
+      "description": "The animated startup splash screen (v1.01b) that shows \"Luxi-Soft Presents / A Horace Chan Production\" with scrolling ASCII art and color-cycling text."
+    },
+    {
+      "path": "cpp/ENGLOGO2.EXE",
+      "label": "Splash Logo v2",
+      "source": "cpp/ENGLOGO2.CPP",
+      "description": "A revised version (v1.5b) of the animated startup splash screen with updated ASCII art."
+    },
+    {
+      "path": "cpp/ENGMENU.EXE",
+      "label": "Menu Engine Demo",
+      "source": "cpp/ENGMENU.CPP",
+      "description": "A test program for \"Main Menu V2.1\", the reusable data-driven menu engine that reads a binary .INI layout file and drives the word collector's main menu."
+    },
+    {
+      "path": "cpp/ENGQUIT.EXE",
+      "label": "Quit Confirmation Demo",
+      "source": "cpp/ENGQUIT.CPP",
+      "description": "A test program for the \"Are you sure you want to exit?\" confirmation dialog, with Yes/No buttons and a scrolling status line."
+    }
+  ]
+}

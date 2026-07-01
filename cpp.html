@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en" data-theme="mono">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>C++ Runner | hevangel.github.io</title>
+  <link href="https://fonts.cdnfonts.com/css/perfect-dos-vga-437" rel="stylesheet" />
+  <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css" />
+  <style>
+    :root {
+      --panel: #0b0b0b;
+      --frame: #2a2a2a;
+      --text: #F3F4F6;
+      --glow: rgba(243, 244, 246, 0.35);
+      --accent: #F3F4F6;
+      --dos-font: "Perfect DOS VGA 437 Win", "Perfect DOS VGA 437", "Fixedsys Excelsior", monospace;
+      --dos-blue: #0000aa;
+      --dos-blue-light: #5555ff;
+      --dos-cyan: #55ffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,255,255,0.04), transparent 35%),
+        #020202;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      padding: 0.55rem 0.85rem;
+      border-bottom: 2px solid var(--dos-blue-light);
+      background: var(--dos-blue);
+      color: #ffffff;
+      font-family: var(--dos-font);
+      font-size: 16px;
+      line-height: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 0 #000055;
+    }
+
+    .title {
+      margin: 0;
+      font: inherit;
+      color: #ffffff;
+      letter-spacing: 0;
+      text-transform: none;
+      text-shadow: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.55rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .controls label {
+      font: inherit;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: var(--dos-cyan);
+      text-shadow: none;
+    }
+
+    .source-link {
+      background: transparent;
+      border: none;
+      padding: 0;
+      min-height: 0;
+      font: inherit;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: var(--dos-cyan);
+      text-shadow: none;
+      cursor: pointer;
+    }
+
+    .source-link:hover {
+      background: transparent;
+      color: var(--dos-cyan);
+      text-decoration: underline;
+    }
+
+    .source-link:active {
+      background: transparent;
+      color: var(--dos-cyan);
+    }
+
+    .source-link:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      text-decoration: none;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    select, button, a.button {
+      background: var(--dos-blue);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 0;
+      padding: 0.2rem 0.45rem;
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      text-shadow: none;
+      min-height: 20px;
+    }
+
+    select {
+      padding-right: 1.2rem;
+    }
+
+    button:hover,
+    a.button:hover,
+    select:hover {
+      background: var(--dos-blue-light);
+    }
+
+    button:active,
+    a.button:active {
+      background: #ffffff;
+      color: var(--dos-blue);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    select:focus, button:focus, a.button:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    main {
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+
+    .console-area {
+      --console-scale: 1.35;
+      --dos-width: 640;
+      --dos-height: 400;
+      --console-width: calc(var(--dos-width) * 1px * var(--console-scale));
+      --console-height: calc(var(--dos-height) * 1px * var(--console-scale));
+      --frame-width: min(calc(640px * 1.35 + 28px), 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      align-items: center;
+      width: var(--frame-width);
+      max-width: 100%;
+    }
+
+    .crt-frame {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--frame);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow:
+        0 0 0 2px #0a0a0a inset,
+        0 0 32px rgba(0,0,0,0.6),
+        0 0 20px var(--glow);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .crt-bezel {
+      width: var(--console-width);
+      max-width: 100%;
+      border: 1px solid #242424;
+      border-radius: 8px;
+      background: #000;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+    }
+
+    .project-description {
+      margin: -0.35rem 0 0.15rem;
+      padding: 0 0.15em;
+      width: 100%;
+      color: var(--text);
+      font-family: var(--dos-font);
+      font-size: calc(16px * var(--console-scale) / 1.35);
+      line-height: 1.15;
+      letter-spacing: 0;
+      text-align: center;
+      text-shadow: 0 0 8px var(--glow);
+    }
+
+    .program-description {
+      margin: 0;
+      padding: 0 0.15em;
+      width: 100%;
+      color: var(--dos-cyan);
+      font-family: var(--dos-font);
+      font-size: calc(14px * var(--console-scale) / 1.35);
+      line-height: 1.15;
+      letter-spacing: 0;
+      text-align: center;
+      text-shadow: none;
+    }
+
+    .program-description:empty {
+      display: none;
+    }
+
+    #container {
+      width: 100%;
+      height: var(--console-height);
+      background: #000;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .crt-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.045) 0px,
+        rgba(255,255,255,0.045) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+      opacity: 0.45;
+      z-index: 2;
+    }
+
+    .crt-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.35) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    #container .jsdos-rso,
+    #container .jsdos-rso > div,
+    #container .jsdos-rso .window,
+    #container .jsdos-rso .bg-black,
+    #container .jsdos-rso .flex-grow,
+    #container .dosbox-container,
+    #container iframe {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    #container .jsdos-rso .background-image,
+    #container .jsdos-rso .sidebar {
+      display: none !important;
+    }
+
+    #container .jsdos-rso .window,
+    #container .jsdos-rso .bg-black {
+      position: absolute !important;
+      inset: 0 !important;
+    }
+
+    #container canvas {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .dossource {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #000000;
+      color: #aaaaaa;
+      font-family: var(--dos-font);
+      font-size: calc(16px * var(--console-scale) / 1.35);
+      line-height: 1;
+      letter-spacing: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.55);
+    }
+
+    .dossource-screen {
+      flex: 1;
+      overflow: auto;
+      padding: 0.35em 0.5em 0.25em;
+      white-space: pre;
+    }
+
+    .dossource-screen::-webkit-scrollbar {
+      width: 14px;
+      background: #000000;
+    }
+
+    .dossource-screen::-webkit-scrollbar-thumb {
+      background: #555555;
+      border: 2px solid #000000;
+    }
+
+    .dossource-prompt,
+    .dossource-cmd {
+      color: #aaaaaa;
+    }
+
+    .dossource-cmd {
+      margin-bottom: 0.15em;
+    }
+
+    .dossource-line {
+      min-height: 1em;
+    }
+
+    .dossource-linenum {
+      color: #55ff55;
+      display: inline-block;
+      min-width: 5ch;
+    }
+
+    .dossource-code {
+      color: #aaaaaa;
+    }
+
+    .dossource-tail {
+      margin-top: 0.35em;
+    }
+
+    .dossource-cursor {
+      display: inline-block;
+      width: 0.62em;
+      height: 1em;
+      margin-left: 0.1em;
+      background: #aaaaaa;
+      animation: dos-blink 1s step-end infinite;
+      vertical-align: bottom;
+    }
+
+    @keyframes dos-blink {
+      50% { opacity: 0; }
+    }
+
+    .dossource-status {
+      display: flex;
+      gap: 1.25em;
+      align-items: center;
+      padding: 0.2em 0.55em;
+      border-top: 2px solid #555555;
+      background: #000000;
+      color: #55ff55;
+      font-size: 0.92em;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .dossource-file {
+      margin-left: auto;
+      color: #aaaaaa;
+      text-transform: none;
+    }
+
+    .dossource-error {
+      padding: 1rem;
+      color: #ff5555;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      padding: 0.75rem 1rem 1rem;
+      color: #a1a1aa;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--accent);
+    }
+
+    code { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">C++ Runner</h1>
+    <div class="controls">
+      <label for="program">Program</label>
+      <button id="runBtn" type="button">Run</button>
+      <button id="viewBtn" class="source-link" type="button">View Source</button>
+      <select id="program" aria-label="C++ Program" disabled>
+        <option value="">Loading programs...</option>
+      </select>
+      <a class="button" href="/">Back to Timeline</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="console-area">
+      <p class="project-description">These are DOS programs I wrote in Turbo C++ for a Grade 12 computer science project: "English Word Collector", a menu-driven vocabulary database, plus the individual test programs I built along the way for its box-drawing, buttons, splash logo, menu engine and quit dialog. Some of these old executables run cleanly, others show their age &mdash; part of the fun is seeing which ones still work.</p>
+      <p id="programDescription" class="program-description" aria-live="polite"></p>
+      <section class="crt-frame" aria-label="DOS terminal">
+        <div class="crt-bezel">
+          <div id="container" aria-live="polite"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    Source file: <code id="programPath">cpp/ENGLISH.EXE</code>.
+    Compiled with Turbo C++ for MS-DOS; runs in <a href="https://www.dosbox.com/">DOSBox</a> via <a href="https://js-dos.com/">js-dos</a>.
+  </footer>
+
+  <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
+  <script>
+    const PROGRAM_MANIFEST_URL = 'cpp/manifest.json';
+    const PROGRAM_KEY = 'cppProgram';
+    const VIEW_KEY = 'cppView';
+    const FALLBACK_DEFAULT_PROGRAM = 'cpp/ENGLISH.EXE';
+
+    const programSelect = document.getElementById('program');
+    const programDescription = document.getElementById('programDescription');
+    const programPath = document.getElementById('programPath');
+    const runBtn = document.getElementById('runBtn');
+    const viewBtn = document.getElementById('viewBtn');
+    const container = document.getElementById('container');
+
+    let programs = [];
+    let supportFiles = [];
+    let defaultProgram = FALLBACK_DEFAULT_PROGRAM;
+    let dosPlayer = null;
+    let dosCi = null;
+    let currentMode = 'source';
+
+    function setActionButtonsDisabled(disabled) {
+      runBtn.disabled = disabled;
+      viewBtn.disabled = disabled;
+    }
+
+    async function fetchBytes(url) {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Could not load ${url}`);
+      return new Uint8Array(await res.arrayBuffer());
+    }
+
+    function getSelectedProgramUrl() {
+      return programSelect.value;
+    }
+
+    function renderProgramOptions() {
+      programSelect.replaceChildren();
+      for (const program of programs) {
+        const option = document.createElement('option');
+        option.value = program.path;
+        option.textContent = program.label;
+        programSelect.appendChild(option);
+      }
+      programSelect.disabled = programs.length === 0;
+    }
+
+    function getSelectedProgram() {
+      const path = getSelectedProgramUrl();
+      return programs.find((program) => program.path === path) || null;
+    }
+
+    function updateProgramDescription() {
+      const program = getSelectedProgram();
+      programDescription.textContent = program?.description || '';
+    }
+
+    async function loadProgramManifest() {
+      const res = await fetch(PROGRAM_MANIFEST_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Could not load ${PROGRAM_MANIFEST_URL}`);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        programs = data.filter((program) => program.path && program.label);
+        supportFiles = [];
+        defaultProgram = FALLBACK_DEFAULT_PROGRAM;
+      } else if (data && Array.isArray(data.programs)) {
+        programs = data.programs.filter((program) => program.path && program.label);
+        supportFiles = (data.supportFiles || []).filter((path) => typeof path === 'string');
+        defaultProgram = data.defaultProgram || FALLBACK_DEFAULT_PROGRAM;
+      } else {
+        throw new Error('Program manifest is invalid.');
+      }
+      if (programs.length === 0) {
+        throw new Error('Program manifest has no valid entries.');
+      }
+      if (!programs.some((program) => program.path === defaultProgram)) {
+        defaultProgram = programs[0].path;
+      }
+      renderProgramOptions();
+    }
+
+    function updateProgramFooter() {
+      programPath.textContent = getSelectedProgramUrl() || PROGRAM_MANIFEST_URL;
+    }
+
+    function loadSavedProgram() {
+      let saved = defaultProgram;
+      try { saved = localStorage.getItem(PROGRAM_KEY) || defaultProgram; } catch {}
+      if (!programs.some((program) => program.path === saved)) saved = defaultProgram;
+      if (!programs.some((program) => program.path === saved)) saved = programs[0]?.path || '';
+      if (saved) programSelect.value = saved;
+      updateProgramFooter();
+      updateProgramDescription();
+    }
+
+    function saveProgramChoice() {
+      try { localStorage.setItem(PROGRAM_KEY, getSelectedProgramUrl()); } catch {}
+      updateProgramFooter();
+    }
+
+    function getViewMode() {
+      return currentMode;
+    }
+
+    function setViewMode(mode) {
+      currentMode = mode === 'source' ? 'source' : 'run';
+      try { localStorage.setItem(VIEW_KEY, currentMode); } catch {}
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': String.fromCharCode(38) + 'amp;', '<': String.fromCharCode(38) + 'lt;', '>': String.fromCharCode(38) + 'gt;' };
+      return text.replace(/[&<>]/g, (ch) => map[ch]);
+    }
+
+    function formatListingLine(line) {
+      const lineNum = line.lineNum == null ? '     ' : String(line.lineNum).padStart(5, ' ');
+      return `<div class="dossource-line"><span class="dossource-linenum">${escapeHtml(lineNum)}</span><span class="dossource-code"> ${escapeHtml(line.text)}</span></div>`;
+    }
+
+    function renderDosSource(fileName, lines) {
+      const listing = lines.map(formatListingLine).join('');
+      const firstLine = lines[0]?.lineNum ?? 1;
+      container.innerHTML = `
+        <div class="dossource" role="document" aria-label="C++ source listing">
+          <div class="dossource-screen">
+            <div class="dossource-prompt">C:\\&gt;</div>
+            <div class="dossource-cmd">TYPE ${escapeHtml(fileName.toUpperCase())}</div>
+            ${listing}
+            <div class="dossource-prompt dossource-tail">C:\\&gt;<span class="dossource-cursor" aria-hidden="true"></span></div>
+          </div>
+          <div class="dossource-status">
+            <span>LINE ${firstLine}</span>
+            <span>COL 1</span>
+            <span class="dossource-file">${escapeHtml(fileName)}</span>
+          </div>
+        </div>`;
+    }
+
+    async function showSourceView() {
+      const program = getSelectedProgram();
+      const sourceUrl = program?.source;
+      if (!sourceUrl) {
+        showError('No source file listed for this program.');
+        return;
+      }
+
+      setActionButtonsDisabled(true);
+      await stopDosPlayer();
+
+      try {
+        const fileName = sourceUrl.split('/').pop();
+        const bytes = await fetchBytes(sourceUrl);
+        const text = new TextDecoder('iso-8859-1').decode(bytes);
+        const lines = text.split(/\r?\n/).map((line, i) => ({ lineNum: i + 1, text: line }));
+        if (lines.length === 0) {
+          throw new Error('Source file is empty.');
+        }
+        setViewMode('source');
+        renderDosSource(fileName, lines);
+      } catch (err) {
+        showError(String(err.message || err));
+      } finally {
+        setActionButtonsDisabled(false);
+      }
+    }
+
+    async function updateView() {
+      if (getViewMode() === 'source') {
+        saveProgramChoice();
+        updateProgramDescription();
+        await showSourceView();
+      } else {
+        await runProgram();
+      }
+    }
+
+    function loadSavedView() {
+      let saved = 'run';
+      try { saved = localStorage.getItem(VIEW_KEY) || 'run'; } catch {}
+      if (!['run', 'source'].includes(saved)) saved = 'run';
+      setViewMode(saved);
+    }
+
+    function showError(message) {
+      container.innerHTML = `<pre class="dossource-error">${escapeHtml(message)}</pre>`;
+    }
+
+    function ensureDosStarted(mount) {
+      try {
+        const clickPlay = () => {
+          const playButton = mount.querySelector('.play-button');
+          if (!playButton) return false;
+          playButton.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          return true;
+        };
+
+        if (clickPlay()) return;
+
+        const observer = new MutationObserver(() => {
+          if (clickPlay()) observer.disconnect();
+        });
+        observer.observe(mount, { childList: true, subtree: true });
+        setTimeout(() => observer.disconnect(), 20000);
+      } catch {}
+    }
+
+    async function stopDosPlayer() {
+      if (!dosPlayer) return;
+      try {
+        await dosPlayer.stop();
+      } catch {}
+      dosPlayer = null;
+      dosCi = null;
+      container.replaceChildren();
+    }
+
+    function buildDosboxConf(exeName) {
+      return `[sdl]
+output=surface
+fullscreen=false
+windowresolution=640x400
+autolock=true
+
+[dosbox]
+machine=vga
+memsize=16
+
+[render]
+scaler=none
+aspect=false
+
+[cpu]
+cycles=max
+
+[autoexec]
+@echo off
+mount c .
+c:
+${exeName}
+`;
+    }
+
+    async function buildInitFs(programUrl) {
+      const exeName = programUrl.split('/').pop();
+      const initFs = [
+        { path: exeName, contents: await fetchBytes(programUrl) },
+      ];
+
+      const supportPaths = supportFiles.filter((path) => path.split('/').pop() !== exeName);
+      for (const path of supportPaths) {
+        const name = path.split('/').pop();
+        initFs.push({ path: name, contents: await fetchBytes(path) });
+      }
+
+      return { exeName, initFs };
+    }
+
+    async function runProgram(forceProgramUrl = null) {
+      const programUrl = forceProgramUrl || getSelectedProgramUrl() || defaultProgram;
+      if (!programUrl) {
+        showError('No program selected.');
+        return;
+      }
+
+      programPath.textContent = programUrl;
+      setActionButtonsDisabled(true);
+      container.replaceChildren();
+
+      try {
+        if (typeof Dos !== 'function') {
+          throw new Error('js-dos did not load correctly.');
+        }
+
+        await stopDosPlayer();
+        setViewMode('run');
+
+        const { exeName, initFs } = await buildInitFs(programUrl);
+        dosPlayer = Dos(container, {
+          dosboxConf: buildDosboxConf(exeName),
+          initFs,
+          kiosk: true,
+          thinSidebar: true,
+          theme: 'dark',
+          mouseCapture: false,
+          autoStart: true,
+          countDownStart: 0,
+          renderAspect: false,
+          fullScreen: false,
+          onEvent: (event, arg) => {
+            if (event === 'ci-ready' && arg) {
+              dosCi = arg;
+            }
+            if (event === 'emu-ready') {
+              ensureDosStarted(container);
+            }
+            if (event === 'emu-ready' || event === 'ci-ready' || event === 'bnd-play') {
+              setActionButtonsDisabled(false);
+            }
+          },
+        });
+
+        ensureDosStarted(container);
+      } catch (err) {
+        setActionButtonsDisabled(false);
+        showError(String(err.message || err));
+      }
+    }
+
+    programSelect.addEventListener('change', async () => {
+      saveProgramChoice();
+      updateProgramDescription();
+      setViewMode('source');
+      await showSourceView();
+    });
+    runBtn.addEventListener('click', async () => {
+      await runProgram();
+    });
+    viewBtn.addEventListener('click', async () => {
+      setViewMode('source');
+      await showSourceView();
+    });
+
+    async function init() {
+      loadSavedView();
+      try {
+        await loadProgramManifest();
+        loadSavedProgram();
+        await updateView();
+      } catch (err) {
+        programSelect.replaceChildren();
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Could not load programs';
+        programSelect.appendChild(option);
+        programSelect.disabled = true;
+        showError(String(err.message || err));
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
