@@ -119,7 +119,7 @@
     "logoHtml": "<div class='big-logo'><img src='/images/java_logo.svg' alt='Java logo' /></div>",
     "title": "Java",
     "era": "circa 1995 · Sun Microsystems",
-    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "launch": { "href": "/java.html", "label": "Play Macross Tetris", "disabled": false },
     "chunks": [
       {
         "label": "▸ 01 / History",

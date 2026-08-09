@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" data-theme="java">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Run Horace Chan's original 1997 Macross Tetris Java applet in a modern browser." />
+  <title>Macross Tetris | hevangel.github.io</title>
+  <style>
+    :root { --ink:#f7f4df; --muted:#b8c5cc; --edge:#334754; --blue:#5382a1; --red:#e76f51; --focus:#ffd166; --shadow:rgba(0,0,0,.68); }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:grid; grid-template-rows:auto 1fr auto; color:var(--ink); background:radial-gradient(circle at 50% 8%,rgba(83,130,161,.22),transparent 34rem),linear-gradient(135deg,#080c0f,#101a20 52%,#070a0c); font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace; }
+    header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.75rem; padding:.65rem .9rem; border-bottom:2px solid var(--red); background:#0d171d; box-shadow:0 3px 16px var(--shadow); }
+    h1 { margin:0; color:#fff; font-size:clamp(1rem,3vw,1.25rem); letter-spacing:.04em; }
+    .controls { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
+    button,.button { min-height:2rem; padding:.35rem .65rem; border:1px solid #7ca3b9; border-radius:3px; color:#fff; background:#183547; font:inherit; font-size:.78rem; text-decoration:none; cursor:pointer; }
+    button:hover,.button:hover { background:var(--blue); }
+    button:active,.button:active { transform:translateY(1px); }
+    button:focus-visible,.button:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
+    main { width:min(100%,68rem); margin:0 auto; display:grid; align-content:start; justify-items:center; gap:1rem; padding:clamp(1rem,4vw,2.4rem); }
+    .intro { width:min(100%,50rem); margin:0; color:var(--muted); font-size:.92rem; line-height:1.55; text-align:center; }
+    .intro strong { color:var(--ink); }
+    .game-frame { width:min(100%,534px); padding:16px; border:1px solid var(--edge); border-radius:13px; background:linear-gradient(145deg,#293841,#0b1115 65%); box-shadow:0 16px 45px var(--shadow),inset 0 0 0 2px #080b0d; }
+    .screen { position:relative; overflow:hidden; width:100%; aspect-ratio:500/380; border:2px solid #050708; background:#020608; box-shadow:inset 0 0 25px #000; }
+    .screen::after { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; background:repeating-linear-gradient(to bottom,rgba(255,255,255,.035) 0 1px,transparent 1px 4px); mix-blend-mode:soft-light; }
+    #javaApplet { display:block; width:500px; height:380px; border:0; transform-origin:top left; background:#000; }
+    #gameStatus { width:min(100%,534px); min-height:1.3em; margin:0; color:#9fdcf4; font-size:.78rem; text-align:center; }
+    .instructions { width:min(100%,50rem); display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; }
+    .instructions article { padding:.85rem 1rem; border:1px solid var(--edge); background:rgba(17,28,36,.88); }
+    .instructions h2 { margin:0 0 .55rem; color:var(--focus); font-size:.9rem; }
+    .instructions p { margin:0; color:var(--muted); font-size:.76rem; line-height:1.6; }
+    kbd { padding:.08rem .28rem; border:1px solid #607886; border-bottom-width:2px; border-radius:3px; color:#fff; background:#0a1116; font:inherit; }
+    footer { padding:.8rem 1rem 1.1rem; color:#8e9aa1; font-size:.76rem; line-height:1.6; text-align:center; }
+    footer a { color:#8bd9f7; }
+    @media (max-width:620px) { header{align-items:flex-start}.controls{width:100%}main{padding:1rem .6rem 1.5rem}.game-frame{padding:8px;border-radius:8px}.instructions{grid-template-columns:1fr} }
+    @media (prefers-reduced-motion:reduce) { button:active,.button:active{transform:none} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Java · Macross Tetris v1.0</h1>
+    <div class="controls" aria-label="Applet controls">
+      <button id="reloadButton" type="button">Reload Applet</button>
+      <button id="musicButton" type="button" aria-pressed="true" title="Music starts when you press Start in the game">Music: On</button>
+      <a class="button" href="java/code/mactetris.java">View Original Source</a>
+      <a class="button" href="/">Back to Timeline</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="intro"><strong>Macross Tetris</strong> was my first real Java program: a two-player applet built in 1997. This page runs the original compiled Java classes unchanged through the CheerpJ browser JVM—no JavaScript game rewrite and no Java plug-in required.</p>
+
+    <section class="game-frame" aria-label="Macross Tetris Java applet">
+      <div id="screen" class="screen">
+        <iframe id="javaApplet" src="java/applet.html" title="Macross Tetris original Java applet" loading="eager"></iframe>
+      </div>
+    </section>
+    <p id="gameStatus" role="status" aria-live="polite">Downloading the Java runtime and starting the original applet…</p>
+
+    <section class="instructions" aria-label="Keyboard instructions">
+      <article>
+        <h2>Left player</h2>
+        <p><kbd>A</kbd>/<kbd>D</kbd> move · <kbd>S</kbd>/<kbd>W</kbd> rotate · <kbd>X</kbd> or <kbd>Space</kbd> drop · <kbd>C</kbd> slow drop · <kbd>Z</kbd> next · <kbd>E</kbd> level</p>
+      </article>
+      <article>
+        <h2>Right player</h2>
+        <p><kbd>4</kbd>/<kbd>6</kbd> move · <kbd>5</kbd>/<kbd>8</kbd> rotate · <kbd>2</kbd> or <kbd>Enter</kbd> drop · <kbd>3</kbd> slow drop · <kbd>1</kbd> next · <kbd>9</kbd> level</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    Original Java source, bytecode, music, and artwork © Horace Chan. Runs with <a href="https://cheerpj.com/docs/overview.html">CheerpJ 4.3</a> by Leaning Technologies. MIDI playback uses <a href="https://github.com/cifkao/html-midi-player">html-midi-player</a>. See <a href="java/CHEERPJ.md">integration notes</a>; <a href="java/tetris.html">the original page</a> remains reference-only.
+  </footer>
+
+  <midi-player id="musicPlayer" src="java/tetris01.mid" loop sound-font hidden aria-hidden="true"></midi-player>
+  <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/html-midi-player@1.6.0"></script>
+  <script>
+    const iframe = document.getElementById('javaApplet');
+    const screen = document.getElementById('screen');
+    const status = document.getElementById('gameStatus');
+    const reloadButton = document.getElementById('reloadButton');
+    const musicButton = document.getElementById('musicButton');
+    const musicPlayer = document.getElementById('musicPlayer');
+    const boundAppletDocuments = new WeakSet();
+    let musicEnabled = true;
+    let gameStarted = false;
+
+    function scaleApplet() {
+      iframe.style.transform = `scale(${screen.clientWidth / 500})`;
+    }
+
+    function stopMusic() {
+      if (typeof musicPlayer.stop === 'function') musicPlayer.stop();
+    }
+
+    function startMusic() {
+      gameStarted = true;
+      if (!musicEnabled) return;
+      if (typeof musicPlayer.start !== 'function') {
+        musicButton.textContent = 'Music: Unavailable';
+        musicButton.disabled = true;
+        return;
+      }
+      try {
+        stopMusic();
+        musicPlayer.currentTime = 0;
+        musicPlayer.start();
+      } catch (error) {
+        console.warn('MIDI playback could not start.', error);
+      }
+    }
+
+    function bindAppletStartTarget() {
+      const appletDocument = iframe.contentDocument;
+      if (!appletDocument || boundAppletDocuments.has(appletDocument)) return;
+      boundAppletDocuments.add(appletDocument);
+      appletDocument.addEventListener('pointerdown', (event) => {
+        const pressedStart = event.clientX >= 105 && event.clientX <= 234 &&
+          event.clientY >= 335 && event.clientY <= 354;
+        if (pressedStart) startMusic();
+      }, { capture: true });
+    }
+
+    new ResizeObserver(scaleApplet).observe(screen);
+    scaleApplet();
+    iframe.addEventListener('load', bindAppletStartTarget);
+    bindAppletStartTarget();
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== location.origin || event.source !== iframe.contentWindow) return;
+      if (event.data?.type !== 'macross-tetris-status') return;
+      if (event.data.state === 'ready') {
+        status.textContent = 'Java 8 runtime ready. Click the applet to focus it, then play.';
+      } else if (event.data.state === 'error') {
+        status.textContent = `The Java runtime could not start: ${event.data.message}`;
+      }
+    });
+
+    musicButton.addEventListener('click', () => {
+      musicEnabled = !musicEnabled;
+      musicButton.setAttribute('aria-pressed', String(musicEnabled));
+      musicButton.textContent = musicEnabled ? 'Music: On' : 'Music: Muted';
+      if (musicEnabled && gameStarted) startMusic();
+      if (!musicEnabled) stopMusic();
+    });
+
+    reloadButton.addEventListener('click', () => {
+      gameStarted = false;
+      stopMusic();
+      status.textContent = 'Reloading the Java runtime and original applet…';
+      iframe.src = 'java/applet.html';
+    });
+  </script>
+</body>
+</html>

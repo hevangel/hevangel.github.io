@@ -7,9 +7,11 @@ A personal programming journal hosted at [hevangel.github.io](https://hevangel.g
 - `index.html` - Main, data-driven programming timeline
 - `data/languages.json` - Ordered timeline entries and showcase links
 - `gwbasic.html` - Interactive GW-BASIC runner/playground
+- `java.html` - Original Macross Tetris Java applet running through a browser JVM
 - `win.html` - Appleby Marking System Windows 3.1 showcase
 - `js/` - JavaScript modules for the GW-BASIC interpreter
 - `gwbasic/` - Example GW-BASIC programs
+- `java/` - Preserved Java applet, artwork, and CheerpJ launch page
 - `win/` - Original Win16 C++ source/binaries, restored data, PCjs runtime, and boot disks
 - `scripts/` - Utility scripts
 
@@ -17,16 +19,20 @@ A personal programming journal hosted at [hevangel.github.io](https://hevangel.g
 
 - **Programming Timeline** - Responsive, themed entries rendered from `data/languages.json`
 - **GW-BASIC Runner** - Interactive browser-based GW-BASIC interpreter
+- **Macross Tetris** - The original two-player Java applet bytecode running unchanged in a Java 8-compatible browser JVM
 - **Windows 3.1 Runner** - The original 1996 Appleby Marking System binaries running in PCjs on an emulated COMPAQ DeskPro 386
 - **Restored Sample Database** - Teachers, classes, students, faculties, grades, and houses recovered from the original `SAMPLE.AMS` backup
 - **Dark, Responsive Design** - Plain HTML and CSS that adapts to desktop and mobile layouts
 
 The Windows showcase boots custom MS-DOS 3.31 program/data disks and uses PCjs's hosted Windows 3.1 hard-disk image. No Win16 binaries were recompiled or reimplemented.
 
+The Java showcase runs the original applet classes unchanged through [CheerpJ 4.3](https://cheerpj.com/docs/overview.html), a WebAssembly-based browser JVM loaded from its CDN. The original source, compiled classes, archive, MIDI, reference HTML, and artwork remain untouched; the integration is documented in [`java/CHEERPJ.md`](java/CHEERPJ.md).
+
 ## Tech Stack
 
 - Plain HTML/CSS/JavaScript (no build step)
 - Vanilla JavaScript GW-BASIC interpreter
+- CheerpJ 4.3 browser JVM for the original Java applet bytecode
 - Vendored PCjs runtime and ROM assets under the MIT License
 - GitHub Pages deployment
 

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=500, initial-scale=1" />
+  <title>Macross Tetris Java Applet</title>
+  <style>
+    html, body { width:500px; height:380px; margin:0; overflow:hidden; background:#000; }
+    cheerpj-applet { display:block; width:500px; height:380px; }
+  </style>
+  <script src="https://cjrtnc.leaningtech.com/4.3/loader.js"></script>
+</head>
+<body>
+  <cheerpj-applet code="mactetris.class" width="500" height="380" name="tetris">
+    The Java applet runtime could not start.
+  </cheerpj-applet>
+  <script type="module">
+    try {
+      await cheerpjInit();
+      parent.postMessage({ type: "macross-tetris-status", state: "ready" }, location.origin);
+    } catch (error) {
+      parent.postMessage({ type: "macross-tetris-status", state: "error", message: String(error?.message || error) }, location.origin);
+    }
+  </script>
+</body>
+</html>
