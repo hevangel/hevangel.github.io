@@ -1,0 +1,262 @@
+/****************************************************************************
+
+
+AMSORG.RC
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+#include "amsorg.h"
+
+
+
+pdclogo BITMAP "aslogo2.bmp"
+
+
+pdclogo2 BITMAP "aslogo3.bmp"
+
+
+folder ICON "ofolder.ico"
+
+
+aoicon ICON "amsorg.ico"
+
+
+hacicon ICON "appleby.ico"
+
+
+haeicon ICON "amsedit.ico"
+
+
+menu MENU 
+{
+ POPUP "&Option"
+ {
+  MENUITEM "&Update All", CM_UPDATEALL, GRAYED
+  MENUITEM SEPARATOR
+  MENUITEM "&Load Class", CM_LOADCLASS, GRAYED
+  MENUITEM "&Manager", CM_MANAGER, GRAYED
+  MENUITEM "&Spectator", CM_SPECTATOR
+  MENUITEM SEPARATOR
+  MENUITEM "E&xit", CM_EXIT
+ }
+
+ POPUP "&Class"
+ {
+  MENUITEM "&Update Class", CM_UPDATECLASS, GRAYED
+  MENUITEM "&Set Transfer", CM_TRANSFER, GRAYED
+  MENUITEM "&Print", CM_PRINT, GRAYED
+  MENUITEM "&Class Info", CM_CLASSINFO, GRAYED
+ }
+
+ POPUP "&Window"
+ {
+  MENUITEM "&Tile", CM_TILE
+  MENUITEM "&Cascade", CM_CASCADE
+  MENUITEM "&Arrange Icon", CM_ARRANGEICON
+  MENUITEM "&Fold All", CM_FOLDALL
+ }
+
+ POPUP "\a&Help"
+ {
+  MENUITEM "&Help", CM_HELP
+  MENUITEM "&System Info", CM_SYSINFO
+  MENUITEM SEPARATOR
+  MENUITEM "&About", CM_ABOUT
+ }
+
+}
+
+logindlg DIALOG 16, 23, 155, 120
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Login"
+FONT 8, "MS Sans Serif"
+{
+ ICON "hacicon", -1, 14, 5, 18, 20
+ LTEXT "Appleby Marking System", -1, 40, 6, 82, 8
+ LTEXT "Version 1.00", -1, 41, 16, 60, 8
+ LTEXT "Last Name :", -1, 12, 34, 42, 8
+ LTEXT "First Name :", -1, 12, 48, 44, 8
+ LTEXT "Teacher Code :", -1, 11, 62, 54, 8
+ LTEXT "Password :", -1, 11, 76, 42, 8
+ EDITTEXT IDE_LASTNAME, 55, 33, 88, 12, ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP
+ EDITTEXT IDE_FIRSTNAME, 55, 47, 88, 12, ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP
+ EDITTEXT IDE_TEACHERCODE, 67, 61, 44, 12, ES_AUTOHSCROLL | ES_UPPERCASE | WS_BORDER | WS_TABSTOP
+ EDITTEXT IDE_PASSWORD, 50, 75, 61, 12, ES_AUTOHSCROLL | ES_LOWERCASE | ES_PASSWORD | WS_BORDER | WS_TABSTOP
+ DEFPUSHBUTTON "OK", IDOK, 97, 96, 50, 14
+ LTEXT "Copyright  (c) 1995", -1, 5, 91, 68, 8
+ LTEXT "Appleby software dev.", -1, 5, 100, 80, 8
+ LTEXT "All Rights Reserved", -1, 5, 110, 66, 8
+}
+
+updatedlg DIALOG 6, 15, 203, 43
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Update"
+FONT 8, "MS Sans Serif"
+{
+ LTEXT "Updating class :", -1, 39, 10, 59, 8
+ LTEXT "", IDE_CLASS, 97, 9, 54, 9
+ LTEXT "Please wait......", -1, 72, 22, 59, 8
+}
+
+fielddlg DIALOG 8, 17, 207, 116
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Fields Information"
+FONT 8, "MS Sans Serif"
+{
+ EDITTEXT IDE_DESCRIPTION, 50, 15, 92, 12, ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP
+ EDITTEXT IDE_WEIGHT, 36, 30, 18, 12
+ COMBOBOX IDE_TYPE, 80, 30, 61, 45, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+ EDITTEXT IDE_RANGE, 38, 56, 96, 12, ES_AUTOHSCROLL | WS_BORDER | WS_TABSTOP
+ PUSHBUTTON "&Calculate Now!", ID_CALCULATE, 56, 90, 62, 14, WS_TABSTOP
+ LTEXT "1,3,5-12", -1, 9, 87, 32, 8, NOT WS_GROUP
+ DEFPUSHBUTTON "OK", IDOK, 148, 6, 50, 14, BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP
+ PUSHBUTTON "Cancel", IDCANCEL, 148, 24, 50, 14, WS_TABSTOP
+ PUSHBUTTON "Help", IDHELP, 148, 42, 50, 14
+ LTEXT "Field No :", -1, 4, 5, 34, 8, NOT WS_GROUP
+ LTEXT "", IDE_FIELDNO, 41, 5, 60, 8
+ LTEXT "Description :", -1, 4, 16, 44, 8, NOT WS_GROUP
+ LTEXT "Weight :", -1, 4, 32, 30, 8, NOT WS_GROUP
+ LTEXT "Type :", -1, 57, 32, 22, 8, NOT WS_GROUP
+ GROUPBOX "Average :", ID_GROUP, 5, 44, 136, 64, BS_GROUPBOX
+ LTEXT "Range :", -1, 9, 58, 28, 8, NOT WS_GROUP
+ LTEXT "Enter field number and/or field range seperated by commas.  For example :", -1, 9, 70, 126, 18, NOT WS_GROUP
+}
+
+transferdlg DIALOG 17, 22, 173, 168
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Set Transfar Fields"
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "OK", IDOK, 114, 21, 50, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 114, 39, 50, 14
+ PUSHBUTTON "Help", IDHELP, 114, 57, 50, 14
+ LTEXT "Marks :", -1, 5, 19, 30, 8
+ LTEXT "Field no. :", -1, 68, 19, 36, 8
+ LTEXT "First midterm :", -1, 5, 32, 46, 8
+ LTEXT "First term :", -1, 5, 47, 40, 8
+ LTEXT "Second midterm :", -1, 5, 60, 58, 8
+ LTEXT "Second term :", -1, 5, 73, 50, 8
+ LTEXT "Third midterm :", -1, 5, 86, 52, 8
+ LTEXT "Third term :", -1, 5, 98, 40, 8
+ LTEXT "X'mas exam :", -1, 5, 111, 52, 8
+ LTEXT "Final exam :", -1, 5, 124, 40, 8
+ LTEXT "Final mark :", -1, 5, 138, 40, 8
+ LTEXT "University mark :", -1, 5, 152, 58, 8
+ EDITTEXT IDE_FIRST_MT, 76, 31, 16, 12
+ EDITTEXT IDE_FIRST_T, 76, 45, 16, 12
+ EDITTEXT IDE_SECOND_MT, 76, 58, 16, 12
+ EDITTEXT IDE_SECOND_T, 76, 71, 16, 12
+ EDITTEXT IDE_THIRD_MT, 76, 84, 16, 12
+ EDITTEXT IDE_THIRD_T, 76, 97, 16, 12
+ EDITTEXT IDE_XMAS_E, 76, 110, 16, 12
+ EDITTEXT IDE_FINAL_E, 76, 123, 16, 12
+ EDITTEXT IDE_YEAR_M, 76, 136, 16, 12
+ EDITTEXT IDE_U_M, 76, 150, 16, 12
+ LTEXT "Class :", -1, 5, 6, 27, 8
+ LTEXT "", IDE_CLASSNAME, 32, 6, 72, 8
+}
+
+inputdlg DIALOG 0, 0, 30, 15
+STYLE WS_POPUP | WS_VISIBLE | WS_BORDER
+FONT 8, "MS Sans Serif"
+{
+ EDITTEXT IDE_INPUT, 2, 2, 23, 12, NOT WS_BORDER | WS_TABSTOP
+}
+
+aboutdlg DIALOG 70, 25, 140, 180
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Sans Serif"
+{
+ ICON "aoicon", -1, 14, 12, 18, 20
+ CONTROL "Appleby Marking System", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 53, 9, 84, 8
+ LTEXT "Organizer", -1, 53, 18, 84, 8
+ LTEXT "Version 1.00", -1, 53, 27, 84, 8
+ CONTROL "Program by :            Horace Chan", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 14, 42, 112, 8
+ CTEXT "Special Thanks to :", -1, 12, 106, 112, 8
+ CTEXT "Dr. Sampson, Mr. Thompson,", -1, 14, 115, 112, 8
+ CTEXT "and Micheal Hui.", -1, 14, 124, 112, 8
+ CONTROL "All Rights Reversed.", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 3, 141, 68, 8
+ LTEXT "Copyright \xA9 1995", -1, 3, 149, 60, 8
+ CONTROL "Appleby software dev.", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 3, 157, 80, 8
+ DEFPUSHBUTTON "OK", IDOK, 82, 141, 50, 14
+ GROUPBOX "", ID_GROUP, 6, 35, 127, 99, BS_GROUPBOX
+ CONTROL "", -1, "BUTTON", BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, -1, 166, 143, 15
+ LTEXT "Alex Short", -1, 75, 52, 53, 8
+}
+
+systeminfodlg DIALOG 11, 26, 163, 157
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "System Infomaton"
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "OK", IDOK, 105, 133, 50, 14
+ LTEXT "Appleby software dev.", -1, 5, 127, 101, 8
+ LTEXT "Copyright (c) 1995", -1, 6, 136, 60, 8
+ LTEXT "All Rights Reserved", -1, 6, 145, 76, 8
+ GROUPBOX "", ID_GROUP, 3, 3, 157, 120, BS_GROUPBOX
+ LTEXT "", IDE_SYSTEMINFO, 9, 11, 144, 108
+}
+
+
+
+commentsdlg DIALOG 6, 19, 306, 163
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Comments"
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "OK", IDOK, 93, 142, 47, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 144, 142, 50, 14
+ PUSHBUTTON "Help", IDHELP, 198, 142, 50, 14
+ EDITTEXT IDE_COMMENTS, 93, 28, 207, 108, ES_MULTILINE | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_TABSTOP
+ LTEXT "Student :", -1, 4, 5, 35, 8
+ LTEXT "", IDE_STUDENT, 39, 5, 117, 8
+ LISTBOX IDE_MARKS, 4, 28, 83, 131, LBS_NOTIFY | WS_BORDER | WS_BORDER | WS_VSCROLL
+ LTEXT "Marks :", -1, 4, 17, 60, 8
+ LTEXT "Comments :", -1, 93, 18, 60, 8
+ LTEXT "Class :", -1, 232, 4, 23, 9
+ RTEXT "", IDE_CLASS, 256, 4, 43, 8
+ PUSHBUTTON "Print", IDE_PRINT, 252, 142, 50, 14
+}
+
+classinfodlg DIALOG 8, 15, 268, 142
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Class Information"
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "OK", IDOK, 214, 122, 50, 14
+ LTEXT "Subject Code :", -1, 5, 4, 50, 8
+ LTEXT "", IDE_SUBJCODE, 57, 4, 44, 8
+ LTEXT "Section no :", -1, 13, 13, 44, 8
+ LTEXT "", IDE_SECTION, 57, 13, 28, 8
+ LTEXT "Description :", -1, 107, 4, 44, 8
+ LTEXT "", IDE_DESCRIPTION, 152, 4, 108, 8
+ LTEXT "Teacher :", -1, 117, 13, 35, 8
+ LTEXT "", IDE_TEACHER, 152, 13, 29, 8
+ LTEXT "Student no :", -1, 201, 22, 43, 8
+ GROUPBOX "Statistic", ID_GROUP, 6, 28, 258, 90, BS_GROUPBOX
+ LTEXT "", IDE_STUDENTNO, 244, 22, 19, 10
+ SCROLLBAR IDE_VSCROLL, 254, 32, 10, 86, SBS_VERT
+ LTEXT "Field no :", -1, 13, 39, 34, 8
+ LTEXT "", IDE_FIELDNO, 46, 39, 16, 8
+ LTEXT "Description :", -1, 70, 39, 45, 8
+ LTEXT "", IDE_FIELDDESCRIPTION, 116, 39, 133, 8
+ LTEXT "average :", -1, 20, 51, 32, 8
+ LTEXT "highest :", -1, 23, 60, 30, 8
+ LTEXT "lowest :", -1, 26, 69, 27, 8
+ LTEXT "passed :", -1, 24, 78, 30, 8
+ LTEXT "failed :", -1, 29, 87, 23, 8
+ LTEXT "over 85% :", -1, 17, 96, 36, 8, WS_GROUP | WS_TABSTOP
+ LTEXT "over 100% :", -1, 13, 105, 40, 8
+ PUSHBUTTON "Print Information", IDE_PRINT, 6, 122, 202, 14
+ LTEXT "", IDE_AVERAGE, 56, 51, 192, 8
+ LTEXT "", IDE_HIGHEST, 56, 61, 192, 8
+ LTEXT "", IDE_LOWEST, 56, 69, 192, 8
+ LTEXT "", IDE_PASSED, 56, 78, 192, 8
+ LTEXT "", IDE_FAILED, 56, 87, 192, 8
+ LTEXT "", IDE_OVEREIGHTYFIVE, 56, 96, 192, 8
+ LTEXT "", IDE_OVERHUNDRED, 56, 105, 192, 8
+}

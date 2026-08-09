@@ -1,0 +1,90 @@
+/****************************************************************************
+
+
+AMSEDIT.RC
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+#include "amsview.h"
+
+acicon ICON "appleby.ico"
+
+applebybmp BITMAP "appleby1.bmp"
+
+
+pdclogo BITMAP "pdclogo.bmp"
+
+
+pdsbkgd BITMAP "pdsbkgd.bmp"
+
+aboutdlg DIALOG 70, 25, 140, 180
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Sans Serif"
+{
+ ICON "avicon", -1, 14, 12, 18, 20
+ CONTROL "Appleby Marking System", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 53, 9, 84, 8
+ LTEXT "Viewer Program", -1, 53, 18, 84, 8
+ LTEXT "Version 1.00b", -1, 53, 26, 84, 8
+ CONTROL "Program by :            Horace Chan", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 14, 42, 112, 8
+ CTEXT "This program is dedicated to :", -1, 9, 72, 122, 8
+ CTEXT "Miss Sally Tang", -1, 40, 81, 60, 8, SS_CENTER | WS_DISABLED | WS_GROUP
+ CTEXT "Special Thanks to :", -1, 12, 106, 112, 8
+ CTEXT "Dr. Sampson, Mr. Thompson,", -1, 14, 115, 112, 8
+ CTEXT "and Micheal Hui.", -1, 14, 124, 112, 8
+ CONTROL "All Rights Reversed.", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 3, 141, 68, 8
+ LTEXT "Copyright \xA9 1995", -1, 3, 149, 60, 8
+ CONTROL "Power Dolls Corporation", -1, "STATIC", SS_LEFTNOWORDWRAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 3, 157, 80, 8
+ DEFPUSHBUTTON "OK", IDOK, 82, 141, 50, 14
+ GROUPBOX "", ID_GROUP, 6, 35, 127, 99, BS_GROUPBOX
+ CONTROL "", -1, "BUTTON", BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, -1, 166, 150, 15
+}
+
+avmenu MENU 
+{
+ POPUP "Options"
+ {
+  MENUITEM "&Open Style Sheet", CM_OPEN
+  MENUITEM "&Style Sheet Info", CM_INFO
+  MENUITEM "&Print", CM_PRINT
+  MENUITEM SEPARATOR
+  MENUITEM "Save && E&xit ", CM_EXIT
+ }
+
+ POPUP "\a&Help"
+ {
+  MENUITEM "&Help", CM_HELP
+  MENUITEM "&System Info", CM_SYSINFO
+  MENUITEM SEPARATOR
+  MENUITEM "&About", CM_ABOUT
+ }
+
+}
+
+opendlg DIALOG 18, 16, 260, 138
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Open Style Sheet"
+FONT 8, "MS Sans Serif"
+{
+ EDITTEXT IDE_FILE, 6, 13, 88, 12, WS_BORDER | WS_TABSTOP
+ LISTBOX IDE_FILELIST, 10, 25, 83, 105, LBS_STANDARD | WS_TABSTOP
+ LISTBOX IDE_DIRLIST, 103, 25, 91, 69, LBS_STANDARD | WS_TABSTOP
+ COMBOBOX IDE_DRIVE, 103, 104, 91, 39, CBS_DROPDOWNLIST | WS_TABSTOP
+ LTEXT "Drive :", -1, 102, 94, 60, 8
+ DEFPUSHBUTTON "OK", IDOK, 203, 6, 50, 14, BS_DEFPUSHBUTTON | WS_GROUP | WS_TABSTOP
+ PUSHBUTTON "Cancel", IDCANCEL, 203, 24, 50, 14, WS_TABSTOP
+ PUSHBUTTON "Help", IDHELP, 203, 42, 50, 14, WS_TABSTOP
+ LTEXT "File :", -1, 8, 3, 60, 8
+ LTEXT "Directory :", -1, 103, 4, 60, 8
+ LTEXT "", IDE_DIR, 103, 14, 60, 8
+}
+
+
+
+
+
+avicon ICON "amsview.ico"
+

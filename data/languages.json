@@ -84,6 +84,34 @@
     ]
   },
   {
+    "id": "windows",
+    "navLabel": "WIN16",
+    "sectionClass": "scanlines",
+    "dividerBefore": "the GUI takes over",
+    "logoHtml": "<div class='big-logo'><img src='/win/AMSMAN.ICO' alt='Appleby Marking System icon' /></div>",
+    "title": "Windows 3.1 / Win16",
+    "era": "1995–1996 · Borland C++ 4.5",
+    "launch": { "href": "/win.html", "label": "▶ Run Appleby Marking System", "disabled": false },
+    "chunks": [
+      {
+        "label": "▸ 01 / Project",
+        "visualHtml": "<div class='win31-window'><div class='win31-titlebar'><span>Appleby Marking System</span><span>_ □</span></div><div class='win31-menu'><span>File</span><span>Edit</span><span>Window</span><span>Help</span></div><div class='win31-body'><div class='win31-pane'><strong>Teachers</strong><br>12 records</div><div class='win31-pane'><strong>Classes</strong><br>28 records</div><div class='win31-pane'><strong>Students</strong><br>39 records</div><div class='win31-pane'><strong>Faculties</strong><br>3 records</div></div><div class='win31-status'>AMS Manager 1.00 · Ready</div></div>",
+        "heading": "Appleby Marking System",
+        "bodyHtml": "A three-program Win16 school marks-management suite I wrote in C++ in 1995–96. <strong>Manager</strong> maintained teachers, classes, students and faculties; <strong>Organizer</strong> edited class mark tables; <strong>Spectator</strong> provided read-only views and reports."
+      },
+      {
+        "label": "▸ 02 / Specialty",
+        "heading": "MDI Windows and Persistent Records",
+        "bodyHtml": "The suite joined a Windows 3.1 multiple-document interface, menus and dialogs to a compact binary database. It was a leap from text-mode tools into <strong>event-driven GUI programming</strong>: window messages, shared runtime libraries, resources and state that had to survive between sessions."
+      },
+      {
+        "label": "▸ 03 / Restoration",
+        "heading": "The Original Binaries, Running Again",
+        "bodyHtml": "No rewrite and no recompile: the original 1996 executables now boot inside a browser-hosted <strong>COMPAQ DeskPro 386</strong>. I decoded the program's own <code>SAMPLE.AMS</code> backup to restore its teachers, classes and students, then packaged everything on bootable DOS disks for PCjs."
+      }
+    ]
+  },
+  {
     "id": "java",
     "navLabel": "JAVA",
     "sectionClass": "",

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en" data-theme="mono">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Windows 3.1 Runner | hevangel.github.io</title>
+  <link href="https://fonts.cdnfonts.com/css/perfect-dos-vga-437" rel="stylesheet" />
+  <link rel="stylesheet" href="/win/pcjs/machines/pcx86/xsl/components.css" />
+  <style>
+    :root {
+      --panel: #0b0b0b;
+      --frame: #2a2a2a;
+      --text: #F3F4F6;
+      --glow: rgba(243, 244, 246, 0.35);
+      --accent: #F3F4F6;
+      --dos-font: "Perfect DOS VGA 437 Win", "Perfect DOS VGA 437", "Fixedsys Excelsior", monospace;
+      --win-navy: #000080;
+      --win-navy-light: #1084d0;
+      --win-silver: #c0c0c0;
+      --win-teal: #008080;
+      --dos-cyan: #55ffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,255,255,0.04), transparent 35%),
+        #020202;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      padding: 0.55rem 0.85rem;
+      border-bottom: 2px solid var(--win-navy-light);
+      background: linear-gradient(90deg, var(--win-navy), var(--win-navy-light));
+      color: #ffffff;
+      font-family: var(--dos-font);
+      font-size: 16px;
+      line-height: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 0 #000055;
+    }
+
+    .title { margin: 0; font: inherit; color: #ffffff; }
+
+    .controls {
+      display: flex;
+      gap: 0.55rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button, a.button {
+      background: var(--win-silver);
+      color: #000000;
+      border: 2px outset #ffffff;
+      border-radius: 0;
+      padding: 0.2rem 0.55rem;
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      min-height: 20px;
+    }
+
+    button:hover, a.button:hover { background: #d4d0c8; }
+    button:active, a.button:active { border-style: inset; }
+    button:disabled { opacity: 0.55; cursor: wait; }
+    button:focus, a.button:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+    main {
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+
+    .console-area {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      width: min(1000px, 100%);
+    }
+
+    .project-description {
+      margin: 0;
+      padding: 0 0.15em;
+      width: 100%;
+      color: var(--text);
+      font-family: var(--dos-font);
+      font-size: 16px;
+      line-height: 1.2;
+      text-align: center;
+      text-shadow: 0 0 8px var(--glow);
+    }
+
+    .program-description {
+      margin: 0;
+      padding: 0 0.15em;
+      width: 100%;
+      color: var(--dos-cyan);
+      font-family: var(--dos-font);
+      font-size: 14px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .crt-frame {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--frame);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow:
+        0 0 0 2px #0a0a0a inset,
+        0 0 32px rgba(0,0,0,0.6),
+        0 0 20px var(--glow);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* PCjs replaces this container with its own markup. */
+    #amsPC { width: 100%; }
+    #amsPC .machine { margin: 0 auto; }
+    #amsPC canvas, .pcjs-canvas canvas { image-rendering: pixelated; background: #000; }
+
+    .boot-note {
+      width: 100%;
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-left: 4px solid var(--win-navy-light);
+      padding: 0.7rem 0.9rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    .boot-note strong { color: var(--text); }
+
+    .panels {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .panel {
+      background: var(--win-silver);
+      color: #000;
+      border: 2px outset #ffffff;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .panel-title {
+      background: linear-gradient(90deg, var(--win-navy), var(--win-navy-light));
+      color: #fff;
+      font-family: var(--dos-font);
+      font-size: 14px;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title span:last-child { letter-spacing: 1px; }
+    .panel-body { padding: 0.7rem 0.85rem; }
+    .panel-body p { margin: 0 0 0.6rem; }
+    .panel-body p:last-child { margin-bottom: 0; }
+    .panel-body ul { margin: 0.3rem 0 0.6rem; padding-left: 1.15rem; }
+    .panel-body li { margin-bottom: 0.35rem; }
+    .panel-body code {
+      background: #fff;
+      border: 1px solid #808080;
+      padding: 0 3px;
+      font-family: Consolas, "Courier New", monospace;
+      color: #000080;
+    }
+
+    .downloads a {
+      display: inline-block;
+      background: var(--win-silver);
+      color: #000;
+      border: 2px outset #fff;
+      text-decoration: none;
+      padding: 3px 8px;
+      margin: 0 6px 6px 0;
+      font-size: 0.78rem;
+    }
+
+    .downloads a:hover { background: #d4d0c8; }
+    .downloads a:active { border-style: inset; }
+
+    footer {
+      padding: 0.75rem 1rem 1rem;
+      color: #a1a1aa;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    footer a { color: var(--accent); }
+    code { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="title">Windows 3.1 Runner &mdash; Appleby Marking System</h1>
+    <div class="controls">
+      <button id="resetBtn" type="button" title="Reboot the emulated PC">Restart</button>
+      <button id="fullBtn" type="button" title="Fill the screen">Full Screen</button>
+      <a class="button" href="/">Back to Timeline</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="console-area">
+      <p class="project-description">
+        The Appleby Marking System &mdash; a three-program Win16 suite I wrote in Borland C++ over
+        1995&ndash;96 to manage a school's teachers, classes, students, faculties and marks. This page boots a
+        COMPAQ DeskPro 386, MS-DOS and Windows 3.1 in your browser, then launches the program with its original
+        1996 sample database restored.
+      </p>
+      <p class="program-description">AMSMAN.EXE &middot; AMSORG.EXE &middot; AMSSPEC.EXE &nbsp;|&nbsp; 16-bit Windows, Borland C++ 4.5, ~24,000 lines of C++</p>
+
+      <section class="crt-frame" aria-label="Emulated COMPAQ DeskPro 386 running Windows 3.1">
+        <div id="amsPC"></div>
+      </section>
+
+      <div class="boot-note" id="bootNote">
+        <strong>First load takes a minute.</strong> The page fetches a 20&nbsp;Mb Windows 3.1 hard-disk image
+        (about 7&nbsp;Mb compressed) from <a href="https://www.pcjs.org" target="_blank" rel="noopener">pcjs.org</a>,
+        then the emulated 386 boots MS-DOS, copies the program from the floppy to <code>C:\AMS</code> and starts
+        Windows. When the <em>Appleby Marking System</em> password box appears, just press
+        <strong>Enter</strong> &mdash; password protection is off in this build.
+      </div>
+
+      <div class="panels">
+        <div class="panel">
+          <div class="panel-title"><span>Using the program</span><span>_ &#9633; &#10005;</span></div>
+          <div class="panel-body">
+            <ul>
+              <li><strong>AMS Manager</strong> (<code>AMSMAN.EXE</code>) starts automatically. Its four MDI
+                windows list Teachers, Classes, Students and Faculties &mdash; open them from the
+                <em>Window</em> menu if they start minimised.</li>
+              <li><strong>AMS Organizer</strong> (<code>AMSORG.EXE</code>) edits a class mark table. Run it
+                from Program Manager's <em>File &rarr; Run</em> with <code>C:\AMS\AMSORG.EXE</code>, then
+                <em>Options &rarr; Open</em> a class such as <code>SBIOA01</code>.</li>
+              <li><strong>AMS Spectator</strong> (<code>AMSSPEC.EXE</code>) is the read-only viewer, with
+                filters by grade, house, sex and faculty.</li>
+              <li>Mouse capture: click inside the screen to grab the pointer, press <kbd>Esc</kbd>
+                to release it.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span>What is actually running</span><span>_ &#9633; &#10005;</span></div>
+          <div class="panel-body">
+            <p>Nothing here is re-implemented. These are the original 1996 binaries, executing on an emulated
+              80386 with a COMPAQ DeskPro 386 BIOS, IBM VGA BIOS, MS-DOS 3.31 and Windows 3.1.</p>
+            <ul>
+              <li><strong>A:</strong> bootable MS-DOS 3.31 disk built from this repo &mdash; the three
+                programs, <code>BC450RTL.DLL</code> and the database.</li>
+              <li><strong>B:</strong> the 28 class mark-table files.</li>
+              <li><strong>C:</strong> PCjs's stock Windows 3.1 disk, so this repo carries no copy of Windows.</li>
+            </ul>
+            <p>The sample database was recovered by decoding <code>SAMPLE.AMS</code>, the program's own backup
+              format, back into the data files it loads at startup.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span>Downloads</span><span>_ &#9633; &#10005;</span></div>
+          <div class="panel-body downloads">
+            <p>Run it in any PC emulator, or dig through the source:</p>
+            <a href="/win/AMS-BOOT.IMG" download>&#128190; AMS-BOOT.IMG</a>
+            <a href="/win/AMS-DATA.IMG" download>&#128190; AMS-DATA.IMG</a>
+            <a href="/win/AMSMAN.EXE" download>&#128190; AMSMAN.EXE</a>
+            <a href="/win/SAMPLE.AMS" download>&#128190; SAMPLE.AMS</a>
+            <a href="https://github.com/hevangel/hevangel.github.io/tree/main/win" target="_blank" rel="noopener">&#128193; C++ source</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Source: <code>win/</code> &mdash; Borland C++ 4.5 for Windows, 1995&ndash;1996.
+    Emulation by <a href="https://www.pcjs.org" target="_blank" rel="noopener">PCjs</a>
+    (<a href="/win/pcjs/LICENSE.txt">MIT License</a>) &copy; Jeff Parsons; Windows 3.1 disk image hosted by pcjs.org.
+  </footer>
+
+  <script src="/win/pcjs/assets/js/xslt-polyfill.min.js"></script>
+  <script src="/win/pcjs/machines/pcx86/releases/2.25/pcx86.js"></script>
+  <script>
+    (function () {
+      var MACHINE_ID = 'amsPC';
+
+      if (typeof embedPCx86 !== 'function') {
+        document.getElementById(MACHINE_ID).textContent =
+          'The PCjs emulator failed to load. Please reload the page.';
+        return;
+      }
+
+      embedPCx86(MACHINE_ID, '/win/machine.xml', '/win/pcjs/machines/pcx86/xsl/components.xsl');
+
+      document.getElementById('resetBtn').addEventListener('click', function () {
+        window.location.reload();
+      });
+
+      document.getElementById('fullBtn').addEventListener('click', function () {
+        var canvas = document.querySelector('#' + MACHINE_ID + ' canvas');
+        var target = canvas && (canvas.closest('.pcjs-canvas') || canvas.parentElement || canvas);
+        if (target && target.requestFullscreen) target.requestFullscreen();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+[setup]
+  "PACKAGENAME","Appleby Marking System"
+  "CAPTIONNAME","Appleby Marking System Setup"
+
+[disks]
+  "0","A:\","AMS Program Disk"
+
+[directories]
+  "0","C:\AMS","Appleby Marking System Directory"
+
+[apps]
+   "0", "R01D", "0", "BIN", "BC450RTL.DLL", "AMS DLL files", "AMS DLL files"
+   "0", "R", "0", "BIN", "BWCC.DLL"  
+   "0", "R05D", "0", "BIN", "SUBJCODE.DAT", "AMS data files", "AMS data files"
+   "0", "R", "0", "BIN", "GRADHSE.DAT"  
+   "0", "R", "0", "BIN", "TEACHER.DAT"  
+   "0", "R", "0", "BIN", "CLASS.DAT"  
+   "0", "R", "0", "BIN", "STUDENT.DAT"  
+   "0", "R", "0", "BIN", "FACULTY.DAT"  
+   "0", "RIA", "0", "BIN", "AMSMAN.EXE", "AMS Manager", "AMS Manager", "Program File"
+   "0", "RIA", "0", "BIN", "AMSORG.EXE", "AMS Organizer" , "AMS Organizer", "Program File"
+   "0", "RIA", "0", "BIN", "AMSSPEC.EXE", "AMS Spectator", "AMS Spectator", "Program File"
+   
+[progman]
+  "A","Appleby Marking System","AMS.GRP"

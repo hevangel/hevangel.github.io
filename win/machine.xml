@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	COMPAQ DeskPro 386, 4Mb RAM and IBM VGA for the Appleby Marking System
+	showcase.  The original executables contain 80386 near-branch instructions,
+	so an 80286 raises an Illegal Instruction fault during startup.
+
+	Drive A: is a bootable MS-DOS 3.31 diskette built from this repo; its
+	AUTOEXEC.BAT copies the program to C:\AMS and starts Windows 3.1 in standard
+	mode with AMS Manager already running. Drive B: carries the class mark files.
+
+	Drive C: is PCjs's stock "PC DOS 3.30 + Windows 3.10" hard disk, fetched from
+	harddisks.pcjs.org, so this repo does not carry a copy of Windows.
+
+	Emulator: PCjs (MIT) by Jeff Parsons - https://www.pcjs.org
+-->
+<machine id="amsPC" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">COMPAQ DeskPro 386 &#183; 4Mb RAM &#183; IBM VGA &#183; MS-DOS 3.31 + Windows 3.1</name>
+	<computer id="deskpro386-vga-4096k" name="COMPAQ DeskPro 386" buswidth="32"/>
+	<cpu id="cpu386" model="80386" pos="right" padRight="8px" padBottom="8px">
+		<control type="button" binding="run">Run</control>
+		<control type="button" binding="reset">Reset</control>
+		<control type="button" binding="setSpeed">Speed</control>
+	</cpu>
+	<ram id="ramLow" addr="0x00000" test="false" size="0xa0000" comment="ROM BIOS memory test disabled for a faster boot"/>
+	<ram id="ramCPQ" addr="0xfa0000" size="0x60000" comment="COMPAQ memory at 0xFA0000"/>
+	<ram id="ramExt" addr="0x100000" size="0x300000" comment="3Mb extended memory at 0x100000"/>
+	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/win/pcjs/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json5"/>
+	<video id="videoVGA" model="vga" screenWidth="1280" screenHeight="960" touchScreen="mouse" autoLock="true" pos="center" padding="8px">
+		<rom id="romVGA" addr="0xc0000" size="0x6000" file="/win/pcjs/machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.json5" notify="videoVGA[0x378d,0x3f8d,0x4eba]"/>
+	</video>
+	<fdc id="fdcNEC" autoMount='{A:{name:"AMS Boot Disk (1.44Mb)",path:"/win/AMS-BOOT.IMG"}, B:{name:"AMS Class Files (1.44Mb)",path:"/win/AMS-DATA.IMG"}}' pos="left" padLeft="8px" padBottom="8px">
+		<control type="list" binding="listDrives"/>
+		<control type="list" binding="listDisks"/>
+		<control type="button" binding="loadDisk">Load</control>
+		<control type="button" binding="saveDisk" padRight="8px">Save</control>
+		<control type="description" binding="descDisk" padRight="8px"/>
+		<control type="file" binding="mountDisk"/>
+	</fdc>
+	<hdc id="hdcAT" type="AT" drives='[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json"}]' pos="left" padLeft="8px" padBottom="8px"/>
+	<parallel id="lpt1" adapter="1" binding="console"/>
+	<keyboard id="keyboard"/>
+	<chipset id="chipset" model="deskpro386" floppies="[1440,1440]" monitor="vga"/>
+	<serial id="com1" adapter="1"/>
+	<mouse serial="com1"/>
+</machine>

@@ -1,26 +1,33 @@
 # Programming Journal
 
-A personal programming journal hosted at [hevangel.github.io](https://hevangel.github.io), documenting my programming journey through different languages and eras.
+A personal programming journal hosted at [hevangel.github.io](https://hevangel.github.io), documenting my programming journey across languages and eras.
 
 ## Structure
 
-- `index.html` - Main timeline page with four parallel tracks: GW-BASIC, Pascal, dBASE IV+, and a placeholder for future entries
+- `index.html` - Main, data-driven programming timeline
+- `data/languages.json` - Ordered timeline entries and showcase links
 - `gwbasic.html` - Interactive GW-BASIC runner/playground
+- `win.html` - Appleby Marking System Windows 3.1 showcase
 - `js/` - JavaScript modules for the GW-BASIC interpreter
 - `gwbasic/` - Example GW-BASIC programs
+- `win/` - Original Win16 C++ source/binaries, restored data, PCjs runtime, and boot disks
 - `scripts/` - Utility scripts
 
 ## Features
 
-- **Parallel Timeline Layout** - Four parallel tracks showing programming eras side-by-side
-- **GW-BASIC Runner** - Interactive GW-BASIC interpreter in the browser
-- **Responsive Design** - Responsive grid layout (4 columns → 2 columns → 1 column)
-- **Dark theme** with custom CSS variables
+- **Programming Timeline** - Responsive, themed entries rendered from `data/languages.json`
+- **GW-BASIC Runner** - Interactive browser-based GW-BASIC interpreter
+- **Windows 3.1 Runner** - The original 1996 Appleby Marking System binaries running in PCjs on an emulated COMPAQ DeskPro 386
+- **Restored Sample Database** - Teachers, classes, students, faculties, grades, and houses recovered from the original `SAMPLE.AMS` backup
+- **Dark, Responsive Design** - Plain HTML and CSS that adapts to desktop and mobile layouts
+
+The Windows showcase boots custom MS-DOS 3.31 program/data disks and uses PCjs's hosted Windows 3.1 hard-disk image. No Win16 binaries were recompiled or reimplemented.
 
 ## Tech Stack
 
-- Plain HTML/CSS/JS (no build step)
+- Plain HTML/CSS/JavaScript (no build step)
 - Vanilla JavaScript GW-BASIC interpreter
+- Vendored PCjs runtime and ROM assets under the MIT License
 - GitHub Pages deployment
 
 ## Development
@@ -32,20 +39,8 @@ npx serve .
 python -m http.server
 ```
 
-Then open `http://localhost:8000` or `http://localhost:3000`
+Then open the URL printed by the selected server.
 
 ## Deployment
 
-Push to `main` branch → GitHub Pages deploys automatically from root.
-
-## Structure
-
-```
-.
-├── index.html          # Main timeline page
-├── gwbasic.html        # GW-BASIC interactive runner
-├── js/                 # JS modules (tokenizer, parser, interpreter, etc.)
-├── gwbasic/            # Sample GW-BASIC programs
-├── scripts/            # Build/utilities
-└── .gitignore
-```
+Push to `main` branch; GitHub Pages deploys automatically from the repository root.
