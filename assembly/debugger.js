@@ -161,7 +161,7 @@ dom.run.addEventListener('click',()=>{if(halted)return setStatus('Reset the halt
 dom.step.addEventListener('click',()=>{running=false;clearTimeout(timer);stepOne(true);});dom.reset.addEventListener('click',reset);
 dom.module.addEventListener('change',()=>loadSource(dom.module.value,false));dom.clear.addEventListener('click',()=>{breakpoints.clear();refreshSource(false);setStatus('All breakpoints cleared.');});
 dom.source.addEventListener('click',event=>{const row=event.target.closest('.source-line.modeled');if(row)toggleBreakpoint(Number(row.dataset.line));});dom.source.addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&event.target.matches('.source-line.modeled')){event.preventDefault();toggleBreakpoint(Number(event.target.dataset.line));}});
-dom.keypad.addEventListener('click',event=>{const button=event.target.closest('button[data-key]');if(button)feedKey(button.dataset.key);});
+dom.keypad.addEventListener('click',event=>{const button=event.target.closest('button[data-key]');if(button){feedKey(button.dataset.key);button.blur();}});
 window.addEventListener('keydown',event=>{
   if(event.ctrlKey||event.metaKey||event.altKey)return;
   const target=event.target;
