@@ -1,0 +1,117 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : op.asm
+                       Output Filename : op.obj
+
+
+    1                                  	* file: op.asm
+    2                                  	* project: ECE 222 Lab 2
+    3                                  	* description: operators subroutines
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	                xdef L2ADD,L2SUB,L2MUL,L2DIV
+    7                                  	
+    8                                  	* subroutine: L2ADD
+    9                                  	* description: Add 2 numbers.
+   10                                  	* parameter: 
+   11                                  	*  D6: oprand 1 
+   12                                  	*  D7: oprand 2
+   13                                  	* return:
+   14                                  	*  D7: answer
+   15                                  	* register used:
+   16                                  	*  none 
+   17                                  	* register modified:
+   18                                  	*  none
+   19                                  	
+   20   00000000   DE86                	L2ADD           add.l   D6,D7           add 2 oprand           
+   21   00000002   4E75                	                rts                     return to call program
+   22                                  	
+   23                                  	* subroutine: L2SUB
+   24                                  	* description: D7 = D7 - D6
+   25                                  	* parameter: 
+   26                                  	*  D6: oprand 1 
+   27                                  	*  D7: oprand 2
+   28                                  	* return:
+   29                                  	*  D7: answer
+   30                                  	* register used:
+   31                                  	*  none 
+   32                                  	* register modified:
+   33                                  	*  none
+   34                                  	
+   35   00000004   9E86                	L2SUB           sub.l   D6,D7           subtract D6 from D7
+   36   00000006   4E75                	                rts                     return to call program
+   37                                  	
+   38                                  	* subroutine: L2MUL
+   39                                  	* description: D7 = D7 * D6
+   40                                  	* parameter: 
+   41                                  	*  D6: oprand 1 
+   42                                  	*  D7: oprand 2
+   43                                  	* return:
+   44                                  	*  D7: answer
+   45                                  	* register used:
+   46                                  	*  none 
+   47                                  	* register modified:
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+   48                                  	*  none
+   49                                  	
+   50   00000008   CFC6                	L2MUL           muls    D6,D7           multiply 2 oprand           
+   51   0000000A   4E75                	                rts                     return to call program
+   52                                  	
+   53                                  	
+   54                                  	* subroutine: L2DIV
+   55                                  	* description: D7 = D7 / D6
+   56                                  	* parameter: 
+   57                                  	*  D6: dividen
+   58                                  	*  D7: dividend
+   59                                  	* return:
+   60                                  	*  D7: answer
+   61                                  	* register used:
+   62                                  	*  none 
+   63                                  	* register modified:
+   64                                  	*  none
+   65                                  	
+   66   0000000C   8FC6                	L2DIV           divs    D6,D7           subtract 2 oprand           
+   67   0000000E   0C47 0000           	                cmp.w   #0,D7           check is negative or positive
+   68   00000012   6D00 000C           	                blt     div_neg                    
+   69   00000016   0287 0000 FFFF      	                andi.l  #$0000ffff,D7   clear remainder
+   70   0000001C   6000 0008           	                bra     l2div_rts
+   71   00000020   0087 FFFF 0000      	div_neg         ori.l   #$ffff0000,D7   clear remainder               
+   72   00000026   4E75                	l2div_rts       rts                     return to call program
+   73                                  	
+   74   00000028                       	                end
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+Defined            Symbol Name               Value              References
+
+  Pre    CODE                               00000000  
+  Pre    DATA                               00000000  
+   71    div_neg                            00000020       68
+  Pre    HIGH32K                            00000000  
+   20    L2ADD                              00000000        6
+   66    L2DIV                              0000000C        6
+   72    l2div_rts                          00000026       70
+   50    L2MUL                              00000008        6
+   35    L2SUB                              00000004        6
+  Pre    LOW32K                             00000000  
+
+
+
+
+           Lines Assembled :  74             Assembly Errors :  0
+
+
+

@@ -1,0 +1,73 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : inche.asm
+                       Output Filename : inche.obj
+
+
+    1                                  	* file: inche.asm
+    2                                  	* project: ECE 222 Lab 3
+    3                                  	* description: ACIA interface
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	                xdef INCHE
+    7                                  	
+    8                                  	* subroutine: INCHE
+    9                                  	* description: Get input character from the keyboard
+   10                                  	* parameter: 
+   11                                  	*  none
+   12                                  	* return:
+   13                                  	*  D0: data input
+   14                                  	* register used:
+   15                                  	*  D0: data input
+   16                                  	*  D1: Status Register
+   17                                  	* variable modified:
+   18                                  	*  none
+   19                                  	
+   20              0001 0040           	ACIAREG         equ     $010040
+   21              0001 0042           	ACIADATA        equ     $010042
+   22   00000000                       	                                                   
+   23   00000000   48E7 4000           	INCHE           movem.l D1,-(SP)        save register 
+   24   00000004   4280                	                clr.l   D0
+   25   00000006   13FC 0015 0001 0040 	                move.b  #$15,ACIAREG    initialize ACIA
+   26   0000000E   1239 0001 0040      	LOOP            move.b  ACIAREG,D1      grep status register
+   27   00000014   0201 0001           	                andi.b  #$01,D1         mask RDRF
+   28   00000018   0C01 0000           	                cmp.b   #$0,D1          check is RDRF = 1
+   29   0000001C   67F0                	                beq     LOOP            if not wait until it's 1
+   30   0000001E   1039 0001 0042      	                move.b  ACIADATA,D0     get iput character
+   31   00000024   0200 007F           	                andi.b  #%01111111,D0   mask the input
+   32                                  	
+   33   00000028   4CDF 0002           	inche_rts       movem.l (SP)+,D1        restore register
+   34   0000002C   4E75                	                rts                     return to call program
+   35                                  	
+   36   0000002E                       	                end
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+Defined            Symbol Name               Value              References
+
+   21    ACIADATA                        =  00010042       30
+   20    ACIAREG                         =  00010040       25     26
+  Pre    CODE                               00000000  
+  Pre    DATA                               00000000  
+  Pre    HIGH32K                            00000000  
+   23    INCHE                              00000000        6
+   33    inche_rts                          00000028  
+   26    LOOP                               0000000E       29
+  Pre    LOW32K                             00000000  
+
+
+
+
+           Lines Assembled :  36             Assembly Errors :  0
+
+
+

@@ -1,0 +1,109 @@
+  Tue Jun 24 1997 11:38                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : paratest.asm
+                       Output Filename : paratest.obj
+
+
+    1                                  	* file: paratest.asm
+    2                                  	* project: ECE 222 Lab 3
+    3                                  	* description: parallel interfacesubroutines
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	* parameter: 
+    7                                  	*  none
+    8                                  	* return:
+    9                                  	*  who cares
+   10                                  	* register used:
+   11                                  	*  who cares
+   12                                  	* variable modified:
+   13                                  	*  who cares
+   14                                  	
+   15              0000 2000           	PROGRAM equ     $2000
+   16              0000 4000           	OPERAND equ     $4000
+   17              0000 5000           	BUFFER  equ     $5000
+   18                                  	
+   19              0000 00E3           	OUT1CR  equ     227
+   20              0000 00E4           	TUTOR   equ     228
+   21              0000 00F3           	OUTPUT  equ     243
+   22              0000 00F8           	OUTCH   equ     248
+   23                                  	
+   24              0001 0001           	PGCR    equ     $010001
+   25              0001 0007           	PBDDR   equ     $010007
+   26              0001 000F           	PBCR    equ     $01000F
+   27              0001 0013           	PBDR    equ     $010013
+   28                                  	
+   29              0000 000D           	CR      equ     $0D
+   30              0000 000A           	LF      equ     $0A
+   31                                  	
+   32   00004000                       	        org     OPERAND
+   33   00004000                       	        
+   34   00004000                       	TUTSP   ds.l    1
+   35                                  	
+   36                                  	*  start the program
+   37                                  	
+   38   00002000                       	        org     PROGRAM
+   39                                  	
+   40   00002000   23CF 0000 4000      	        move.l  A7,TUTSP                save TUTOR stack pointer
+   41   00002006   2E7C 0000 8000      	        move.l  #$8000,A7               locate this program's stack
+   42                                  	
+   43   0000200C   13FC 0000 0001 0001 	        move.b  #$0,PGCR
+   44   00002014   13FC 00F0 0001 0007 	        move.b  #$F0,PBDDR              col as output
+   45   0000201C   13FC 0080 0001 000F 	        move.b  #$80,PBCR
+   46   00002024   13FC 0000 0001 0013 	        move.b  #$0,PBDR
+   47                                  	
+  Tue Jun 24 1997 11:38                                                                                                  Page    2
+
+
+
+
+   48   0000202C   1039 0001 0013      	LOOP    move.b  PBDR,D0
+   49   00002032   60F8                	        bra     LOOP
+   50                                  	
+   51   00002034   2E79 0000 4000      	EXIT    move.l  TUTSP,A7                exit the program
+   52   0000203A   1E3C 00E4           	        move.b  #TUTOR,D7
+   53   0000203E   4E4E                	        trap    #14
+   54                                  	
+   55                                  	
+   56                                  	
+  Tue Jun 24 1997 11:38                                                                                                  Page    3
+
+
+Defined            Symbol Name               Value              References
+
+   17    BUFFER                          =  00005000  
+  Pre    CODE                               00000000  
+   29    CR                              =  0000000D  
+  Pre    DATA                               00000000  
+   51    EXIT                               00002034  
+  Pre    HIGH32K                            00000000  
+   30    LF                              =  0000000A  
+   48    LOOP                               0000202C       49
+  Pre    LOW32K                             00000000  
+   16    OPERAND                         =  00004000       32
+   19    OUT1CR                          =  000000E3  
+   22    OUTCH                           =  000000F8  
+   21    OUTPUT                          =  000000F3  
+   26    PBCR                            =  0001000F       45
+   25    PBDDR                           =  00010007       44
+   27    PBDR                            =  00010013       46     48
+   24    PGCR                            =  00010001       43
+   15    PROGRAM                         =  00002000       38
+   20    TUTOR                           =  000000E4       52
+   34    TUTSP                              00004000       40     51
+
+
+
+
+           Lines Assembled :  56             Assembly Errors :  0
+
+
+

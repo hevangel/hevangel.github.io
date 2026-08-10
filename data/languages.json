@@ -88,7 +88,7 @@
     "navLabel": "WIN16",
     "sectionClass": "scanlines",
     "dividerBefore": "the GUI takes over",
-    "logoHtml": "<div class='big-logo'><img src='/win/AMSMAN.ICO' alt='Appleby Marking System icon' /></div>",
+    "logoHtml": "<div class='big-logo'><img src='/images/windows_31_logo.svg' alt='Windows 3.1 logo' /></div>",
     "title": "Windows 3.1 / Win16",
     "era": "1995–1996 · Borland C++ 4.5",
     "launch": { "href": "/win.html", "label": "▶ Run Appleby Marking System", "disabled": false },
@@ -168,6 +168,34 @@
     ]
   },
   {
+    "id": "assembly",
+    "navLabel": "ASM",
+    "sectionClass": "scanlines",
+    "dividerBefore": "dropping below the abstractions",
+    "logoHtml": "<div class='big-logo'><img src='/images/assembly_logo.png' alt='Assembly logo' /></div>",
+    "title": "Assembly",
+    "era": "1997 · Motorola 68000",
+    "launch": { "href": "/assembly.html", "label": "▶ Run & Debug Calculator", "disabled": false },
+    "chunks": [
+      {
+        "label": "▸ 01 / Project",
+        "visualHtml": "<div class='asm-screen'><span class='cmt'>; MAIN.ASM — E&amp;CE 222 Lab 3</span><br><span class='addr'>$002000</span>&nbsp;&nbsp;<span class='hex'>move.l A7,TUTSP</span><br><span class='addr'>$002006</span>&nbsp;&nbsp;<span class='hex'>move.l #$8000,A7</span><br><span class='addr'>$00200C</span>&nbsp;&nbsp;<span class='hex'>lea PROMPT,A5</span><br><span class='addr'>$002018</span>&nbsp;&nbsp;<span class='hex'>jsr OUTPUT</span><br><span class='addr'>$00201E</span>&nbsp;&nbsp;<span class='hex'>bsr GETMODE</span><br><br><span class='reg'>D0=00000031</span> <span class='reg'>A7=00008000</span><br><span class='reg'>PC=00201E</span> <span class='cmt'>waiting for ACIA input_</span></div>",
+        "heading": "A 68000 Calculator on Real I/O",
+        "bodyHtml": "My 1997 E&amp;CE 222 labs targeted a <strong>Motorola 68000</strong> training board and its TUTOR monitor. The integrated program presents a serial menu, scans a 4×4 parallel keypad, and runs a signed four-function calculator through hand-written input, output, arithmetic, and conversion routines."
+      },
+      {
+        "label": "▸ 02 / Preservation",
+        "heading": "Source, Opcodes & Hardware Addresses",
+        "bodyHtml": "The original <code>.ASM</code> files survive beside zero-error assembler listings containing addresses and emitted opcodes. The code talks directly to the ACIA at <code>$010040/$010042</code> and a 6821-style parallel interface at <code>$010001–$010013</code>—registers, polling loops, debounce delays, and no operating system."
+      },
+      {
+        "label": "▸ 03 / Workbench",
+        "heading": "Run It One Instruction at a Time",
+        "bodyHtml": "The browser workbench recreates the original control flow at source level: set breakpoints on preserved lines, single-step across modules, use the keypad, and observe <strong>D0–D7, A0–A7, PC, stack, and calculator state</strong>. Reconstructed link addresses are identified honestly because the final 1997 linked image did not survive."
+      }
+    ]
+  },
+  {
     "id": "vhdl",
     "navLabel": "VHDL",
     "sectionClass": "",
@@ -192,34 +220,6 @@
         "label": "▸ 03 / My Take",
         "heading": "My Day Job, My Native Layer",
         "bodyHtml": "VHDL is where my journey <em>converges</em>. Everything above is built on hardware described in languages like this. When a bug spans firmware, OS, and silicon, I chase it from RTL waveform up to the JS console and back. Fifty years in, the loop is closed: <em>the kid who typed <code>GOTO 10</code> now designs the gates that fetch it.</em>"
-      }
-    ]
-  },
-  {
-    "id": "assembly",
-    "navLabel": "ASM",
-    "sectionClass": "scanlines",
-    "dividerBefore": "descending to bare metal",
-    "logoHtml": "<div class='big-logo'><img src='/images/assembly_logo.png' alt='Assembly logo' /></div>",
-    "title": "Assembly",
-    "era": "circa always · bare metal",
-    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
-    "chunks": [
-      {
-        "label": "▸ 01 / History",
-        "visualHtml": "<div class='asm-screen'><span class='cmt'>; bootloader.asm — 16-bit real mode</span><br><span class='addr'>0x7C00</span>&nbsp;&nbsp;<span class='hex'>mov ax, 0x07C0</span><br><span class='addr'>0x7C03</span>&nbsp;&nbsp;<span class='hex'>mov ds, ax</span><br><span class='addr'>0x7C05</span>&nbsp;&nbsp;<span class='hex'>mov si, msg</span><br><span class='addr'>0x7C08</span>&nbsp;&nbsp;<span class='hex'>call print</span><br><span class='addr'>0x7C0B</span>&nbsp;&nbsp;<span class='hex'>cli ; hlt</span><br><br><span class='reg'>AX=07C0</span> <span class='reg'>BX=0000</span> <span class='reg'>IP=7C0B</span><br><span class='cmt'>> halted_</span><span style='animation:blink 1s steps(2) infinite;'>█</span></div>",
-        "heading": "The Machine's Native Tongue",
-        "bodyHtml": "Assembly is the <strong>human-readable shadow</strong> of the CPU's actual instruction set. Each maps almost one-to-one onto the binary opcodes the silicon executes. Before compilers were trustworthy, it was how <em>everything</em> got written — OSes, games, BIOS routines."
-      },
-      {
-        "label": "▸ 02 / Specialty",
-        "heading": "Total Control, Zero Safety Net",
-        "bodyHtml": "Every register, every flag, every memory address — no GC, no type system, no bounds check. Its specialty is <strong>transparency</strong>: reading disassembly is how you learn what a compiler really did. The basement beneath every other language here."
-      },
-      {
-        "label": "▸ 03 / My Take",
-        "heading": "Where Software Meets Silicon",
-        "bodyHtml": "Assembly was the bridge that turned me from a <em>programmer</em> into an <em>engineer</em>. The day <code>0x7C00</code> lit up in a debugger, the abstraction curtain tore. Today, when a branch predictor mispredicts, the debug trail ends in instruction-level behavior — and I can draw a straight line from the RTL waveform to the disassembly. It's the Rosetta Stone between my day job and everything else."
       }
     ]
   },

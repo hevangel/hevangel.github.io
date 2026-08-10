@@ -1,0 +1,321 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : calc.asm
+                       Output Filename : calc.obj
+
+
+    1                                  	* file: calc.asm
+    2                                  	* project: ECE 222 Lab 2
+    3                                  	* description: calculator main program
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	                xdef STATE,SIGNSPACE,ESIGNSPACE,CALC
+    7                                  	                xref L2ADD,L2SUB,L2MUL,L2DIV,GETNUMD,HEX2DEC,INPUT
+    8                                  	                xref OUTCH, OUTPUT, OUT1CR, INCHE
+    9                                  	
+   10                                  	* declare constants
+   11              0000 2500           	PROGRAM         equ     $2500
+   12              0000 4500           	OPERAND         equ     $4500
+   13              0000 5500           	BUFFER          equ     $5500
+   14                                  	
+   15              0000 00E4           	TUTOR           equ     228
+   16                                  	
+   17              0000 000D           	CR              equ     $0D
+   18              0000 000A           	LF              equ     $0A
+   19                                  	
+   20                                  	* declare strings
+   21   00004500                       	                org     OPERAND
+   22   00004500   0D 0A 0D 0A 45 26   	TITLE           dc.b    CR,LF,CR,LF,"E&CE 222 Calculator",CR,LF
+        00004506   43 45 20 32 32 32 
+        0000450C   20 43 61 6C 63 75 
+        00004512   6C 61 74 6F 72 0D 
+        00004518   0A 
+   23   00004519   62 79 20 59 2E 43   	                dc.b    "by Y.Chan & X.Du"
+        0000451F   68 61 6E 20 26 20 
+        00004525   58 2E 44 75 
+   24              0000 4529           	ETITLE          equ     *
+   25   00004529   2D                  	SIGNNEG         dc.b    "-"
+   26              0000 452A           	ESIGNNEG        equ     *
+   27   0000452A   0D 0A 20 20         	SIGNSPACE       dc.b    CR,LF,"  "
+   28              0000 452E           	ESIGNSPACE      equ     *
+   29   0000452E   0D 0A 3D 20         	SIGNEQ          dc.b    CR,LF,"= "
+   30              0000 4532           	ESIGNEQ         equ     *
+   31   00004532   20 2B 20            	SIGNADD         dc.b    " + "
+   32              0000 4535           	ESIGNADD        equ     *
+   33   00004535   20 2D 20            	SIGNSUB         dc.b    " - "
+   34              0000 4538           	ESIGNSUB        equ     *
+   35   00004538   20 2A 20            	SIGNMUL         dc.b    " * "
+   36              0000 453B           	ESIGNMUL        equ     *
+   37   0000453B   20 2F 20            	SIGNDIV         dc.b    " / "
+   38              0000 453E           	ESIGNDIV        equ     *
+   39   0000453E   45 72 72 6F 72      	ERROR           dc.b    "Error"
+   40              0000 4543           	EERROR          equ     *
+   41                                  	
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+        ^
+   42   00004544                       	RESULT          ds.l    1       the current result
+   43   00004548                       	STATE           ds.b    1       state: 0-done, 1-first, 2-continue, 3-error 
+   44   00004549                       	OPR             ds.b    1       operation
+   45                                  	
+   46                                  	* start of main program
+   47   00002500                       	                org     PROGRAM
+   48                                  	*               move.l  #$8000,SP
+   49                                  	
+   50                                  	* subroutine: CALC
+   51                                  	* description: the calcator main program
+   52                                  	* parameter: 
+   53                                  	*  none
+   54                                  	* return:
+   55                                  	*  none
+   56                                  	* register used:
+   57                                  	*  D0: result variable
+   58                                  	*  D6: temp variable
+   59                                  	*  D7: trap 14 register
+   60                                  	*  A5: start of buffer
+   61                                  	*  A6: end of buffer
+   62                                  	* register modified:
+   63                                  	*  none
+   64                                  	
+   65   00002500   48E7 FFFE           	CALC            movem.l D0-D7/A0-A6,-(SP)       save registers
+   66   00002504   4BF9 0000 4500      	                lea     TITLE,A5        point to start of title
+   67   0000250A   4DF9 0000 4529      	                lea     ETITLE,A6       point to end of title
+   68   00002510                       	                
+   69   00002510   4EB9 0000 0000      	                jsr     OUT1CR          print message
+   70                                  	
+   71   00002516   42B9 0000 4544      	                clr.l   RESULT          set result to 0
+   72   0000251C   4239 0000 4548      	                clr.b   STATE           set state = 0
+   73   00002522   4239 0000 4549      	                clr.b   OPR             set opr = 0
+   74                                  	
+   75   00002528   0C39 0001 0000 4548 	main_loop       cmp.b   #1,STATE        check is FIRST state
+   76   00002530   6700 0094           	                beq     end_result
+   77   00002534                       	                
+   78   00002534   4BF9 0000 452E      	dis_result      lea     SIGNEQ,A5       point to start of string
+   79   0000253A   4DF9 0000 4532      	                lea     ESIGNEQ,A6      point to end of string
+   80   00002540   4EB9 0000 0000      	                jsr     OUTPUT          print '=' sign
+   81   00002546                       	                
+   82   00002546   2039 0000 4544      	                move.l  RESULT,D0       
+   83   0000254C   0C80 0000 270F      	                cmp.l   #9999,D0        check is bigger or smaller
+   84   00002552   6E00 0040           	                bgt     prn_err         result > 9999
+   85   00002556   0C80 FFFF D8F1      	                cmp.l   #-9999,D0       check is bigger or smaller
+   86   0000255C   6D00 0036           	                blt     prn_err         result < -9999
+   87   00002560   0C80 0000 0000      	                cmp.l   #0,D0           check is result < 0
+   88   00002566   6C00 0016           	                bge     prn_result
+   89   0000256A                       	                
+   90   0000256A   4BF9 0000 4529      	                lea     SIGNNEG,A5      point to start of string
+   91   00002570   4DF9 0000 452A      	                lea     ESIGNNEG,A6     point to end of string
+   92   00002576   4EB9 0000 0000      	                jsr     OUTPUT          print '-'
+   93   0000257C                       	                
+   94   0000257C   4480                	                neg.l   D0              make it positive
+   95   0000257E                       	                
+   96   0000257E   2A7C 0000 5500      	prn_result      move.l  #BUFFER,A5
+   97   00002584   2C7C 0000 5500      	                move.l  #BUFFER,A6
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+
+
+   98   0000258A   4EB9 0000 0000      	                jsr     HEX2DEC         call HEX2DEC subroutine
+   99   00002590   6000 0016           	                bra     prn_end         go ahead
+  100                                  	
+  101   00002594   13FC 0003 0000 4548 	prn_err         move.b  #3,STATE
+  102   0000259C   4BF9 0000 453E      	                lea     ERROR,A5        point to start of string
+  103   000025A2   4DF9 0000 4543      	                lea     EERROR,A6       point to end of string
+  104                                  	
+  105   000025A8   4EB9 0000 0000      	prn_end         jsr     OUTPUT          print message
+  106   000025AE                       	                
+  107                                  	                * print the next sign
+  108   000025AE   0C39 0000 0000 4548 	                cmp.b   #0,STATE        check state
+  109   000025B6   6700 0074           	                beq     end_dis                
+  110   000025BA   0C39 0003 0000 4548 	                cmp.b   #3,STATE        
+  111   000025C2   6700 0068           	                beq     end_dis
+  112                                  	
+  113   000025C6   0C39 0004 0000 4549 	end_result      cmp.b   #4,OPR          check div operation
+  114   000025CE   6700 004A           	                beq     dis_div
+  115   000025D2   0C39 0003 0000 4549 	                cmp.b   #3,OPR          check mul operation
+  116   000025DA   6700 002E           	                beq     dis_mul
+  117   000025DE   0C39 0002 0000 4549 	                cmp.b   #2,OPR          check sub operation
+  118   000025E6   6700 0012           	                beq     dis_sub
+  119                                  	                                        * check add operation
+  120   000025EA   4BF9 0000 4532      	dis_add         lea     SIGNADD,A5      point to start of string
+  121   000025F0   4DF9 0000 4535      	                lea     ESIGNADD,A6     point to end of string
+  122   000025F6   6000 002E           	                bra     dis_op
+  123   000025FA   4BF9 0000 4535      	dis_sub         lea     SIGNSUB,A5      point to start of string
+  124   00002600   4DF9 0000 4538      	                lea     ESIGNSUB,A6     point to end of string
+  125   00002606   6000 001E           	                bra     dis_op
+  126   0000260A   4BF9 0000 4538      	dis_mul         lea     SIGNMUL,A5      point to start of string
+  127   00002610   4DF9 0000 453B      	                lea     ESIGNMUL,A6     point to end of string
+  128   00002616   6000 000E           	                bra     dis_op
+  129   0000261A   4BF9 0000 453B      	dis_div         lea     SIGNDIV,A5      point to start of string
+  130   00002620   4DF9 0000 453E      	                lea     ESIGNDIV,A6     point to end of string
+  131   00002626   4EB9 0000 0000      	dis_op          jsr     OUTPUT          print sign
+  132                                  	
+  133   0000262C   2A7C 0000 5500      	end_dis         move.l  #BUFFER,A5      set buffer address
+  134   00002632   2C7C 0000 5500      	                move.l  #BUFFER,A6      set buffer address
+  135   00002638   4EB9 0000 0000      	                jsr     INPUT           get input data
+  136   0000263E                       	                
+  137   0000263E   BDCD                	                cmpa.l  A5,A6           check is there any input
+  138   00002640   6700 0080           	                beq     do_none         don't do any calculation if no input
+  139                                  	
+  140   00002644   4EB9 0000 0000      	                jsr     GETNUMD         convert ascii to binary
+  141   0000264A   2E39 0000 4544      	                move.l  RESULT,D7       move result to D7
+  142   00002650   2C01                	                move.l  D1,D6           move oprand to D6
+  143   00002652                       	                                
+  144   00002652   0C39 0001 0000 4549 	                cmp.b   #1,OPR          check operation
+  145   0000265A   6700 002A           	                beq     do_add
+  146   0000265E   0C39 0002 0000 4549 	                cmp.b   #2,OPR          check operation
+  147   00002666   6700 0028           	                beq     do_sub
+  148   0000266A   0C39 0003 0000 4549 	                cmp.b   #3,OPR          check operation
+  149   00002672   6700 0026           	                beq     do_mul
+  150   00002676   0C39 0004 0000 4549 	                cmp.b   #4,OPR          check operation
+  151   0000267E   6700 0024           	                beq     do_div
+  152   00002682   6000 003E           	                bra     do_none         do nothing
+  153                                  	
+  154   00002686   4EB9 0000 0000      	do_add          jsr     L2ADD           call ADD subroutine
+  Wed Jun 25 1997 16:18                                                                                                  Page    4
+
+
+
+
+  155   0000268C   6000 002E           	                bra     end_do
+  156   00002690   4EB9 0000 0000      	do_sub          jsr     L2SUB           call SUB subroutine
+  157   00002696   6000 0024           	                bra     end_do
+  158   0000269A   4EB9 0000 0000      	do_mul          jsr     L2MUL           call MUL subroutine
+  159   000026A0   6000 001A           	                bra     end_do
+  160   000026A4   0C06 0000           	do_div          cmp.b   #0,D6           check dividen is zero
+  161   000026A8   6600 000C           	                bne     no_zero
+  162   000026AC   2E3C 0000 2710      	                move.l  #10000,D7
+  163   000026B2   6000 0008           	                bra     end_do
+  164   000026B6   4EB9 0000 0000      	no_zero         jsr     L2DIV           call DIV subroutine
+  165                                  	
+  166   000026BC   23C7 0000 4544      	end_do          move.l  D7,RESULT
+  167                                  	
+  168   000026C2   0C40 0006           	do_none         cmp     #6,D0           check is exit
+  169   000026C6   6700 005C           	                beq     calc_rts
+  170   000026CA   0C40 0005           	                cmp     #5,D0           check is clear
+  171   000026CE   6700 003A           	                beq     is_clr
+  172   000026D2                       	                
+  173   000026D2   13C0 0000 4549      	                move.b  D0,OPR          move operator
+  174   000026D8                       	                
+  175   000026D8   0C39 0001 0000 4548 	                cmp.b   #1,STATE        check is FIRST state
+  176   000026E0   6600 0008           	                bne     not_first
+  177   000026E4   23C1 0000 4544      	                move.l  D1,RESULT       change result
+  178   000026EA                       	                
+  179   000026EA   0C00 0000           	not_first       cmp.b   #0,D0           check is ENTER
+  180   000026EE   6700 000E           	                beq     is_ent
+  181   000026F2                       	                
+  182   000026F2   13FC 0002 0000 4548 	                move.b  #2,STATE
+  183   000026FA   6000 FE2C           	                bra     main_loop
+  184                                  	
+  185   000026FE   13FC 0000 0000 4548 	is_ent          move.b  #0,STATE
+  186   00002706   6000 FE20           	                bra     main_loop
+  187                                  	
+  188   0000270A   42B9 0000 4544      	is_clr          clr.l   RESULT          
+  189   00002710   13FC 0000 0000 4548 	                move.b  #0,STATE
+  190   00002718   13FC 0000 0000 4549 	                move.b  #0,OPR
+  191                                  	
+  192   00002720   6000 FE06           	end_main_loop   bra     main_loop
+  193                                  	
+  194   00002724   4CDF 7FFF           	calc_rts        movem.l (SP)+,D0-D7/A0-A6       restore registers
+  195   00002728   4E75                	                rts                             bye-bye calculator
+  196                                  	
+  197                                  	                *move.b  #TUTOR,D7
+  198                                  	                *trap    #14
+  199   0000272A                       	                end
+  Wed Jun 25 1997 16:18                                                                                                  Page    5
+
+
+Defined            Symbol Name               Value              References
+
+   13    BUFFER                          =  00005500       96     97    133    134
+   65    CALC                               00002500        6
+  194    calc_rts                           00002724      169
+  Pre    CODE                               00000000  
+   17    CR                              =  0000000D       22     22     22     27     29
+  Pre    DATA                               00000000  
+  120    dis_add                            000025EA  
+  129    dis_div                            0000261A      114
+  126    dis_mul                            0000260A      116
+  131    dis_op                             00002626      122    125    128
+   78    dis_result                         00002534  
+  123    dis_sub                            000025FA      118
+  154    do_add                             00002686      145
+  160    do_div                             000026A4      151
+  158    do_mul                             0000269A      149
+  168    do_none                            000026C2      138    152
+  156    do_sub                             00002690      147
+   40    EERROR                          =  00004543      103
+  133    end_dis                            0000262C      109    111
+  166    end_do                             000026BC      155    157    159    163
+  192    end_main_loop                      00002720  
+  113    end_result                         000025C6       76
+   39    ERROR                              0000453E      102
+   32    ESIGNADD                        =  00004535      121
+   38    ESIGNDIV                        =  0000453E      130
+   30    ESIGNEQ                         =  00004532       79
+   36    ESIGNMUL                        =  0000453B      127
+   26    ESIGNNEG                        =  0000452A       91
+   28    ESIGNSPACE                      =  0000452E        6
+   34    ESIGNSUB                        =  00004538      124
+   24    ETITLE                          =  00004529       67
+    7    GETNUMD                            External      140
+    7    HEX2DEC                            External       98
+  Pre    HIGH32K                            00000000  
+    8    INCHE                              External  
+    7    INPUT                              External      135
+  188    is_clr                             0000270A      171
+  185    is_ent                             000026FE      180
+    7    L2ADD                              External      154
+    7    L2DIV                              External      164
+    7    L2MUL                              External      158
+    7    L2SUB                              External      156
+   18    LF                              =  0000000A       22     22     22     27     29
+  Pre    LOW32K                             00000000  
+   75    main_loop                          00002528      183    186    192
+  179    not_first                          000026EA      176
+  164    no_zero                            000026B6      161
+   12    OPERAND                         =  00004500       21
+   44    OPR                                00004549       73    113    115    117    144    146    148    150    173    190
+    8    OUT1CR                             External       69
+    8    OUTCH                              External  
+    8    OUTPUT                             External       80     92    105    131
+  105    prn_end                            000025A8       99
+  101    prn_err                            00002594       84     86
+   96    prn_result                         0000257E       88
+   11    PROGRAM                         =  00002500       47
+   42    RESULT                             00004544       71     82    141    166    177    188
+  Wed Jun 25 1997 16:18                                                                                                  Page    6
+
+
+Defined            Symbol Name               Value              References
+
+   31    SIGNADD                            00004532      120
+   37    SIGNDIV                            0000453B      129
+   29    SIGNEQ                             0000452E       78
+   35    SIGNMUL                            00004538      126
+   25    SIGNNEG                            00004529       90
+   27    SIGNSPACE                          0000452A        6
+   33    SIGNSUB                            00004535      123
+   43    STATE                              00004548        6     72     75    101    108    110    175    182    185    189
+   22    TITLE                              00004500       66
+   15    TUTOR                           =  000000E4  
+
+
+
+
+           Lines Assembled :  199             Assembly Errors :  0
+
+
+

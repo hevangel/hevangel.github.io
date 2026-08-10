@@ -4,28 +4,26 @@ A personal programming journal hosted at [hevangel.github.io](https://hevangel.g
 
 ## Structure
 
-- `index.html` - Main, data-driven programming timeline
-- `data/languages.json` - Ordered timeline entries and showcase links
-- `gwbasic.html` - Interactive GW-BASIC runner/playground
-- `javascript.html` - Modern-browser Operation Minmay game showcase
-- `java.html` - Original Macross Tetris Java applet running through a browser JVM
-- `win.html` - Appleby Marking System Windows 3.1 showcase
-- `js/` - JavaScript modules for the GW-BASIC interpreter
-- `gwbasic/` - Example GW-BASIC programs
-- `javascript/` - Preserved Netscape-era game pages/artwork and modern compatibility runtime
-- `java/` - Preserved Java applet, artwork, and CheerpJ launch page
-- `win/` - Original Win16 C++ source/binaries, restored data, PCjs runtime, and boot disks
+- `index.html` / `data/languages.json` - Data-driven timeline shell, ordered entries, and showcase links
+- `gwbasic.html` / `gwbasic/` / `js/` - Interactive GW-BASIC playground, examples, and interpreter
+- `assembly.html` / `assembly/` - 1997 MC68000 source-level workbench, original sources, and assembler listings
+- `javascript.html` / `javascript/` - Operation Minmay showcase and preserved Netscape-era game
+- `java.html` / `java/` - Macross Tetris applet showcase and preserved Java files
+- `win.html` / `win/` - Appleby Marking System showcase, Win16 files, data, and PCjs assets
 - `scripts/` - Utility scripts
 
 ## Features
 
 - **Programming Timeline** - Responsive, themed entries rendered from `data/languages.json`
 - **GW-BASIC Runner** - Interactive browser-based GW-BASIC interpreter
+- **68000 Lab Workbench** - Runs the 1997 E&CE 222 calculator behavior from its preserved MC68000 source flow, with source-line breakpoints, stepping, keypad/ACIA I/O, and live D/A registers
 - **Operation Minmay** - A Netscape-era JavaScript space shooter restored on a modern Canvas runtime with its original artwork and mission flow
 - **Macross Tetris** - The original two-player Java applet bytecode running unchanged in a Java 8-compatible browser JVM
 - **Windows 3.1 Runner** - The original 1996 Appleby Marking System binaries running in PCjs on an emulated COMPAQ DeskPro 386
 - **Restored Sample Database** - Teachers, classes, students, faculties, grades, and houses recovered from the original `SAMPLE.AMS` backup
 - **Dark, Responsive Design** - Plain HTML and CSS that adapts to desktop and mobile layouts
+
+The assembly corpus contains eleven original `.ASM` files and their zero-error 2500 A.D. assembler `.LST` outputs from June 1997. Its object files, final linked image, linker map, and TUTOR board ROM did not survive. `assembly.html` therefore uses an explicitly labeled source-level execution model: it follows the original control flow and hardware addresses while exposing reconstructed link addresses, rather than claiming binary- or cycle-accurate emulation.
 
 The Windows showcase boots custom MS-DOS 3.31 program/data disks and uses PCjs's hosted Windows 3.1 hard-disk image. No Win16 binaries were recompiled or reimplemented.
 
@@ -36,6 +34,7 @@ The Java showcase runs the original applet classes unchanged through [CheerpJ 4.
 ## Tech Stack
 
 - Plain HTML/CSS/JavaScript (no build step)
+- Dependency-free MC68000 source-level execution/debugging model
 - Vanilla JavaScript GW-BASIC interpreter
 - CheerpJ 4.3 browser JVM for the original Java applet bytecode
 - Vendored PCjs runtime and ROM assets under the MIT License
@@ -50,7 +49,7 @@ npx serve .
 python -m http.server
 ```
 
-Then open the URL printed by the selected server.
+Then open the URL printed by the selected server. HTTP serving is required for the assembly workbench's source fetches and the Windows runner's machine assets.
 
 ## Deployment
 

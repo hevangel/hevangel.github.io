@@ -1,0 +1,127 @@
+  Tue Jun 24 1997 15:35                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : test2.asm
+                       Output Filename : test2.obj
+
+
+    1                                  	*  file: test.asm
+    2                                  	*  project:  ece222 lab 2     
+    3                                  	*  by:  Y. Chan(95050292), X. Du(95056498)
+    4                                  	*
+    5                                  	*  description: the test program 2
+    6                                  	*
+    7                                  	*  parameter:
+    8                                  	*    none
+    9                                  	*
+   10                                  	*  return:
+   11                                  	*    none
+   12                                  	*
+   13                                  	*  register used:
+   14                                  	*    who cares
+   15                                  	*
+   16                                  	*  register modified:
+   17                                  	*    who cares
+   18                                  	
+   19                                  		xref    PARALLEL
+   20   00000000                       		
+   21                                  	*  constant declarations                  
+   22                                  	
+   23              0000 2000           	PROGRAM equ     $2000
+   24              0000 4000           	OPERAND equ     $4000
+   25              0000 5000           	BUFFER  equ     $5000
+   26                                  	
+   27              0000 00E4           	TUTOR   equ     228
+   28              0000 00F3           	OUTPUT  equ     243
+   29              0000 00F8           	OUTCH   equ     248
+   30                                  	
+   31              0000 000D           	CR      equ     $0D
+   32              0000 000A           	LF      equ     $0A
+   33                                  	
+   34   00004000                       		org     OPERAND
+   35   00004000                       		
+   36   00004000   0D 0A               	PROMPT  dc.b    CR,LF
+   37   00004002   0D 0A               		dc.b    CR,LF
+   38   00004004   54 65 73 74 69 6E   		dc.b    "Testing...",CR,LF
+        0000400A   67 2E 2E 2E 0D 0A 
+   39              0000 4010           	EPROMPT equ     *
+   40                                  	
+   41   00004010                       	TUTSP   ds.l    1
+   42                                  	
+   43                                  	*  start the program
+   44                                  	
+   45   00002000                       		org     PROGRAM
+   46                                  	
+  Tue Jun 24 1997 15:35                                                                                                  Page    2
+
+
+
+
+   47   00002000   23CF 0000 4010      		move.l  A7,TUTSP                save TUTOR stack pointer
+   48   00002006   2E7C 0000 8000      		move.l  #$8000,A7               locate this program's stack
+   49                                  	
+   50   0000200C   4BF9 0000 4000      	LOOP    lea     PROMPT,A5               point to start of menu 
+   51   00002012   4DF9 0000 4010      		lea     EPROMPT,A6              point to end of menu
+   52   00002018   1E3C 00F3           		move.b  #OUTPUT,D7              print the menu screen
+   53   0000201C   4E4E                		trap    #14
+   54                                  	
+   55   0000201E   4EB9 0000 2032      	GET     jsr     GETMODE                 jump to subroutine
+   56   00002024   60F8                		bra     GET
+   57                                  	
+   58   00002026   2E79 0000 4010      	EXIT    move.l  TUTSP,A7                exit the program
+   59   0000202C   1E3C 00E4           		move.b  #TUTOR,D7
+   60   00002030   4E4E                		trap    #14
+   61   00002032                       	       
+   62   00002032   4240                	GETMODE clr     D0              clear the storage       
+   63   00002034                       		
+   64   00002034   4EB9 0000 0000      		JSR     PARALLEL
+   65                                  	
+   66   0000203A   1E3C 00F8           		move.b  #OUTCH,D7
+   67   0000203E   4E4E                		trap    #14
+   68                                  	
+   69   00002040   4E75                	RETURN  rts
+   70   00002042   60EE                		bra     GETMODE
+   71                                  	
+   72   00002044                       		end
+  Tue Jun 24 1997 15:35                                                                                                  Page    3
+
+
+Defined            Symbol Name               Value              References
+
+   25    BUFFER                          =  00005000  
+  Pre    CODE                               00000000  
+   31    CR                              =  0000000D       36     37     38
+  Pre    DATA                               00000000  
+   39    EPROMPT                         =  00004010       51
+   58    EXIT                               00002026  
+   55    GET                                0000201E       56
+   62    GETMODE                            00002032       55     70
+  Pre    HIGH32K                            00000000  
+   32    LF                              =  0000000A       36     37     38
+   50    LOOP                               0000200C  
+  Pre    LOW32K                             00000000  
+   24    OPERAND                         =  00004000       34
+   29    OUTCH                           =  000000F8       66
+   28    OUTPUT                          =  000000F3       52
+   19    PARALLEL                           External       64
+   23    PROGRAM                         =  00002000       45
+   36    PROMPT                             00004000       50
+   69    RETURN                             00002040  
+   27    TUTOR                           =  000000E4       59
+   41    TUTSP                              00004010       47     58
+
+
+
+
+           Lines Assembled :  72             Assembly Errors :  0
+
+
+

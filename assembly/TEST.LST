@@ -1,0 +1,108 @@
+  Tue Jun 24 1997 11:15                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : test.asm
+                       Output Filename : test.obj
+
+
+    1                                  	*  file: test.asm
+    2                                  	*
+    3                                  	*  description: the test program
+    4                                  	*
+    5                                  	*  parameter:
+    6                                  	*    none
+    7                                  	*
+    8                                  	*  return:
+    9                                  	*    none
+   10                                  	*
+   11                                  	*  register used:
+   12                                  	*    who cares
+   13                                  	*
+   14                                  	*  register modified:
+   15                                  	*    who cares
+   16                                  	
+   17                                  		xref    INCHE
+   18   00000000                       		
+   19                                  	*  constant declarations                  
+   20                                  	
+   21              0000 2000           	PROGRAM equ     $2000
+   22              0000 4000           	OPERAND equ     $4000
+   23              0000 5000           	BUFFER  equ     $5000
+   24                                  	
+   25              0000 00E4           	TUTOR   equ     228
+   26              0000 00F8           	OUTCH   equ     248
+   27                                  	
+   28              0000 000D           	CR      equ     $0D
+   29              0000 000A           	LF      equ     $0A
+   30                                  	
+   31   00004000                       		org     OPERAND
+   32   00004000                       		
+   33   00004000                       	TUTSP   ds.l    1
+   34                                  	
+   35                                  	*  start the program
+   36                                  	
+   37   00002000                       		org     PROGRAM
+   38                                  	
+   39   00002000   23CF 0000 4000      		move.l  A7,TUTSP                save TUTOR stack pointer
+   40   00002006   2E7C 0000 8000      		move.l  #$8000,A7               locate this program's stack
+   41                                  	
+   42   0000200C   4EB9 0000 2026      	GET     jsr     GETMODE                 jump to subroutine
+   43   00002012   1E3C 00F8           		move.b  #OUTCH,D7
+   44   00002016   4E4E                		trap    #14
+   45   00002018   60F2                		bra     GET
+   46                                  	
+   47   0000201A   2E79 0000 4000      	EXIT    move.l  TUTSP,A7                exit the program
+  Tue Jun 24 1997 11:15                                                                                                  Page    2
+
+
+
+
+   48   00002020   1E3C 00E4           		move.b  #TUTOR,D7
+   49   00002024   4E4E                		trap    #14
+   50   00002026                       		
+   51   00002026   4240                	GETMODE clr     D0              clear the storage       
+   52   00002028                       		
+   53   00002028   4EB9 0000 0000      		JSR     INCHE
+   54                                  	
+   55   0000202E   4E75                	RETURN  rts
+   56   00002030   60F4                		bra     GETMODE
+   57                                  	
+   58   00002032                       		end
+  Tue Jun 24 1997 11:15                                                                                                  Page    3
+
+
+Defined            Symbol Name               Value              References
+
+   23    BUFFER                          =  00005000  
+  Pre    CODE                               00000000  
+   28    CR                              =  0000000D  
+  Pre    DATA                               00000000  
+   47    EXIT                               0000201A  
+   42    GET                                0000200C       45
+   51    GETMODE                            00002026       42     56
+  Pre    HIGH32K                            00000000  
+   17    INCHE                              External       53
+   29    LF                              =  0000000A  
+  Pre    LOW32K                             00000000  
+   22    OPERAND                         =  00004000       31
+   26    OUTCH                           =  000000F8       43
+   21    PROGRAM                         =  00002000       37
+   55    RETURN                             0000202E  
+   25    TUTOR                           =  000000E4       48
+   33    TUTSP                              00004000       39     47
+
+
+
+
+           Lines Assembled :  58             Assembly Errors :  0
+
+
+

@@ -1,0 +1,242 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : main.asm
+                       Output Filename : main.obj
+
+
+    1                                  	*  file: main.asm
+    2                                  	*  project:  ece222 lab 3     
+    3                                  	*  by:  Y. Chan(95050292), X. Du(95056498)
+    4                                  	*
+    5                                  	*  description: the main shell
+    6                                  	*
+    7                                  	*  parameter:
+    8                                  	*    none
+    9                                  	*
+   10                                  	*  return:
+   11                                  	*    none
+   12                                  	*
+   13                                  	*  register used:
+   14                                  	*    A7  repositioned the stack pointer     
+   15                                  	*    D0  mode number entered by the user
+   16                                  	*    A5  points to the beginning of the buffer
+   17                                  	*    A6  points to one byte pass the end of 
+   18                                  	*        the buffer
+   19                                  	*    D7  trap 14 register
+   20                                  	*
+   21                                  	*  register modified:
+   22                                  	*    D0, A5, A6, D7
+   23                                  	
+   24                                  		xref    CALC, OUT1CR, OUTPUT, INCHE, OUTCH
+   25                                  	
+   26                                  	*  constant declarations                  
+   27                                  	
+   28              0000 2000           	PROGRAM equ     $2000
+   29              0000 4000           	OPERAND equ     $4000
+   30              0000 5000           	BUFFER  equ     $5000
+   31                                  	
+   32              0000 00E4           	TUTOR   equ     228
+   33                                  	
+   34              0000 000D           	CR      equ     $0D
+   35              0000 000A           	LF      equ     $0A
+   36                                  	
+   37   00004000                       		org     OPERAND
+   38   00004000                       		
+   39   00004000   0D 0A               	PROMPT  dc.b    CR,LF
+   40   00004002   0D 0A               		dc.b    CR,LF
+   41   00004004   4D 65 6E 75 0D 0A   		dc.b    "Menu",CR,LF
+   42   0000400A   42 79 20 48 6F 72   		dc.b    "By Horace Chan & Grace Du", CR, LF
+        00004010   61 63 65 20 43 68 
+        00004016   61 6E 20 26 20 47 
+        0000401C   72 61 63 65 20 44 
+        00004022   75 0D 0A 
+   43   00004025   0D 0A               		dc.b    CR,LF
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+   44   00004027   31 2E 20 20 45 6E   		dc.b    "1.  Enter Calculater Mode: ",CR,LF
+        0000402D   74 65 72 20 43 61 
+        00004033   6C 63 75 6C 61 74 
+        00004039   65 72 20 4D 6F 64 
+        0000403F   65 3A 20 0D 0A 
+   45   00004044   32 2E 20 20 45 6E   		dc.b    "2.  Enter Clock Set Mode: ",CR,LF
+        0000404A   74 65 72 20 43 6C 
+        00004050   6F 63 6B 20 53 65 
+        00004056   74 20 4D 6F 64 65 
+        0000405C   3A 20 0D 0A 
+   46   00004060   33 2E 20 20 43 6C   		dc.b    "3.  Clock Display: ",CR,LF
+        00004066   6F 63 6B 20 44 69 
+        0000406C   73 70 6C 61 79 3A 
+        00004072   20 0D 0A 
+   47   00004075   34 2E 20 20 52 65   		dc.b    "4.  Return to TUTOR. ",CR,LF
+        0000407B   74 75 72 6E 20 74 
+        00004081   6F 20 54 55 54 4F 
+        00004087   52 2E 20 0D 0A 
+   48   0000408C   0D 0A               		dc.b    CR,LF
+   49   0000408E   0D 0A               		dc.b    CR,LF
+   50   00004090   50 6C 65 61 73 65   		dc.b    "Please enter the mode you would " 
+        00004096   20 65 6E 74 65 72 
+        0000409C   20 74 68 65 20 6D 
+        000040A2   6F 64 65 20 79 6F 
+        000040A8   75 20 77 6F 75 6C 
+        000040AE   64 20 
+   51   000040B0   6C 69 6B 65 20 74   		dc.b    "like to choose, ",CR,LF
+        000040B6   6F 20 63 68 6F 6F 
+        000040BC   73 65 2C 20 0D 0A 
+   52   000040C2   65 6E 64 20 69 74   		dc.b    "end it with <Enter>: "
+        000040C8   20 77 69 74 68 20 
+        000040CE   3C 45 6E 74 65 72 
+        000040D4   3E 3A 20 
+   53              0000 40D7           	EPROMPT equ     *
+   54                                  	
+   55   000040D7   0D 0A               	ERRMSG  dc.b    CR,LF
+   56   000040D9   0D 0A               		dc.b    CR,LF
+   57   000040DB   53 6F 72 72 79 2C   		dc.b    "Sorry, Functions for Clock Set " 
+        000040E1   20 46 75 6E 63 74 
+        000040E7   69 6F 6E 73 20 66 
+        000040ED   6F 72 20 43 6C 6F 
+        000040F3   63 6B 20 53 65 74 
+        000040F9   20 
+   58   000040FA   61 6E 64 20 43 6C   		dc.b    "and Clock Display ",CR,LF  
+        00004100   6F 63 6B 20 44 69 
+        00004106   73 70 6C 61 79 20 
+        0000410C   0D 0A 
+   59   0000410E   61 72 65 20 6E 6F   		dc.b    "are not available at the moment. ",CR,LF 
+        00004114   74 20 61 76 61 69 
+        0000411A   6C 61 62 6C 65 20 
+        00004120   61 74 20 74 68 65 
+        00004126   20 6D 6F 6D 65 6E 
+        0000412C   74 2E 20 0D 0A 
+   60   00004131   50 6C 65 61 73 65   		dc.b    "Please try another mode. ",CR,LF
+        00004137   20 74 72 79 20 61 
+        0000413D   6E 6F 74 68 65 72 
+        00004143   20 6D 6F 64 65 2E 
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+
+
+        00004149   20 0D 0A 
+   61              0000 414C           	ENDMSG  equ     *
+   62   0000414C                       		
+   63   0000414C                       	TUTSP   ds.l    1
+   64                                  	
+   65                                  	
+   66                                  	*  start the program
+   67                                  	
+   68   00002000                       		org     PROGRAM
+   69                                  	
+   70   00002000   23CF 0000 414C      		move.l  A7,TUTSP                save TUTOR stack pointer
+   71   00002006   2E7C 0000 8000      		move.l  #$8000,A7               locate this program's stack
+   72                                  	
+   73   0000200C   4BF9 0000 4000      	LOOP    lea     PROMPT,A5               point to start of menu 
+   74   00002012   4DF9 0000 40D7      		lea     EPROMPT,A6              point to end of menu
+   75   00002018                       		
+   76   00002018   4EB9 0000 0000      		jsr     OUTPUT                  print the menu screen
+   77                                  	
+   78   0000201E   6100 004A           		bsr     GETMODE                 jump to subroutine
+   79                                  	
+   80   00002022   0C00 0031           		cmp.b   #'1',D0                 mode=1?   
+   81   00002026   6700 001A           		beq     CAL                     branch to call calculator 
+   82   0000202A   0C00 0032           		cmp.b   #'2',D0                 mode=2?
+   83   0000202E   6700 001A           		beq     PRTERR                  branch to print error message 
+   84   00002032   0C00 0033           		cmp.b   #'3',D0                 mode=3?
+   85   00002036   6700 0012           		beq     PRTERR                  branch to print error message
+   86   0000203A   0C00 0034           		cmp.b   #'4',D0                 mode=4?
+   87   0000203E   6700 001E           		beq     EXIT                    branch to exit the program
+   88                                  	
+   89   00002042   4EB9 0000 0000      	CAL     jsr     CALC                    jump to calculator subroutine   
+   90   00002048   60C2                		bra     LOOP
+   91                                  	
+   92   0000204A   4BF9 0000 40D7      	PRTERR  lea     ERRMSG,A5               print error message
+   93   00002050   4DF9 0000 414C      		lea     ENDMSG,A6
+   94   00002056   4EB9 0000 0000      		jsr     OUTPUT                  
+   95   0000205C   60AE                		bra     LOOP
+   96                                  	
+   97   0000205E   2E79 0000 414C      	EXIT    move.l  TUTSP,A7                exit the program
+   98   00002064   1E3C 00E4           		move.b  #TUTOR,D7
+   99   00002068   4E4E                		trap    #14
+  100   0000206A                       		
+  101                                  	*  subroutine: accepting inputs
+  102                                  	* 
+  103                                  	*  parameter: 
+  104                                  	*    none
+  105                                  	*  return:
+  106                                  	*    D0  mode number
+  107                                  	*  register used:    
+  108                                  	*    none
+  109                                  	*  register modified:
+  110                                  	*    none
+  111                                  	
+  112                                  	****************
+  113                                  	
+  114   0000206A   4240                	GETMODE clr     D0              clear the storage       
+  115   0000206C                       		
+  116   0000206C   4EB9 0000 0000      		jsr     INCHE           get data
+  Wed Jun 25 1997 16:18                                                                                                  Page    4
+
+
+
+
+  117                                  	
+  118   00002072   0C00 0034           		cmp.b   #'4',D0         check is input valid
+  119   00002076   6EF2                		bgt     GETMODE
+  120   00002078   0C00 0031           		cmp.b   #'1',D0
+  121   0000207C   6DEC                		blt     GETMODE
+  122   0000207E                       		
+  123   0000207E   4EB9 0000 0000      		jsr     OUTCH           print character
+  124                                  	
+  125   00002084   4E75                		rts                     return to main program
+  126   00002086   60E2                		bra     GETMODE
+  127   00002088                       		end
+  Wed Jun 25 1997 16:18                                                                                                  Page    5
+
+
+Defined            Symbol Name               Value              References
+
+   30    BUFFER                          =  00005000  
+   89    CAL                                00002042       81
+   24    CALC                               External       89
+  Pre    CODE                               00000000  
+   34    CR                              =  0000000D       39     40     41     42     43     44     45     46     47     48     49
+                                                           51     55     56     58     59     60
+  Pre    DATA                               00000000  
+   61    ENDMSG                          =  0000414C       93
+   53    EPROMPT                         =  000040D7       74
+   55    ERRMSG                             000040D7       92
+   97    EXIT                               0000205E       87
+  114    GETMODE                            0000206A       78    119    121    126
+  Pre    HIGH32K                            00000000  
+   24    INCHE                              External      116
+   35    LF                              =  0000000A       39     40     41     42     43     44     45     46     47     48     49
+                                                           51     55     56     58     59     60
+   73    LOOP                               0000200C       90     95
+  Pre    LOW32K                             00000000  
+   29    OPERAND                         =  00004000       37
+   24    OUT1CR                             External  
+   24    OUTCH                              External      123
+   24    OUTPUT                             External       76     94
+   28    PROGRAM                         =  00002000       68
+   39    PROMPT                             00004000       73
+   92    PRTERR                             0000204A       83     85
+   32    TUTOR                           =  000000E4       98
+   63    TUTSP                              0000414C       70     97
+
+
+
+
+           Lines Assembled :  127             Assembly Errors :  0
+
+
+

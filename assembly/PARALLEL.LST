@@ -1,0 +1,153 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : parallel.asm
+                       Output Filename : parallel.obj
+
+
+    1                                  	* file: parallel.asm
+    2                                  	* project: ECE 222 Lab 3
+    3                                  	* description: parallel interfacesubroutines
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	                xdef PARALLEL
+    7                                  	                xref OUTCH
+    8                                  	
+    9                                  	* subroutine: PARALLEL
+   10                                  	* description: Get input character from parallel port
+   11                                  	* parameter: 
+   12                                  	*  none
+   13                                  	* return:
+   14                                  	*  D0: key pressed
+   15                                  	* register used:
+   16                                  	*  A0: data address
+   17                                  	*  D1: C1-C4
+   18                                  	*  D2: R1-R4
+   19                                  	*  D3: Counter
+   20                                  	* variable modified:
+   21                                  	
+   22              0000 4800           	OPRAND  equ     $4800
+   23                                  	
+   24              0001 0001           	PGCR    equ     $010001
+   25              0001 0007           	PBDDR   equ     $010007
+   26              0001 000F           	PBCR    equ     $01000F
+   27              0001 0013           	PBDR    equ     $010013
+   28              0000 00A0           	DELAY   equ     $A0
+   29                                  	
+   30              0000 000D           	CR      equ     $0D
+   31                                  	
+   32                                  	* initialize data map
+   33   00000000   31 31 31 32 32 32   	CHAR    dc.b    "1112223+        "
+        00000006   33 2B 20 20 20 20 
+        0000000C   20 20 20 20 
+   34   00000010   31 31 31 32 32 32   	        dc.b    "1112223+        "
+        00000016   33 2B 20 20 20 20 
+        0000001C   20 20 20 20 
+   35   00000020   31 31 31 32 32 32   	        dc.b    "1112223+        "
+        00000026   33 2B 20 20 20 20 
+        0000002C   20 20 20 20 
+   36   00000030   34 34 34 35 35 35   	        dc.b    "4445556-        "
+        00000036   36 2D 20 20 20 20 
+        0000003C   20 20 20 20 
+   37   00000040   34 34 34 35 35 35   	        dc.b    "4445556-        "
+        00000046   36 2D 20 20 20 20 
+        0000004C   20 20 20 20 
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+   38   00000050   34 34 34 35 35 35   	        dc.b    "4445556-        "
+        00000056   36 2D 20 20 20 20 
+        0000005C   20 20 20 20 
+   39   00000060   37 37 37 38 38 38   	        dc.b    "7778889*        "
+        00000066   39 2A 20 20 20 20 
+        0000006C   20 20 20 20 
+   40   00000070   43 43 43 30 30 30   	        dc.b    "CCC000",CR,"/        "
+        00000076   0D 2F 20 20 20 20 
+        0000007C   20 20 20 20 
+   41              0000 0080           	ECHAR   equ     *
+   42                                  	
+   43   00000080   48E7 7080           	PARALLEL        movem.l A0/D1-D3,-(SP)  save register 
+   44   00000084                       	                
+   45   00000084   4280                	                clr.l   D0              clear D0
+   46   00000086   207C 0000 0000      	                move.l #CHAR,A0         set data address
+   47   0000008C   13FC 0000 0001 0001 	                move.b  #$0,PGCR        set mode 0
+   48   00000094   13FC 0080 0001 0007 	                move.b  #$80,PBDDR      set sub-mode 1X
+   49   0000009C   13FC 00F0 0001 0007 	                move.b  #$F0,PBDDR      set row as output
+   50   000000A4   13FC 0000 0001 0013 	                move.b  #$0,PBDR        set all output to 0
+   51                                  	
+   52   000000AC   1239 0001 0013      	PRESSLOOP       move.b  PBDR,D1         get input
+   53   000000B2   0C01 000F           	                cmp.b   #$0F,D1         check key pressed
+   54   000000B6   67F4                	                beq     PRESSLOOP       wait for press
+   55                                  	
+   56   000000B8   363C 00A0           	                move    #DELAY,D3       set delay
+   57   000000BC   5343                	DELAYLOOP       subq    #1,D3           D3 minus 1
+   58   000000BE   0C43 0000           	                cmp     #0,D3           check is D3 reach zero
+   59   000000C2   6EF8                	                bgt     DELAYLOOP       loop
+   60                                  	
+   61   000000C4   1239 0001 0013      	                move.b  PBDR,D1         copy row data
+   62   000000CA   13FC 000F 0001 0007 	                move.b  #$0F,PBDDR      set row as output
+   63   000000D2   13FC 0000 0001 0013 	                move.b  #$0,PBDR        set all output to 0
+   64   000000DA   1439 0001 0013      	                move.b  PBDR,D2         copy col data
+   65   000000E0                       	                
+   66   000000E0   8202                	                or.b    D2,D1           combine row and col
+   67   000000E2   0401 0077           	                subi.b  #$77,D1         get character position
+   68   000000E6                       	                
+   69   000000E6   0281 0000 00FF      	                and.l   #$000000FF,D1   get position
+   70   000000EC   1030 1000           	                move.b  (A0,D1),D0      copy data
+   71                                  	
+   72   000000F0   1439 0001 0013      	RELEASELOOP     move.b  PBDR,D2         get input
+   73   000000F6   0C02 00F0           	                cmp.b   #$F0,D2         check key released
+   74   000000FA   66F4                	                bne     RELEASELOOP     wait for release
+   75                                  	
+   76   000000FC   363C 00A0           	                move    #DELAY,D3       set delay
+   77   00000100   5343                	DELAYLOOP2      subq    #1,D3           D3 minus 1
+   78   00000102   0C43 0000           	                cmp     #0,D3           check is D3 reach zero
+   79   00000106   6EF8                	                bgt     DELAYLOOP2      loop
+   80                                  	
+   81   00000108   4CDF 010E           	input_rts       movem.l (SP)+,A0/D1-D3  restore register
+   82   0000010C   4E75                	                rts                     return to call program
+   83                                  	
+   84   0000010E                       	                end
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+Defined            Symbol Name               Value              References
+
+   33    CHAR                               00000000       46
+  Pre    CODE                               00000000  
+   30    CR                              =  0000000D       40
+  Pre    DATA                               00000000  
+   28    DELAY                           =  000000A0       56     76
+   57    DELAYLOOP                          000000BC       59
+   77    DELAYLOOP2                         00000100       79
+   41    ECHAR                           =  00000080  
+  Pre    HIGH32K                            00000000  
+   81    input_rts                          00000108  
+  Pre    LOW32K                             00000000  
+   22    OPRAND                          =  00004800  
+    7    OUTCH                              External  
+   43    PARALLEL                           00000080        6
+   26    PBCR                            =  0001000F  
+   25    PBDDR                           =  00010007       48     49     62
+   27    PBDR                            =  00010013       50     52     61     63     64     72
+   24    PGCR                            =  00010001       47
+   52    PRESSLOOP                          000000AC       54
+   72    RELEASELOOP                        000000F0       74
+
+
+
+
+           Lines Assembled :  84             Assembly Errors :  0
+
+
+

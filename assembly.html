@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Run and debug Horace Chan's original 1997 Motorola 68000 calculator lab in a browser-based source-level workbench." />
+<title>68000 Lab Workbench · 1997</title>
+<link rel="stylesheet" href="/assembly/workbench.css" />
+</head>
+<body>
+<header class="app-header"><div><p class="eyebrow">E&amp;CE 222 · June 1997</p><h1>68000 Lab Workbench</h1></div><nav class="top-actions" aria-label="Page actions"><a href="/">Back to Timeline</a><a id="asmLink" href="/assembly/MAIN.ASM">Download .ASM</a><a id="lstLink" href="/assembly/MAIN.LST">View .LST</a></nav></header>
+<div class="menu-bar" aria-hidden="true"><span>File</span><span>Run</span><span>Debug</span><span>View</span><span>Help</span><b>TUTOR-68K / Source Model</b></div>
+<main>
+<section class="intro"><strong>Lab 3 calculator shell by Horace Chan &amp; Grace Du.</strong> This workbench recreates the 1997 Motorola 68000/TUTOR board workflow from the preserved assembler sources and zero-error listings. Run it, use the hexadecimal-style keypad, or pause on an original source line and watch the registers change.</section>
+<section class="toolbar" aria-label="Debugger controls"><button id="resetButton" type="button">↺ Reset</button><button id="runButton" class="primary" type="button">▶ Run</button><button id="stepButton" type="button">⇥ Step</button><span class="separator"></span><label>Module <select id="moduleSelect"></select></label><label>Speed <select id="speedSelect"><option value="1">1 instr/tick</option><option value="6" selected>6 instr/tick</option><option value="30">30 instr/tick</option></select></label><label class="check"><input id="followToggle" type="checkbox" checked /> Follow PC</label><button id="clearBreakpoints" type="button">Clear breakpoints</button></section>
+<section class="workbench" aria-label="Motorola 68000 debugger">
+<div class="source-pane panel"><div class="panel-title"><span id="sourceTitle">MAIN.ASM</span><span>click a modeled line to toggle ●</span></div><div id="sourceCode" class="source-code" tabindex="0" aria-label="Assembly source listing"></div></div>
+<div class="runtime-column">
+<section class="terminal-panel panel"><div class="panel-title"><span>ACIA Terminal · $010042</span><span id="terminalState">RESET</span></div><pre id="terminal" class="terminal" aria-live="polite"></pre></section>
+<section class="keypad-panel panel"><div class="panel-title"><span>6821 Parallel Keypad · $010013</span><span>keyboard input enabled</span></div><div id="keypad" class="keypad" aria-label="Calculator keypad"></div></section>
+<section class="cpu-panel panel"><div class="panel-title"><span>MC68000 Registers</span><span id="instructionCount">0 instructions</span></div><div id="registers" class="register-grid"></div><div id="programState" class="program-state"></div></section>
+</div>
+</section>
+<div class="status-bar"><span id="status" role="status" aria-live="polite">Reset complete. Press Run or Step.</span><span id="location">MAIN.ASM</span></div>
+<section class="notes"><article><h2>What survived</h2><p>Eleven original <code>.ASM</code> files and their 2500 A.D. assembler <code>.LST</code> outputs, dated June 24–25, 1997. The integrated project is a signed four-function calculator with serial output and a scanned 4×4 keypad.</p></article><article><h2>Why a source model?</h2><p>The object files, final linked image, board ROM, and linker map did not survive. The workbench therefore follows the preserved source control flow and models its registers, stack, ACIA, keypad, and calculator state; it does not claim binary- or cycle-accurate emulation.</p></article><article><h2>Debugger tips</h2><p>Click a highlighted executable line to set a breakpoint. <strong>Run</strong> continues to input or a breakpoint; <strong>Step</strong> executes one modeled instruction. Press <kbd>1</kbd> at the menu, then try <kbd>1</kbd><kbd>2</kbd><kbd>+</kbd><kbd>3</kbd><kbd>Enter</kbd>.</p></article></section>
+</main>
+<footer>Original MC68000 source © Horace Chan and Grace Du, 1997. Browser workbench uses only HTML, CSS, and JavaScript. <a href="https://github.com/hevangel/hevangel.github.io/tree/main/assembly">Browse the preserved corpus</a>.</footer>
+<script src="/assembly/debugger.js"></script>
+</body>
+</html>

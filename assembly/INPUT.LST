@@ -1,0 +1,159 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : input.asm
+                       Output Filename : input.obj
+
+
+    1                                  	* file: input.asm
+    2                                  	* project: ECE 222 Lab 2
+    3                                  	* description: input subroutines
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	                xdef INPUT
+    7                                  	                xref STATE,SIGNSPACE,ESIGNSPACE,PARALLEL,OUTCH,OUTPUT
+    8                                  	
+    9                                  	* subroutine: INPUT
+   10                                  	* description: Get input data from keyboard 
+   11                                  	*              only accept keys 0-9,+,-,*,/,C,CR
+   12                                  	*              
+   13                                  	* parameter: 
+   14                                  	*  A6: start of buffer 
+   15                                  	* return:
+   16                                  	*  D0: operation
+   17                                  	*  A6: end of buffer
+   18                                  	* register used:
+   19                                  	*  D0: i/o
+   20                                  	*  D2: character count
+   21                                  	* variable modified:
+   22                                  	*  STATE
+   23                                  	
+   24   00000000   48E7 6180           	INPUT           movem.l A0/D1/D2/D7,-(SP)       save register 
+   25   00000004   4282                	                clr.l   D2              set count = 0
+   26                                  	                *move.b  #48,(A6)        move 0 to buffer                
+   27                                  	
+   28   00000006   0C39 0001 0000 0000 	                cmp.b   #1,STATE        check is FIRST state                
+   29   0000000E   6600 000A           	                bne     input_loop                
+   30   00000012   13FC 0002 0000 0000 	                move.b  #2,STATE        change to CONTINUE state
+   31                                  	
+   32   0000001A   4EB9 0000 0000      	input_loop      jsr     PARALLEL        get input from keypad
+   33                                  	
+   34   00000020   0C00 0043           	                cmp.b   #$43,D0         check is 'C'
+   35   00000024   6700 00B2           	                beq     in_clr
+   36   00000028                       	                
+   37   00000028   0C39 0003 0000 0000 	                cmp.b   #3,STATE        check is in error state
+   38   00000030   67E8                	                beq     input_loop
+   39   00000032                       	                
+   40   00000032   0C00 002B           	                cmp.b   #$2B,D0         check is '+'
+   41   00000036   6700 0080           	                beq     in_add
+   42   0000003A   0C00 002D           	                cmp.b   #$2D,D0         check is '-'
+   43   0000003E   6700 0080           	                beq     in_sub
+   44   00000042   0C00 002A           	                cmp.b   #$2A,D0         check is '*'
+   45   00000046   6700 0080           	                beq     in_mul
+   46   0000004A   0C00 002F           	                cmp.b   #$2F,D0         check is '/'
+   47   0000004E   6700 0080           	                beq     in_div
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+   48   00000052   0C00 000D           	                cmp.b   #$0D,D0         check is CR
+   49   00000056   6700 0088           	                beq     in_ent
+   50                                  	
+   51   0000005A   0C42 0004           	                cmp     #4,D2           check key entered > 4?
+   52   0000005E   6CBA                	                bge     input_loop      reject more input
+   53   00000060                       	                
+   54   00000060   0C00 0039           	                cmp.b   #57,D0          check is digit > 9
+   55   00000064   6EB4                	                bgt     input_loop      
+   56   00000066   0C00 0030           	                cmp.b   #48,D0          check is digit < 0
+   57   0000006A   6DAE                	                blt     input_loop
+   58   0000006C                       	                
+   59   0000006C   0C39 0000 0000 0000 	                cmp.b   #0,STATE        check is DONE state
+   60   00000074   6600 0024           	                bne     check_zero
+   61   00000078                       	                
+   62   00000078   48E7 0006           	                movem.l A5/A6,-(SP)     save A5,A6
+   63   0000007C   4BF9 0000 0000      	                lea     SIGNSPACE,A5    point to start of string
+   64   00000082   4DF9 0000 0000      	                lea     ESIGNSPACE,A6   point to end of string
+   65   00000088   4EB9 0000 0000      	                jsr     OUTPUT          print string
+   66                                  	
+   67   0000008E   13FC 0001 0000 0000 	                move.b  #1,STATE        change state to FIRST
+   68   00000096   4CDF 6000           	                movem.l (SP)+,A5/A6     restore A5,A6                
+   69   0000009A                       	                
+   70   0000009A   0C00 0030           	check_zero      cmp.b   #48,D0          check is digit == 0
+   71   0000009E   6600 000A           	                bne     add_count           
+   72   000000A2   0C42 0000           	                cmp     #0,D2           check is first digit
+   73   000000A6   6700 0004           	                beq     prn_ch          0 in first digit doesn't count
+   74                                  	
+   75   000000AA   5242                	add_count       addq    #1,D2           count++
+   76                                  	
+   77   000000AC   1CC0                	prn_ch          move.b  D0,(A6)+        copy character to buffer
+   78   000000AE   4EB9 0000 0000      	                jsr     OUTCH           print character
+   79   000000B4                       	                
+   80   000000B4   6000 FF64           	                bra     input_loop      get next key
+   81                                  	
+   82   000000B8   303C 0001           	in_add          move    #1,D0           set operation
+   83   000000BC   6000 0042           	                bra     input_rts
+   84   000000C0   303C 0002           	in_sub          move    #2,D0           set operation
+   85   000000C4   6000 003A           	                bra     input_rts
+   86   000000C8   303C 0003           	in_mul          move    #3,D0           set operation
+   87   000000CC   6000 0032           	                bra     input_rts
+   88   000000D0   303C 0004           	in_div          move    #4,D0           set operation
+   89   000000D4   6000 002A           	                bra     input_rts
+   90   000000D8   303C 0005           	in_clr          move    #5,D0           set clear
+   91   000000DC   6000 0022           	                bra     input_rts
+   92   000000E0   0C39 0000 0000 0000 	in_ent          cmp.b   #0,STATE        check is DONE state
+   93   000000E8   6600 0012           	                bne     in_ent2                
+   94   000000EC   0C42 0000           	                cmp     #0,D2           check is count == 0
+   95   000000F0   6600 000A           	                bne     in_ent2
+   96   000000F4   303C 0006           	                move    #6,D0           set exit
+   97   000000F8   6000 0006           	                bra     input_rts
+   98   000000FC   303C 0000           	in_ent2         move    #0,D0           set enter
+   99                                  	
+  100   00000100   4CDF 0186           	input_rts       movem.l (SP)+,A0/D1/D2/D7       restore register
+  101   00000104   4E75                	                rts                     return to call program
+  102                                  	
+  103   00000106                       	                end
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+Defined            Symbol Name               Value              References
+
+   75    add_count                          000000AA       71
+   70    check_zero                         0000009A       60
+  Pre    CODE                               00000000  
+  Pre    DATA                               00000000  
+    7    ESIGNSPACE                         External       64
+  Pre    HIGH32K                            00000000  
+   24    INPUT                              00000000        6
+   32    input_loop                         0000001A       29     38     52     55     57     80
+  100    input_rts                          00000100       83     85     87     89     91     97
+   82    in_add                             000000B8       41
+   90    in_clr                             000000D8       35
+   88    in_div                             000000D0       47
+   92    in_ent                             000000E0       49
+   98    in_ent2                            000000FC       93     95
+   86    in_mul                             000000C8       45
+   84    in_sub                             000000C0       43
+  Pre    LOW32K                             00000000  
+    7    OUTCH                              External       78
+    7    OUTPUT                             External       65
+    7    PARALLEL                           External       32
+   77    prn_ch                             000000AC       73
+    7    SIGNSPACE                          External       63
+    7    STATE                              External       28     30     37     59     67     92
+
+
+
+
+           Lines Assembled :  103             Assembly Errors :  0
+
+
+

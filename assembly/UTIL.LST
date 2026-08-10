@@ -1,0 +1,161 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : util.asm
+                       Output Filename : util.obj
+
+
+    1                                  	* file: util.asm
+    2                                  	* project: ECE 222 Lab 2
+    3                                  	* description: utilities subroutines
+    4                                  	* by Y.Chan & X.Du
+    5                                  	
+    6                                  	                xdef GETNUMD,HEX2DEC
+    7                                  	
+    8                                  	* subroutine: GETNUMD
+    9                                  	* description: Convert decimal number in ASCII to binary, stop at seeing
+   10                                  	*               any non-digital numbers.
+   11                                  	* parameter: 
+   12                                  	*  A5: start of buffer 
+   13                                  	*  A6: end of buffer
+   14                                  	* return:
+   15                                  	*  D1: integer
+   16                                  	* register used:
+   17                                  	*  D6,D7 
+   18                                  	* register modified:
+   19                                  	*  none
+   20                                  	
+   21   00000000   48E7 0300           	GETNUMD         movem.l D6/D7,-(SP)     save register 
+   22   00000004   4281                	                clr.l   D1              clear the result
+   23   00000006   4287                	gnd_loop        clr.l   D7              clear temp variable
+   24   00000008   BDCD                	                cmpa.l  A5,A6           check for the end of buffer
+   25   0000000A   6F00 003C           	                ble     gnd_rts
+   26                                  	
+   27   0000000E   1E1D                	                move.b  (A5)+,D7        copy the current digit
+   28   00000010   0407 0030           	                subi.b  #48,D7          get the number 
+   29   00000014   6D00 0032           	                blt     gnd_rts         check is digit < 0
+   30   00000018   0C07 0009           	                cmp.b   #9,D7   
+   31   0000001C   6E00 002A           	                bgt     gnd_rts         check is digit < 9
+   32   00000020   0C81 0000 FFFF      	                cmp.l   #$FFFF,D1       check is number > 16bit
+   33                                  	
+   34   00000026   6D00 0018           	                blt     gnd_lt16b                              
+   35   0000002A                       	                
+   36   0000002A   2C01                	                move.l  D1,D6           get high 16bit
+   37   0000002C   4246                	                clr.w   D6                
+   38   0000002E   4846                	                swap    D6
+   39   00000030                       	                
+   40   00000030   CCFC 000A           	                mulu    #10,D6          x10 high 16bit
+   41   00000034   4846                	                swap    D6
+   42   00000036                       	                
+   43   00000036   C2FC 000A           	                mulu    #10,D1          x10 low 16bit
+   44   0000003A   D286                	                add.l   D6,D1           add high 16bit                
+   45   0000003C   6000 0006           	                bra     gnd_add         branch to                     
+   46                                  	
+   47   00000040   C2FC 000A           	gnd_lt16b       mulu    #10,D1          x10 low 16bit
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+   48   00000044   D287                	gnd_add         add.l   D7,D1           add the current digit to the result
+   49                                  	
+   50   00000046   60BE                	end_gnd_loop    bra     gnd_loop
+   51                                  	
+   52   00000048   4CDF 00C0           	gnd_rts         movem.l (SP)+,D6/D7     restore register
+   53   0000004C   4E75                	                rts                     return to call program
+   54                                  	
+   55                                  	* subroutine: HEX2DEC
+   56                                  	* description: Convert binary number to ASCII decimal
+   57                                  	* paramter:
+   58                                  	*  D0: integer to convert
+   59                                  	*  A6: start of buffer
+   60                                  	* return:
+   61                                  	*  A6: end of buffer
+   62                                  	* register used:
+   63                                  	*  D0,D1,D2,D3,SP
+   64                                  	* register modified:
+   65                                  	*  none
+   66                                  	
+   67   0000004E   48E7 F000           	HEX2DEC         movem.l D0-D3,-(SP)     save register
+   68   00000052   7201                	                move.l  #1,D1           clear number of characters
+   69   00000054   0C80 0000 000A      	h2d_loop        cmp.l   #10,D0          check divident < 10
+   70   0000005A   6D00 0038           	                blt     end_h2d_loop
+   71                                  	
+   72   0000005E   4282                	                clr.l   D2              clear D2
+   73   00000060   4283                	                clr.l   D3
+   74   00000062   3600                	                move.w  D0,D3           move hex to temp variable
+   75   00000064   0C80 0000 FFFF      	                cmp.l   #$FFFF,D0       Is D0 > 16bit                                
+   76   0000006A   6D00 0014           	                blt     h2d_lt16b
+   77   0000006E                       	                                
+   78   0000006E   4240                	                clr.w   D0              divide high 16bit by 10
+   79   00000070   4840                	                swap    D0           
+   80   00000072   80FC 000A           	                divu    #10,D0          
+   81                                  	
+   82   00000076   3400                	                move.w  D0,D2           move quotient to D2
+   83   00000078   4240                	                clr.w   D0                
+   84                                  	
+   85   0000007A   D680                	                add.l   D0,D3           add remainder of hi 16bit to low 16bit
+   86   0000007C   4842                	                swap    D2              quotient of hi 16bit * 2^16
+   87   0000007E   4242                	                clr.w   D2
+   88                                  	
+   89   00000080   86FC 000A           	h2d_lt16b       divu    #10,D3          divide by 10
+   90   00000084   D443                	                add.w   D3,D2           store quotient to D2
+   91   00000086   4843                	                swap    D3              get remainder
+   92   00000088   0603 0030           	                addi.b  #48,D3          get decimial character
+   93   0000008C                       	                
+   94   0000008C   1F03                	                move.b  D3,-(SP)        push into stack
+   95   0000008E   5201                	                addq.b  #1,D1           add 1 to counter
+   96   00000090   2002                	                move.l  D2,D0           set quotient as dividend
+   97   00000092   60C0                	                bra     h2d_loop
+   98                                  	
+   99   00000094   0680 0000 0030      	end_h2d_loop    add.l   #48,D0
+  100   0000009A   1F00                	                move.b  D0,-(SP)
+  101                                  	
+  102   0000009C   1CDF                	h2d_loop2       move.b  (SP)+,(A6)+           
+  103   0000009E   5341                	                subq    #1,D1
+  104   000000A0   6EFA                	end_h2d_loop2   bgt     h2d_loop2
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+
+
+  105   000000A2   4CDF 000F           	                movem.l (SP)+,D0-D3     restore register
+  106   000000A6   4E75                	                rts
+  107   000000A8                       	                end
+  Wed Jun 25 1997 16:18                                                                                                  Page    4
+
+
+Defined            Symbol Name               Value              References
+
+  Pre    CODE                               00000000  
+  Pre    DATA                               00000000  
+   50    end_gnd_loop                       00000046  
+   99    end_h2d_loop                       00000094       70
+  104    end_h2d_loop2                      000000A0  
+   21    GETNUMD                            00000000        6
+   48    gnd_add                            00000044       45
+   23    gnd_loop                           00000006       50
+   47    gnd_lt16b                          00000040       34
+   52    gnd_rts                            00000048       25     29     31
+   69    h2d_loop                           00000054       97
+  102    h2d_loop2                          0000009C      104
+   89    h2d_lt16b                          00000080       76
+   67    HEX2DEC                            0000004E        6
+  Pre    HIGH32K                            00000000  
+  Pre    LOW32K                             00000000  
+
+
+
+
+           Lines Assembled :  107             Assembly Errors :  0
+
+
+

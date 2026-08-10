@@ -1,0 +1,161 @@
+  Wed Jun 25 1997 16:18                                                                                                  Page    1
+
+
+
+
+
+
+
+               2500 A.D. 68000 Macro Assembler - Version 4.03a
+               -----------------------------------------------
+
+                       Input  Filename : out.asm
+                       Output Filename : out.obj
+
+
+    1                                  	*  file: out.asm
+    2                                  	*  project:  ece222 lab 3     
+    3                                  	*  by:  Y. Chan(95050292), X. Du(95056498)
+    4                                  	*
+    5                                  	*  description: the output interface implementation
+    6   00000000                       			
+    7                                  			xdef OUTCH, OUTPUT, OUT1CR
+    8                                  	
+    9              0001 0040           	ACIASC          equ     $010040
+   10              0001 0042           	DATARX          equ     $010042
+   11              0000 000D           	CR              equ     $0D
+   12              0000 000A           	LF              equ     $0A
+   13                                  	
+   14                                  	*  subroutine: outch
+   15                                  	*
+   16                                  	*  description: 
+   17                                  	*   sends ASCII characters to screen
+   18                                  	* 
+   19                                  	*  parameter: 
+   20                                  	*   D0 ASCII characters in lowest byte
+   21                                  	*
+   22                                  	*  return:
+   23                                  	*   none 
+   24                                  	*
+   25                                  	*  register used:    
+   26                                  	*   D1 store contents of status register   
+   27                                  	*
+   28                                  	*  register modified:
+   29                                  	*   none 
+   30                                  	
+   31   00000000   48E7 7F7E           	OUTCH   movem.l D1-D7/A1-A6,-(A7)       save register contents
+   32   00000004   13FC 0015 0001 0040 		move.b  #$15,ACIASC             initialize ACIA
+   33                                  	
+   34   0000000C   1239 0001 0040      	CKTDRE  move.b  ACIASC,D1               copy to data register    
+   35                                  	
+   36   00000012   0201 0002           		andi.b  #$02,D1                 mask TDRE
+   37   00000016   0C01 0000           		cmp.b   #$0,D1                  TDRE is high?
+   38   0000001A   67F0                		beq     CKTDRE                  loop back until TDRE is high
+   39   0000001C   13C0 0001 0042      		move.b  D0,DATARX               write a byte to RX/TX
+   40                                  	
+   41   00000022   4CDF 7EFE           		movem.l (A7)+,D1-D7/A1-A6      restore register contents
+   42   00000026   4E75                		rts                             reture
+   43   00000028                       		
+   44                                  	
+   45                                  	*  subroutine: output
+   46                                  	* 
+   47                                  	*  description:
+  Wed Jun 25 1997 16:18                                                                                                  Page    2
+
+
+
+
+   48                                  	*   outputs string to screen
+   49                                  	* 
+   50                                  	*  parameter: 
+   51                                  	*   A5 point to the beginning of the string
+   52                                  	*   A6 point to the byte immediately after the 
+   53                                  	*      last byte of the string
+   54                                  	*
+   55                                  	*  return:
+   56                                  	*   none 
+   57                                  	*
+   58                                  	*  register used:    
+   59                                  	*   D0 temporary transfer for the buffer
+   60                                  	*
+   61                                  	*  register modified:
+   62                                  	*   none 
+   63                                  	
+   64   00000028   48E7 FF78           	OUTPUT  movem.l D0-D7/A1-A4,-(A7)       save register contents
+   65   0000002C   13FC 0015 0001 0040 		move.b  #$15,ACIASC             initialize ACIA
+   66                                  	
+   67   00000034   BBCE                	STROUT  cmp.l   A6,A5                   A5 < A6?
+   68   00000036   6C00 0008           		bge     RETURN
+   69                                  	
+   70   0000003A   101D                		move.b  (A5)+,D0                copy to specified register
+   71   0000003C   61C2                		bsr     OUTCH                   call outch subroutine
+   72   0000003E   60F4                		bra     STROUT                  output next character     
+   73   00000040                       		
+   74   00000040   4CDF 1EFF           	RETURN  movem.l (A7)+,D0-D7/A1-A4       restore register contents 
+   75   00000044   4E75                		rts
+   76                                  	
+   77                                  	*  subroutine: out1cr
+   78                                  	* 
+   79                                  	*  description:
+   80                                  	*   outputs string to screen with appended CR and LF
+   81                                  	* 
+   82                                  	*  parameter: 
+   83                                  	*   A5 point to the beginning of the string
+   84                                  	*   A6 point to the byte immediately after the last byte of the string
+   85                                  	*
+   86                                  	*  return:
+   87                                  	*   none 
+   88                                  	*
+   89                                  	*  register used:    
+   90                                  	*   D0 temporary transfer for the buffer
+   91                                  	*
+   92                                  	*  register modified:
+   93                                  	*   none 
+   94                                  	
+   95   00000046   48E7 FF78           	OUT1CR  movem.l D0-D7/A1-A4,-(A7)       save register contents
+   96   0000004A   13FC 0015 0001 0040 		move.b  #$15,ACIASC             initialize ACIA
+   97                                  	
+   98   00000052   61D4                		bsr     OUTPUT                  call subroutine to display chars
+   99                                  	
+  100   00000054   103C 000D           		move.b  #CR,D0                  transfer CR to specified register 
+  101   00000058   61A6                		bsr     OUTCH                  
+  102   0000005A                       		
+  103   0000005A   103C 000A           		move.b  #LF,D0                  transfer LF to specified register
+  104   0000005E   61A0                		bsr     OUTCH  
+  Wed Jun 25 1997 16:18                                                                                                  Page    3
+
+
+
+
+  105                                  	
+  106   00000060   4CDF 1EFF           		movem.l (A7)+,D0-D7/A1-A4       restore register contents 
+  107   00000064   4E75                		rts
+  108                                  	
+  109   00000066                       		end
+  Wed Jun 25 1997 16:18                                                                                                  Page    4
+
+
+Defined            Symbol Name               Value              References
+
+    9    ACIASC                          =  00010040       32     34     65     96
+   34    CKTDRE                             0000000C       38
+  Pre    CODE                               00000000  
+   11    CR                              =  0000000D      100
+  Pre    DATA                               00000000  
+   10    DATARX                          =  00010042       39
+  Pre    HIGH32K                            00000000  
+   12    LF                              =  0000000A      103
+  Pre    LOW32K                             00000000  
+   95    OUT1CR                             00000046        7
+   31    OUTCH                              00000000        7     71    101    104
+   64    OUTPUT                             00000028        7     98
+   74    RETURN                             00000040       68
+   67    STROUT                             00000034       72
+
+
+
+
+           Lines Assembled :  109             Assembly Errors :  0
+
+
+
