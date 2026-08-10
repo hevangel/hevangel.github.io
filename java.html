@@ -12,18 +12,28 @@
     header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.75rem; padding:.65rem .9rem; border-bottom:2px solid var(--red); background:#0d171d; box-shadow:0 3px 16px var(--shadow); }
     h1 { margin:0; color:#fff; font-size:clamp(1rem,3vw,1.25rem); letter-spacing:.04em; }
     .controls { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
-    button,.button { min-height:2rem; padding:.35rem .65rem; border:1px solid #7ca3b9; border-radius:3px; color:#fff; background:#183547; font:inherit; font-size:.78rem; text-decoration:none; cursor:pointer; }
+    button,.button { min-height:2rem; display:inline-flex; align-items:center; justify-content:center; padding:.35rem .65rem; border:1px solid #7ca3b9; border-radius:3px; color:#fff; background:#183547; font:inherit; font-size:.78rem; line-height:1; text-align:center; text-decoration:none; cursor:pointer; }
     button:hover,.button:hover { background:var(--blue); }
     button:active,.button:active { transform:translateY(1px); }
     button:focus-visible,.button:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
-    main { width:min(100%,68rem); margin:0 auto; display:grid; align-content:start; justify-items:center; gap:1rem; padding:clamp(1rem,4vw,2.4rem); }
+    main { width:min(100%,68rem); min-width:0; margin:0 auto; display:grid; align-content:start; justify-items:center; gap:1rem; padding:clamp(1rem,4vw,2.4rem); }
     .intro { width:min(100%,50rem); margin:0; color:var(--muted); font-size:.92rem; line-height:1.55; text-align:center; }
     .intro strong { color:var(--ink); }
-    .game-frame { width:min(100%,534px); padding:16px; border:1px solid var(--edge); border-radius:13px; background:linear-gradient(145deg,#293841,#0b1115 65%); box-shadow:0 16px 45px var(--shadow),inset 0 0 0 2px #080b0d; }
+    .game-frame { width:min(100%,534px); min-width:0; padding:16px 16px 12px; border:1px solid var(--edge); border-radius:13px; background:linear-gradient(145deg,#293841,#0b1115 65%); box-shadow:0 16px 45px var(--shadow),inset 0 0 0 2px #080b0d; }
     .screen { position:relative; overflow:hidden; width:100%; aspect-ratio:500/380; border:2px solid #050708; background:#020608; box-shadow:inset 0 0 25px #000; }
     .screen::after { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; background:repeating-linear-gradient(to bottom,rgba(255,255,255,.035) 0 1px,transparent 1px 4px); mix-blend-mode:soft-light; }
     #javaApplet { display:block; width:500px; height:380px; border:0; transform-origin:top left; background:#000; }
-    #gameStatus { width:min(100%,534px); min-height:1.3em; margin:0; color:#9fdcf4; font-size:.78rem; text-align:center; }
+    .game-toolbar { display:flex; align-items:center; justify-content:space-between; gap:.75rem; min-height:2.7rem; padding:.65rem .1rem 0; }
+    #gameStatus { flex:1 1 auto; min-width:0; min-height:1.3em; margin:0; color:#9fdcf4; font-size:.72rem; line-height:1.35; text-align:left; }
+    #musicButton { flex:0 0 auto; display:inline-flex; align-items:center; gap:.42rem; min-height:2.1rem; padding:.25rem .62rem .25rem .3rem; border:1px solid #568ca8; border-radius:999px; color:#eaf8ff; background:linear-gradient(180deg,#1b465d,#102c3c); box-shadow:inset 0 1px rgba(255,255,255,.12),0 3px 10px rgba(0,0,0,.28); letter-spacing:.02em; }
+    #musicButton::before { content:"♪"; display:grid; width:1.45rem; height:1.45rem; place-items:center; border-radius:50%; color:#17222a; background:var(--focus); font-size:.95rem; line-height:1; }
+    #musicButton::after { content:""; width:.48rem; height:.48rem; border-radius:50%; background:#65e3ae; box-shadow:0 0 7px rgba(101,227,174,.85); }
+    #musicButton:hover { border-color:#8bc7e4; background:linear-gradient(180deg,#245a75,#153a4e); }
+    #musicButton[aria-pressed="false"] { border-color:#52626b; color:#aebbc1; background:linear-gradient(180deg,#29343a,#1a2226); }
+    #musicButton[aria-pressed="false"]::before { color:#d3d9dc; background:#536169; }
+    #musicButton[aria-pressed="false"]::after { background:#7b858a; box-shadow:none; }
+    #musicButton:disabled { opacity:.55; cursor:not-allowed; }
+    #musicPlayer { display:none !important; position:absolute !important; width:0 !important; height:0 !important; overflow:hidden !important; }
     .instructions { width:min(100%,50rem); display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; }
     .instructions article { padding:.85rem 1rem; border:1px solid var(--edge); background:rgba(17,28,36,.88); }
     .instructions h2 { margin:0 0 .55rem; color:var(--focus); font-size:.9rem; }
@@ -31,16 +41,15 @@
     kbd { padding:.08rem .28rem; border:1px solid #607886; border-bottom-width:2px; border-radius:3px; color:#fff; background:#0a1116; font:inherit; }
     footer { padding:.8rem 1rem 1.1rem; color:#8e9aa1; font-size:.76rem; line-height:1.6; text-align:center; }
     footer a { color:#8bd9f7; }
-    @media (max-width:620px) { header{align-items:flex-start}.controls{width:100%}main{padding:1rem .6rem 1.5rem}.game-frame{padding:8px;border-radius:8px}.instructions{grid-template-columns:1fr} }
+    @media (max-width:620px) { header{align-items:flex-start}.controls{width:100%}main{padding:1rem .6rem 1.5rem}.game-frame{padding:8px 8px 7px;border-radius:8px}.game-toolbar{gap:.5rem;padding-top:.5rem}#gameStatus{font-size:.66rem}#musicButton{padding-right:.5rem}.instructions{grid-template-columns:1fr} }
     @media (prefers-reduced-motion:reduce) { button:active,.button:active{transform:none} }
   </style>
 </head>
 <body>
   <header>
     <h1>Java · Macross Tetris v1.0</h1>
-    <div class="controls" aria-label="Applet controls">
+    <div class="controls" aria-label="Page controls">
       <button id="reloadButton" type="button">Reload Applet</button>
-      <button id="musicButton" type="button" aria-pressed="true" title="Music starts when you press Start in the game">Music: On</button>
       <a class="button" href="java/code/mactetris.java">View Original Source</a>
       <a class="button" href="/">Back to Timeline</a>
     </div>
@@ -53,8 +62,11 @@
       <div id="screen" class="screen">
         <iframe id="javaApplet" src="java/applet.html" title="Macross Tetris original Java applet" loading="eager"></iframe>
       </div>
+      <div class="game-toolbar">
+        <p id="gameStatus" role="status" aria-live="polite">Downloading the Java runtime and starting the original applet…</p>
+        <button id="musicButton" type="button" aria-pressed="true" title="Music starts when you press Start in the game">Music: On</button>
+      </div>
     </section>
-    <p id="gameStatus" role="status" aria-live="polite">Downloading the Java runtime and starting the original applet…</p>
 
     <section class="instructions" aria-label="Keyboard instructions">
       <article>

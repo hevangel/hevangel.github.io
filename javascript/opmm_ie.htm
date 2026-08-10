@@ -1,0 +1,1620 @@
+<html><head><title>Operation Minmay for Internet Explorer</title>
+
+<script language="javascript1.2">
+<!-- start of javascript
+//Operation Minmay
+//Author: Horace Chan
+//Source code are freely distributed with proper credit given.
+
+var state = 0;	// state of the game
+var load_count = 0;	//load counter
+
+var timerID = null;
+var INT = 25;	//delay
+var VF_FIRELAYER = 5;
+var BOSS_LAYER = 17;
+var EXPB_LAYER = 18;
+var EN_FIRELAYER3 = 19
+var EN_FIRELAYER1 = 20;
+var EN_FIRELAYER2 = 32;
+var BPOD_LAYER = 38;
+var ARMOUR_LAYER = 44;
+var OPOD_LAYER = 48;
+var EXP1_LAYER = 51;
+var EXP2_LAYER = 56;
+
+var distance = 0;
+var score = 0;
+var bpod_delay = 0;
+var armour_delay = 0;
+var opod_delay = 0;
+
+var star_pos = 0;	//background position
+var vf1 = null;	// object of valkyire
+var vf1_fire = new Array(12);
+var en_fire1 = new Array(12);
+var en_fire2 = new Array(6);
+var en_fire3 = null;
+var en_bpod = new Array(6);
+var en_armour = new Array(4);
+var en_opod = new Array(2);
+var en_boss = null;
+
+var mode = 0;
+var enemy_max = new Array(9);
+var efire_count1 = 0;
+var efire_count2 = 0;
+var bpod_count = 0;
+var armour_count = 0;
+var opod_count = 0;
+var exp1_count = 0;
+var exp2_count = 0;
+var x_diff = 0;
+var y_diff = 0;
+
+//objects
+function vf(x,y,mx,my,mxn,mxy,fd,fu,fc,e,fdd)
+{
+	this.pos_x = x;		// position of vf1
+	this.pos_y = y;
+	this.move_x = mx;	// move of vf1
+	this.move_y = my;
+	this.move_x_not = mxn;	// move of vf1 done
+	this.move_y_not = mxn;
+	this.firedown = fd; // fire flag
+	this.fireup = fu;
+	this.fire_count = fc; // fire counter
+	this.energy = e;	//energy
+	this.firedelay = fdd;	// fire delay
+}
+
+function battlepod(a,x,y,mx,my,f)
+{
+	this.active = a;
+	this.pos_x = x;
+	this.pos_y = y;
+	this.move_x = mx;
+	this.move_y = my;
+	this.fire_count = f;
+}
+
+function armour(a,e,x,y,dx,dy,f)
+{
+	this.active = a;
+	this.energy = e;
+	this.pos_x = x;
+	this.pos_y = y;
+	this.dest_x = dx;
+	this.dest_y = dy;
+	this.fire_count = f;
+}
+
+function officierpod(a,e,x,y,mx,my,d,f)
+{
+	this.active = a;
+	this.energy = e;
+	this.pos_x = x;
+	this.move_x = mx;
+	this.move_y = my;
+	this.pos_y = y;
+	this.distance = d;
+	this.fire_count = f;
+}
+
+function boss(a,e,x,y,mx,my,dx,dy,f1,f2,f3,fd1,fd2,fd3)
+{
+	this.active = a;
+	this.energy = e;
+	this.pos_x = x;
+	this.pos_y = y;
+	this.move_x = mx;
+	this.move_y = my;
+	this.dest_x = dx;
+	this.dest_y = dy;
+	this.fire_count1 = f1;
+	this.fire_count2 = f2;
+	this.fire_coutn3 = f3;
+	this.fire_delay1 = fd1;
+	this.fire_delay2 = fd2;
+	this.fire_delay3 = fd3;
+}
+
+function fire(o,x,y,vx,vy,p)
+{
+	this.onfire = o;	// on fire?
+	this.pos_x = x;	// position of fire
+	this.pos_y = y;
+	this.velocity_x = vx;	// velocity of fire
+	this.velocity_y = vy;
+	this.power = p;	// power
+	this.owner = null;
+}
+
+function en_max(b,a,o)
+{
+	this.bpod_max = b;
+	this.armour_max = a;
+	this.opod_max = o;
+}
+
+function load_data()
+{
+	state = -4;
+
+	bg_image = new Image();
+  bg_image.src.src = "stars.jpg";
+  bg_image.onLoad = load_check();
+
+	minmay_image = new Image();
+	minmay_image.src = "minmay.gif";
+	minmay_image.onLoad = load_check();
+
+	screen1_image = new Image();
+	screen1_image.src = "screen1.gif";
+	screen1_image.onLoad = load_check();
+
+	player1_image = new Image();
+	player1_image.src = "player1.gif";
+	player1_image.onLoad = load_check();
+
+	player2_image = new Image();
+	player2_image.src = "player2.gif";
+	player2_image.onLoad = load_check();
+
+	player3_image = new Image();
+	player3_image.src = "player3.gif";
+	player3_image.onLoad = load_check();
+
+	player4_image = new Image();
+	player4_image.src = "player4.gif";
+	player4_image.onLoad = load_check();
+
+	vf1_image = new Image();
+	vf1_image.src = "vf1s.gif";
+	vf1_image.onLoad = load_check();
+
+	vf2_image = new Image();
+	vf2_image.src = "vf1a_white.gif";
+	vf2_image.onLoad = load_check();
+
+	vf3_image = new Image();
+	vf3_image.src = "vf1a_blue.gif";
+	vf3_image.onLoad = load_check();
+
+	vf4_image = new Image();
+	vf4_image.src = "vf1a_red.gif";
+	vf4_image.onLoad = load_check();
+
+	enemy1_image = new Image();
+	enemy1_image.src = "enemy1.gif";
+	enemy1_image.onLoad = load_check();
+
+	enemy2_image = new Image();
+	enemy2_image.src = "enemy2.gif";
+	enemy2_image.onLoad = load_check();
+
+	enemy3_image = new Image();
+	enemy3_image.src = "enemy3.gif";
+	enemy3_image.onLoad = load_check();
+
+	enemy4_image = new Image();
+	enemy4_image.src = "enemy4.gif";
+	enemy4_image.onLoad = load_check();
+
+	bullet1_image = new Image();
+	bullet1_image.src = "bullet1.gif";
+	bullet1_image.onLoad = load_check();
+
+	bullet2_image = new Image();
+	bullet2_image.src = "bullet2.gif";
+	bullet2_image.onLoad = load_check();
+
+	bullet3_image = new Image();
+	bullet3_image.src = "bullet3.gif";
+	bullet3_image.onLoad = load_check();
+
+	explode1_image = new Image();
+	explode1_image.src = "explode1.gif";
+	explode1_image.onLoad = load_check();
+
+	explode2_image = new Image();
+	explode2_image.src = "explode2.gif";
+	explode2_image.onLoad = load_check();
+
+	explodeb_image = new Image();
+	explodeb_image.src = "enemy4a.gif";
+	explodeb_image.onLoad = load_check();
+
+	gameover_image = new Image();
+	gameover_image.src = "gameover.gif";
+	gameover_image.onLoad = load_check();
+
+	complete_image = new Image();
+	complete_image.src = "minmay2.gif";
+	complete_image.onLoad = load_check();
+}
+
+function load_check()
+{
+	load_count++;
+	document.load.document.compelete.resizeBy(12,0);
+	if (load_count == 23)
+	{ goto_briefing(); }
+}
+
+function goto_briefing()
+{
+		document.load.visibility="hidden";
+		document.briefing.visibility="show";
+		state = -3;
+}
+
+function goto_select()
+{
+		document.briefing.visibility="hidden";
+		document.over.visibility="hidden";
+		document.select.visibility="show";
+		//document.embeds[0].play();
+		state = -2
+}
+
+function init_game(player_gif)
+{
+	document.select.visibility="hidden";
+	document.stage1.visibility="show";
+	document.valkyire.document.type.src=player_gif;
+
+	document.layers[EXP1_LAYER].left=600;
+	document.layers[EXP1_LAYER].top=430;
+	document.layers[EXP2_LAYER].left=-18;
+	document.layers[EXP2_LAYER].top=-18;
+
+	distance =  0;
+	score = 0;
+	enemy_delay = 10;
+	mode = 0;
+  bpod_count = 0;
+  armour_count = 0;
+  opod_count = 0;
+	efire_count1 = 0;
+	efire_count2 = 0;
+
+ 	vf1 = new vf(50,200,0,0,0,0,0,0,0,10,0);
+	for (i=0; i<12; i++)
+	{
+		vf1_fire[i] = new fire(0,-100,0,30,0,1);
+		en_fire1[i] =	new fire(0,-100,0,0,0,1);
+	}
+	for (i=0; i<6; i++)
+	{
+		en_bpod[i] = new battlepod(0,1000,0,0,0,0);
+		en_fire2[i] = new fire(0,-100,0,-40,0,2);
+	}
+	for (i=0; i<4; i++)
+	{ en_armour[i] = new armour(0,3,1000,0,0,0,0,0); }
+  for (i=0; i<2; i++)
+	{ en_opod[i] = new officierpod(0,5,1000,0,-8,0,140,0); }
+	en_boss = new boss(0,100,1000,0,0,0,0,0,0,0,0,20,50,50);
+	enemy_max[0] = new en_max(2,0,0);
+	enemy_max[1] = new en_max(6,0,0);
+	enemy_max[2] = new en_max(4,2,0);
+	enemy_max[3] = new en_max(0,4,0);
+	enemy_max[4] = new en_max(6,0,1);
+	enemy_max[5] = new en_max(0,4,1);
+	enemy_max[6] = new en_max(6,2,0);
+	enemy_max[7] = new en_max(6,4,2);
+
+	document.energy.document.percent.resizeTo((vf1.energy*10),8);
+	state = -1;
+}
+
+function start_game()
+{
+		document.stage1.visibility="hidden";
+		document.stars.visibility="show";
+		document.valkyire.visibility="show";
+		document.energy.visibility="show";
+
+		state = 0;
+		timerID = setTimeout("interval()",0);
+}
+
+function interval()
+{
+	clearTimeout(timerID)
+	distance++;
+	score++;
+
+	//move background
+	star_pos -= 2;
+	if (star_pos <= -160) {star_pos = 0;}
+	document.stars.left=star_pos;
+
+	//move vf
+ 	vf1.pos_x += vf1.move_x;
+	vf1.pos_y += vf1.move_y;
+	if (vf1.pos_x < 4)	{ vf1.pos_x = 4; }
+	if (vf1.pos_x > 520) { vf1.pos_x = 520; }
+	if (vf1.pos_y < 4) { vf1.pos_y = 4; }
+	if (vf1.pos_y > 410) {vf1.pos_y = 410; }
+	document.valkyire.moveTo(vf1.pos_x,vf1.pos_y);
+	vf1.move_x += vf1.move_x_not;
+	vf1.move_x_not = 0;
+	vf1.move_y += vf1.move_y_not;
+	vf1.move_y_not = 0;
+
+	//valkiyre fires
+	if (vf1.firedelay == 0)
+  {
+		if (vf1.firedown ==1 )
+		{
+			if (vf1_fire[vf1.fire_count].onfire == 0)
+			{
+				vf1_fire[vf1.fire_count].onfire = 1;
+				vf1_fire[vf1.fire_count].pos_x = vf1.pos_x + 50;
+				vf1_fire[vf1.fire_count].pos_y = vf1.pos_y + 20;
+				vf1.firedelay = 1;
+				vf1.fire_count++;
+				if (vf1.fire_count > 7)
+				{	vf1.fire_count = 0; }
+			}
+			if (vf1.fireup == 1)
+			{	vf1.firedown = 0; }
+		}
+	}
+	else
+	{ vf1.firedelay = 0; }
+
+	fire_move();
+
+	exp1_count = 0;
+	exp2_count = 0;
+
+	if (mode == 8)
+	{	boss_mode(); }
+	else
+	{
+		new_enemy();
+
+		if (distance > 3500)
+		{	mode = 8; }
+		else if (distance > 3000)
+		{	mode = 7; }
+		else if (distance > 2500)
+		{	mode = 6; }
+		else if (distance > 2000)
+		{	mode = 5; }
+		else if (distance > 1500)
+		{	mode = 4; }
+		else if (distance > 1000)
+		{	mode = 3 }
+		else if (distance > 600)
+		{	mode = 2; }
+		else if (distance > 200)
+		{	mode = 1; }
+	}
+	check_hit();
+	enemy_move();
+
+	if (state < 98)
+	{	timerID = setTimeout("interval()",INT);	}
+	else if (state == 98)
+	{	timerID = setTimeout("display_over()",2000); }
+	else if (state == 100)
+	{
+		distance = 0;
+		document.energy.visibility = "hidden";
+		for (i=0; i<12; i++)
+		{ document.layers[EN_FIRELAYER1+i].left = 1000; }
+		for (i=0; i<8; i++)
+		{ document.layers[VF_FIRELAYER+i].left = 1000; }
+		for (i=0; i<6; i++)
+		{ document.layers[EN_FIRELAYER2+i].left = 1000; }
+		document.layers[EN_FIRELAYER3].left = 1000;
+		timerID = setTimeout("boss_explode()",INT);
+	}
+
+	return false;
+}
+function boss_explode()
+{
+	clearTimeout(timerID);
+	if (distance < 30)
+	{
+		for (i=0; i<5; i++)
+		{
+			x = en_boss.pos_x-40+Math.random()*200;
+			y = en_boss.pos_y-40+Math.random()*80;
+			document.layers[EXP1_LAYER+i].moveTo(x,y);
+		}
+		for (i=0; i<4; i++)
+		{
+			x = en_boss.pos_x-10+Math.random()*200;
+			y = en_boss.pos_y-10+Math.random()*80;
+			document.layers[EXP2_LAYER+i].moveTo(x,y);
+		}
+		distance++;
+		if (distance == 30)
+		{
+			document.energy.visibility = "hidden";
+			document.layers[BOSS_LAYER].left= 1000;
+			for (i=0; i<5; i++)
+			{ document.layers[EXP1_LAYER+i].left= 1000; }
+			for (i=0; i<4; i++)
+			{ document.layers[EXP2_LAYER+i].left= 1000; }
+			document.layers[EXPB_LAYER].left = 1000;
+		}
+	}
+	else if (vf1.pos_x < 540)
+	{
+		vf1.pos_x += 8;
+		document.valkyire.moveTo(vf1.pos_x,vf1.pos_y);
+	}
+	else if (vf1.pos_x < 640)
+	{
+		vf1.pos_x += 10;
+		document.valkyire.moveTo(vf1.pos_x,vf1.pos_y);
+	}
+	else
+	{ state = 101; }
+
+	if (state == 100)
+  { timerID = setTimeout("boss_explode()",INT); }
+	else if (state == 101)
+	{
+		//document.embeds[1].play();
+		document.stars.visibility = "hidden";
+		document.valkyire.visibility = "hidden";
+
+		document.complete.visibility = "show";
+		document.dis_score.document.open();
+		document.dis_score.document.writeln("<font size=5 color='ffffff' face='courier new'><b>Scores: "+score+"</b></font><br>");
+		document.dis_score.document.close();
+		document.dis_score.visibility="show";
+	}
+}
+
+function display_over()
+{
+		clearTimeout(timerID)
+
+		//document.embeds[0].stop();
+
+		document.over.visibility = "show";
+		document.stars.visibility = "hidden";
+		document.valkyire.visibility = "hidden";
+		document.energy.visibility = "hidden";
+		for (i=0; i<12; i++)
+		{ document.layers[EN_FIRELAYER1+i].left= 1000; }
+		for (i=0; i<8; i++)
+		{ document.layers[VF_FIRELAYER+i].left= 1000; }
+		for (i=0; i<6; i++)
+		{
+			document.layers[BPOD_LAYER+i].left= 1000;
+			document.layers[EN_FIRELAYER2+i].left= 1000; }
+		for (i=0; i<4; i++)
+		{ document.layers[ARMOUR_LAYER+i].left= 1000; }
+		for (i=0; i<2; i++)
+		{ document.layers[OPOD_LAYER+i].left= 1000; }
+    document.layers[BOSS_LAYER].left= 1000;
+		for (i=0; i<5; i++)
+		{ document.layers[EXP1_LAYER+i].left= 1000; }
+		for (i=0; i<4; i++)
+		{ document.layers[EXP2_LAYER+i].left= 1000; }
+		document.layers[EXPB_LAYER].left = 1000;
+		document.layers[EN_FIRELAYER3].left= 1000;
+
+		document.over.document.open();
+		document.over.document.writeln("<center><br>");
+		document.over.document.writeln("<font size=6 color='ffffff' face='courier new'><b>Game Over</b></font><br>");
+		document.over.document.writeln("<img src='gameover.gif' hspacing=5><br>");
+		document.over.document.writeln("<font size=4 color='ffffff' face='courier new'><b>Score: "+score+"</b></font><br><br>");
+		document.over.document.writeln("<font size=3 color='ffffff' face='courier new'>Please send comments and suggestions to <a href='mailto:yhchan@novice.uwaterloo.ca'><b>Horace</b></a><br>");
+		document.over.document.writeln("Press any key to restart</font><br>");
+		document.over.document.writeln("</center>");
+		document.over.document.close();
+
+		state = 99;
+}
+
+function fire_move()
+{
+	for (i=0; i<8; i++)
+	{
+	// vf fire move
+		if (vf1_fire[i].onfire == 1)
+		{
+			vf1_fire[i].pos_x += vf1_fire[i].velocity_x;
+			if (vf1_fire[i].pos_x > 640)
+     	{	vf1_fire[i].onfire = 0; vf1_fire[i].pos_x = -100; }
+			document.layers[VF_FIRELAYER+i].moveTo(vf1_fire[i].pos_x,vf1_fire[i].pos_y);
+		}
+	}
+
+	for (i=0; i<12; i++)
+	{
+	// enemy fire move
+	 	if (en_fire1[i].onfire == 1)
+		{
+			en_fire1[i].pos_x += en_fire1[i].velocity_x;
+			en_fire1[i].pos_y += en_fire1[i].velocity_y;
+
+			if ((en_fire1[i].pos_x < -10) || (en_fire1[i].pos_x > 640) || (en_fire1[i].pos_y < -20) || (en_fire1[i].pos_y > 460))
+      {
+				en_fire1[i].onfire = 0;
+				en_fire1[i].pos_x = -100;
+				en_fire1[i].owner.fire_count--;
+			}
+			document.layers[EN_FIRELAYER1+i].moveTo(en_fire1[i].pos_x,en_fire1[i].pos_y);
+		}
+	}
+
+	for (i=0; i<6; i++)
+	{
+	 	if (en_fire2[i].onfire == 1)
+		{
+			en_fire2[i].pos_x += en_fire2[i].velocity_x;
+			en_fire2[i].pos_y += en_fire2[i].velocity_y;
+
+			if ((en_fire2[i].pos_x < -10) || (en_fire2[i].pos_x > 640) || (en_fire2[i].pos_y < -20) || (en_fire2[i].pos_y > 460))
+      {
+				en_fire2[i].onfire = 0;
+				en_fire2[i].pos_x = -100;
+				en_fire2[i].owner.fire_count--;
+			}
+			document.layers[EN_FIRELAYER2+i].moveTo(en_fire2[i].pos_x,en_fire2[i].pos_y);
+		}
+	}
+}
+
+function new_enemy()
+{
+	bpod_delay--;
+	armour_delay--;
+	opod_delay--;
+
+	if (bpod_delay <= 0)
+	{
+		// new battle pod
+		if ((en_bpod[bpod_count].active == 0) && (enemy_max[mode].bpod_max != 0))
+		{
+			bpod_delay = 12;
+
+  		en_bpod[bpod_count].active = 1;
+			en_bpod[bpod_count].pos_x = 620;
+			en_bpod[bpod_count].pos_y = Math.round(Math.random()*8)*52;
+			en_bpod[bpod_count].move_x = -4;
+			en_bpod[bpod_count].move_y = Math.round((0.4-Math.random())*2);;
+
+			bpod_count++;
+			if (bpod_count >= enemy_max[mode].bpod_max)
+			{ bpod_count = 0; }
+		}
+	}
+
+	if (armour_delay <= 0)
+	{
+		// new armour
+		if ((en_armour[armour_count].active == 0) && (enemy_max[mode].armour_max != 0))
+		{
+			armour_delay = 12;
+
+			en_armour[armour_count].active = 1;
+			en_armour[armour_count].energy = 3;
+			en_armour[armour_count].pos_x = Math.round(Math.random()*8)*40 + 320;
+			temp_var = Math.random();
+			if (temp_var >= 0.5)
+			{ en_armour[armour_count].pos_y = 0; }
+			else
+			{ en_armour[armour_count].pos_y = 400; }
+
+	    en_armour[armour_count].dest_x = Math.round(Math.random()*22)*10 + 330;
+			en_armour[armour_count].dest_y = Math.round(Math.random()*33)*10;
+
+			armour_count++;
+			if (armour_count >= enemy_max[mode].armour_max)
+			{ armour_count = 0; }
+		}
+	}
+
+	if (opod_delay <= 0)
+	{
+		// new officier pod
+		if ((en_opod[opod_count].active == 0) && (enemy_max[mode].opod_max != 0))
+		{
+			opod_delay = 12;
+
+			en_opod[opod_count].active = 1;
+			en_opod[opod_count].energy = 5;
+			en_opod[opod_count].pos_x = 620;
+			en_opod[opod_count].pos_y = Math.round(Math.random()*8)*52;
+
+			opod_count++;
+			if (opod_count >= enemy_max[mode].opod_max)
+			{ opod_count = 0; }
+		}
+	}
+}
+
+function enemy_move()
+{
+//move battle pod;
+	for (i=0; i < 6; i++)
+	{
+		if (en_bpod[i].active == 1)
+		{
+			en_bpod[i].pos_x += en_bpod[i].move_x;
+			en_bpod[i].pos_y += en_bpod[i].move_y;
+			if ((en_bpod[i].pos_x < -90) || (en_bpod[i].pos_y < -50) || (en_bpod[i].pos_y > 450))
+			{
+				en_bpod[i].pos_x = 1000;
+				en_bpod[i].active = 0;
+			}
+			if (en_bpod[i].fire_count == 0)
+			{
+				if (en_fire1[efire_count1].onfire == 0)
+				{
+					en_bpod[i].fire_count++;
+
+					en_fire1[efire_count1].onfire = 1;
+				  en_fire1[efire_count1].pos_x = en_bpod[i].pos_x -10 ;
+					en_fire1[efire_count1].pos_y = en_bpod[i].pos_y +15 ;
+
+					x = (en_bpod[i].pos_x - vf1.pos_x);
+					if (x > 0)
+					{	en_fire1[efire_count1].velocity_x = -8; }
+					else if (x < 0)
+					{	en_fire1[efire_count1].velocity_x = 8; }
+					else
+					{	en_fire1[efire_count1].velocity_x = 0; }
+
+					y = Math.round((vf1.pos_y - en_bpod[i].pos_y) / Math.abs(x) * 8);
+					if (y > 6) { y = 6; }
+					if (y < -6) { y = -6; }
+
+					en_fire1[efire_count1].velocity_y = y;
+
+					en_fire1[efire_count1].owner = en_bpod[i];
+
+					efire_count1++;
+
+					if (efire_count1 > 11)
+		 			{	efire_count1 = 0; }
+				}
+			}
+			document.layers[BPOD_LAYER+i].moveTo(en_bpod[i].pos_x,en_bpod[i].pos_y);
+		}
+	}
+
+//move armour
+	for (i=0; i<4; i++)
+	{
+		if (en_armour[i].active == 1)
+		{
+			x_diff = en_armour[i].pos_x - en_armour[i].dest_x;
+			y_diff = en_armour[i].pos_y - en_armour[i].dest_y;
+
+			if (x_diff > 0)
+			{ en_armour[i].pos_x -= 5; }
+			else if (x_diff < 0)
+			{ en_armour[i].pos_x += 5; }
+
+			if (y_diff > 0)
+			{ en_armour[i].pos_y -= 5; }
+			else if (y_diff < 0)
+			{ en_armour[i].pos_y += 5; }
+
+			if ((x_diff == 0) && (y_diff == 0))
+			{
+				en_armour[i].dest_x = Math.round(Math.random()*22)*10 + 330;
+				en_armour[i].dest_y = Math.round(Math.random()*33)*10;
+			}
+
+			if ((en_armour[i].fire_count == 0)&&(en_armour[i].pos_y > 50) && (en_armour[i].pos_y < 330))
+			{
+				temp_count1 = efire_count1+1;
+				temp_count2 = efire_count1+2;
+				if (temp_count1 > 11)
+	 			{	temp_count1 -= 12; }
+				if (temp_count2 > 11)
+	 			{	temp_count2 -= 12; }
+
+				if ((en_fire1[efire_count1].onfire == 0)&&(en_fire1[temp_count1].onfire == 0) && (en_fire1[temp_count2].onfire == 0))
+        {
+					en_armour[i].fire_count += 3;
+
+					en_fire1[efire_count1].onfire = 1;
+					en_fire1[temp_count1].onfire = 1;
+					en_fire1[temp_count2].onfire = 1;
+				  en_fire1[efire_count1].pos_x = en_armour[i].pos_x -5 ;
+				  en_fire1[temp_count1].pos_x = en_armour[i].pos_x -5 ;
+				  en_fire1[temp_count2].pos_x = en_armour[i].pos_x -5 ;
+					en_fire1[efire_count1].pos_y = en_armour[i].pos_y +7 ;
+					en_fire1[temp_count1].pos_y = en_armour[i].pos_y +7 ;
+					en_fire1[temp_count2].pos_y = en_armour[i].pos_y +7 ;
+
+					en_fire1[efire_count1].velocity_x = -10;
+					en_fire1[temp_count1].velocity_x = -8;
+					en_fire1[temp_count2].velocity_x = -8;
+
+					en_fire1[efire_count1].velocity_y = 0;
+					en_fire1[temp_count1].velocity_y = 6;
+					en_fire1[temp_count2].velocity_y = -6;
+
+					en_fire1[efire_count1].owner = en_armour[i];
+					en_fire1[temp_count1].owner = en_armour[i];
+					en_fire1[temp_count2].owner = en_armour[i];
+
+					efire_count1 = temp_count2 + 1;
+					if (efire_count1 > 11)
+					{	efire_count1 -= 12; }
+				}
+			}
+
+			document.layers[ARMOUR_LAYER+i].moveTo(en_armour[i].pos_x,en_armour[i].pos_y);
+		}
+	}
+
+	// move officier pod
+	for (i=0; i<2; i++)
+	{
+		if (en_opod[i].active == 1)
+		{
+			x_diff = en_opod[i].pos_x - vf1.pos_y - en_opod[i].distance - 10;
+
+			en_opod[i].pos_x += en_opod[i].move_x;
+			en_opod[i].pos_y += en_opod[i].move_y;
+
+			y_diff = en_opod[i].pos_y - vf1.pos_y + 20;
+
+			if (x_diff > 0)
+			{
+				en_opod[i].move_y = -y_diff;
+				if (en_opod[i].move_y > 4)
+				{ en_opod[i].move_y = 4; }
+				if (en_opod[i].move_y < -4)
+				{ en_opod[i].move_y = -4; }
+			}
+
+			if ((en_opod[i].pos_x < -130) || (en_opod[i].pos_y < -80) || (en_opod[i].pos_y > 450))
+			{
+				en_opod[i].pos_x = 1000;
+				en_opod[i].active = 0;
+			}
+
+			if (en_opod[i].fire_count < 3)
+			{
+				if (en_fire2[efire_count2].onfire == 0)
+				{
+					en_opod[i].fire_count++;
+					en_fire2[efire_count2].onfire = 1;
+
+					y_diff = vf1.pos_y - en_opod[i].pos_y + 12;
+
+					if ((y_diff > -18) && (y_diff < 22))
+					{
+						en_fire2[efire_count2].pos_x = en_opod[i].pos_x;
+						en_fire2[efire_count2].pos_y = en_opod[i].pos_y + 2;
+					}
+					if ((y_diff > 25) && (y_diff < 65))
+					{
+						en_fire2[efire_count2].pos_x = en_opod[i].pos_x + 20;
+						en_fire2[efire_count2].pos_y = en_opod[i].pos_y + 45;
+					}
+
+					en_fire2[efire_count2].owner = en_opod[i];
+
+					efire_count2++;
+					if (efire_count2 > 5)
+		 			{	efire_count2 = 0; }
+				}
+			}
+
+			document.layers[OPOD_LAYER+i].moveTo(en_opod[i].pos_x,en_opod[i].pos_y);
+		}
+	}
+}
+
+function check_hit()
+{
+	for (i=0; i<12; i++)
+	{
+		if (en_fire1[i].onfire != 1)
+		{	continue; }
+		if ((en_fire1[i].pos_x > vf1.pos_x+10) && (en_fire1[i].pos_x < vf1.pos_x+100) && (en_fire1[i].pos_y > vf1.pos_y) && (en_fire1[i].pos_y < vf1.pos_y + 26))
+		{
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(en_fire1[i].pos_x-10, en_fire1[i].pos_y-10);
+				exp2_count++;
+			}
+			en_fire1[i].onfire = 0;
+			en_fire1[i].owner.fire_count--;
+			document.layers[EN_FIRELAYER1+i].left = -100;
+			break;
+		}
+	}
+
+	for (i=0; i<6; i++)
+	{
+		if (en_fire2[i].onfire != 1)
+		{	continue; }
+		if ((en_fire2[i].pos_x > vf1.pos_x+10) && (en_fire2[i].pos_x < vf1.pos_x+100) && (en_fire2[i].pos_y > vf1.pos_y) && (en_fire2[i].pos_y < vf1.pos_y + 26))
+		{
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(en_fire2[i].pos_x-10, en_fire2[i].pos_y-10);
+				exp2_count++;
+			}
+			en_fire2[i].onfire = 0;
+			en_fire2[i].owner.fire_count--;
+			document.layers[EN_FIRELAYER2+i].left = -100;
+			break;
+		}
+	}
+
+	// check battle pod hit/crash
+	for (i=0; i<6; i++)
+	{
+		if (en_bpod[i].active != 1)
+		{ continue; }
+
+		for (j=0; j<8; j++)
+  	{
+			if (vf1_fire[j].onfire != 1)
+			{ continue; }
+			if ((vf1_fire[j].pos_x > en_bpod[i].pos_x) && (vf1_fire[j].pos_x < en_bpod[i].pos_x + 90) && (vf1_fire[j].pos_y > en_bpod[i].pos_y) && (vf1_fire[j].pos_y < en_bpod[i].pos_y + 54))
+			{
+					vf1_fire[j].onfire = 0;
+					document.layers[VF_FIRELAYER+j].left = -100;
+  				en_bpod[i].active = 0;
+  				document.layers[BPOD_LAYER+i].left = 1000;
+					document.layers[EXP1_LAYER+exp1_count].moveTo(en_bpod[i].pos_x-5,en_bpod[i].pos_y-25);
+  				exp1_count++;
+					score += 100;
+ 			}
+		}
+
+		x_diff = vf1.pos_x + 10 - en_bpod[i].pos_x;
+		y_diff = vf1.pos_y - en_bpod[i].pos_y;
+		vf_crash_x = 0;
+		vf_crash_y = 0;
+
+		crashed = 0;
+		if ((x_diff >= 0) && (x_diff < 90) && (y_diff >= 0) && (y_diff < 50))
+		{	crashed = 1; vf_crash_x = 0; vf_crash_y = 0;}
+		else if ((x_diff >= 0) && (x_diff < 90) && (y_diff < 0) && (y_diff > -30))
+		{	crashed = 1; vf_crash_x = 0; vf_crash_y = 20;}
+		else if ((x_diff < 0) && (x_diff > -90) && (y_diff >= 0) && (y_diff < 50))
+		{	crashed = 1; vf_crash_x = -x_diff; vf_crash_y = 0;}
+		else if ((x_diff < 0) && (x_diff > -90) && (y_diff < 0) && (y_diff > -30))
+		{	crashed = 1; vf_crash_x = -x_diff; vf_crash_y = 20;}
+
+		if (crashed == 1)
+		{
+			en_bpod[i].active = 0;
+			document.layers[BPOD_LAYER+i].left = 1000;
+			document.layers[EXP1_LAYER+exp1_count].moveTo(en_bpod[i].pos_x-5,en_bpod[i].pos_y-25);
+			exp1_count++;
+			score += 100;
+
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(vf1.pos_x+vf_crash_x, vf1.pos_y+vf_crash_y);
+				exp2_count++;
+			}
+		}
+	}
+
+	// check armour hit
+	for (i=0; i<4; i++)
+	{
+		if (en_armour[i].active != 1)
+		{ continue; }
+
+		for (j=0; j<8; j++)
+  	{
+			if (vf1_fire[j].onfire != 1)
+			{ continue; }
+			if ((vf1_fire[j].pos_x > en_armour[i].pos_x) && (vf1_fire[j].pos_x < en_armour[i].pos_x + 80) && (vf1_fire[j].pos_y > en_armour[i].pos_y) && (vf1_fire[j].pos_y < en_armour[i].pos_y + 100))
+			{
+				en_armour[i].energy--;
+				score += 50;
+
+				if (en_armour[i].energy == 0)
+				{
+					en_armour[i].active = 0;
+  				document.layers[ARMOUR_LAYER+i].left = 1000;
+					document.layers[EXP1_LAYER+exp1_count].moveTo(en_armour[i].pos_x-10,en_armour[i].pos_y);
+  				exp1_count++;
+				}
+				else
+				{
+					document.layers[EXP2_LAYER+exp2_count].moveTo(vf1_fire[j].pos_x+5, vf1_fire[j].pos_y-12);
+					exp2_count++;
+				}
+
+				vf1_fire[j].onfire = 0;
+				document.layers[VF_FIRELAYER+j].left = -100;
+  		}
+		}
+
+		x_diff = vf1.pos_x + 10 - en_armour[i].pos_x;
+		y_diff = vf1.pos_y - en_armour[i].pos_y;
+
+		vf_crash_x = 0;
+		vf_crash_y = 0;
+		a_crash = 0;
+
+		crashed = 0;
+		if ((x_diff >= 0) && (x_diff < 80) && (y_diff >= 0) && (y_diff < 100))
+		{	crashed = 1; vf_crash_x = 0; vf_crash_y = 0; a_crash = -15;}
+		else if ((x_diff >= 0) && (x_diff < 80) && (y_diff < 0) && (y_diff > -30))
+		{	crashed = 1; vf_crash_x = 0; vf_crash_y = 20; a_crash = -15;}
+		else if ((x_diff < 0) && (x_diff > -90) && (y_diff >= 0) && (y_diff < 100))
+		{	crashed = 1; vf_crash_x = -x_diff; vf_crash_y = 0; a_crash = 15;}
+		else if ((x_diff < 0) && (x_diff > -90) && (y_diff < 0) && (y_diff > -30))
+		{	crashed = 1; vf_crash_x = -x_diff; vf_crash_y = 20; a_crash = 15;}
+
+		if (crashed == 1)
+		{
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(vf1.pos_x+vf_crash_x, vf1.pos_y+vf_crash_y);
+				exp2_count++;
+			}
+
+			en_armour[i].energy--;
+			score += 50;
+
+			if (en_armour[i].energy == 0)
+			{
+				en_armour[i].active = 0;
+ 				document.layers[ARMOUR_LAYER+i].left = 1000;
+				document.layers[EXP1_LAYER+exp1_count].moveTo(en_armour[i].pos_x-10,en_armour[i].pos_y);
+ 				exp1_count++;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(vf1.pos_x+vf_crash_x+a_crash, vf1.pos_y+vf_crash_y);
+				exp2_count++;
+			}
+		}
+	}
+
+	// check officier pod hit
+	for (i=0; i<2; i++)
+	{
+		if (en_opod[i].active != 1)
+		{ continue; }
+
+		for (j=0; j<8; j++)
+  	{
+			if (vf1_fire[j].onfire != 1)
+			{ continue; }
+			if ((vf1_fire[j].pos_x > en_opod[i].pos_x) && (vf1_fire[j].pos_x < en_opod[i].pos_x + 120) && (vf1_fire[j].pos_y > en_opod[i].pos_y) && (vf1_fire[j].pos_y < en_opod[i].pos_y + 80))
+			{
+				en_opod[i].energy--;
+				score += 50;
+
+				if (en_opod[i].energy == 0)
+				{
+					en_opod[i].active = 0;
+  				document.layers[OPOD_LAYER+i].left = 1000;
+					document.layers[EXP1_LAYER+exp1_count].moveTo(en_opod[i].pos_x+10,en_opod[i].pos_y-10);
+  				exp1_count++;
+				}
+				else
+				{
+					document.layers[EXP2_LAYER+exp2_count].moveTo(vf1_fire[j].pos_x+5, vf1_fire[j].pos_y-12);
+					exp2_count++;
+				}
+
+				vf1_fire[j].onfire = 0;
+				document.layers[VF_FIRELAYER+j].left = -100;
+  		}
+		}
+
+		x_diff = vf1.pos_x + 10 - en_opod[i].pos_x;
+		y_diff = vf1.pos_y - en_opod[i].pos_y;
+
+		vf_crash_x = 0;
+		vf_crash_y = 0;
+		o_crash = 0;
+
+		crashed = 0;
+		if ((x_diff >= 0) && (x_diff < 120) && (y_diff >= 0) && (y_diff < 80))
+		{	crashed = 1; vf_crash_x = 0; vf_crash_y = 0; o_crash = -15;}
+		else if ((x_diff >= 0) && (x_diff < 120) && (y_diff < 0) && (y_diff > -30))
+		{	crashed = 1; vf_crash_x = 0; vf_crash_y = 20; o_crash = -15;}
+		else if ((x_diff < 0) && (x_diff > -90) && (y_diff >= 0) && (y_diff < 80))
+		{	crashed = 1; vf_crash_x = -x_diff; vf_crash_y = 0; o_crash = 15;}
+		else if ((x_diff < 0) && (x_diff > -90) && (y_diff < 0) && (y_diff > -30))
+		{	crashed = 1; vf_crash_x = -x_diff; vf_crash_y = 20; o_crash = 15;}
+
+		if (crashed == 1)
+		{
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(vf1.pos_x+vf_crash_x, vf1.pos_y+vf_crash_y);
+				exp2_count++;
+			}
+
+			en_opod[i].energy--;
+			score += 50;
+
+			if (en_opod[i].energy == 0)
+			{
+				en_opod[i].active = 0;
+ 				document.layers[OPOD_LAYER+i].left = 1000;
+				document.layers[EXP1_LAYER+exp1_count].moveTo(en_opod[i].pos_x+10,en_opod[i].pos_y-10);
+ 				exp1_count++;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(vf1.pos_x+vf_crash_x+o_crash, vf1.pos_y+vf_crash_y);
+				exp2_count++;
+			}
+		}
+	}
+
+	for (i=exp1_count; i<5; i++)
+	{ document.layers[EXP1_LAYER+i].left=-100; }
+
+	for (i=exp2_count; i<4; i++)
+	{ document.layers[EXP2_LAYER+i].left=-100; }
+}
+
+function boss_mode()
+{
+	if (en_boss.active == 0)
+	{
+		// create boss if all other enemy are cleared.
+		cleared = 1;
+		for (i=0; i<6; i++)
+		{
+			if (en_bpod[i].active == 1)
+			{	cleared = 0; }
+		}
+		for (i=0; i<4; i++)
+		{
+			if (en_armour[i].active == 1)
+			{	cleared = 0; }
+		}
+		for (i=0; i<2; i++)
+		{
+			if (en_opod[i].active == 1)
+			{	cleared = 0; }
+		}
+		if (cleared == 1)
+		{
+			en_boss.active = 1;
+			en_boss.pos_x = 632;
+			en_boss.pos_y = 220;
+			en_boss.dest_x = 300;
+			en_boss.dest_y = 220;
+		}
+	}
+	else
+	{
+		// move boss
+		x_diff = en_boss.pos_x - en_boss.dest_x;
+		y_diff = en_boss.pos_y - en_boss.dest_y;
+
+		if (x_diff > 0)
+		{ en_boss.pos_x -= 4; }
+		else if (x_diff < 0)
+		{ en_boss.pos_x += 4; }
+
+		if (y_diff > 0)
+		{ en_boss.pos_y -= 4; }
+		else if (y_diff < 0)
+		{ en_boss.pos_y += 4; }
+
+		if ((y_diff == 0) && (x_diff == 0))
+		{
+			en_boss.dest_x = Math.round(Math.random()*32)*8+120;
+			if (Math.random() > 0.5)
+			{	en_boss.dest_y = Math.round(Math.random()*38)*8+16; }
+			else
+			{	en_boss.dest_y = Math.round(vf1.pos_y-100/8)*8;
+				if (en_boss.dest_y > 320)
+				{ en_boss.dest_y = 320; }
+				if (en_boss.dest_y <= 2)
+				{ en_boss.dest_y = 2; }
+			}
+		}
+
+		// check boss crashed with vf1
+		diff_x = 0;
+		diff_y = 0;
+
+		document.layers[EXPB_LAYER].moveTo(1000,0);
+		document.layers[BOSS_LAYER].moveTo(en_boss.pos_x,en_boss.pos_y);
+
+// 	check hit and crash
+		crashed = 0;
+		hited = 0;
+
+		if (((vf1.pos_y >= en_boss.pos_y)&&(vf1.pos_y < en_boss.pos_y + 10)&&(vf1.pos_x + 10 >= en_boss.pos_x+198)&&(vf1.pos_x + 10 < en_boss.pos_x+248))
+			||((vf1.pos_y >= en_boss.pos_y + 11)&&(vf1.pos_y < en_boss.pos_y + 45)&&(vf1.pos_x + 10 >= en_boss.pos_x+46)&&(vf1.pos_x + 10 < en_boss.pos_x+248))
+			||((vf1.pos_y >= en_boss.pos_y + 46)&&(vf1.pos_y < en_boss.pos_y + 73)&&(vf1.pos_x + 10 >= en_boss.pos_x+20)&&(vf1.pos_x + 10 < en_boss.pos_x+248))
+			||((vf1.pos_y >= en_boss.pos_y + 73)&&(vf1.pos_y < en_boss.pos_y + 104)&&(vf1.pos_x + 10 >= en_boss.pos_x+57) && (vf1.pos_x + 10 < en_boss.pos_x+171))
+			||((vf1.pos_y >= en_boss.pos_y + 87)&&(vf1.pos_y < en_boss.pos_y + 118)&&(vf1.pos_x + 10 >= en_boss.pos_x+1)&&(vf1.pos_x + 10 < en_boss.pos_x+72)))
+		{ crashed = 1; diff_x = vf1.pos_x+0; diff_y = vf1.pos_y+0;}
+
+		else if (((vf1.pos_y >= en_boss.pos_y)&&(vf1.pos_y < en_boss.pos_y + 10)&&(vf1.pos_x + 100 >= en_boss.pos_x+198)&&(vf1.pos_x + 100 < en_boss.pos_x+248))
+			||((vf1.pos_y >= en_boss.pos_y + 11)&&(vf1.pos_y < en_boss.pos_y + 45)&&(vf1.pos_x + 100 >= en_boss.pos_x+46)&&(vf1.pos_x + 100 < en_boss.pos_x+248))
+			||((vf1.pos_y >= en_boss.pos_y + 46)&&(vf1.pos_y < en_boss.pos_y + 73)&&(vf1.pos_x + 100 >= en_boss.pos_x+20)&&(vf1.pos_x + 100 < en_boss.pos_x+248))
+			||((vf1.pos_y >= en_boss.pos_y + 73)&&(vf1.pos_y < en_boss.pos_y + 104)&&(vf1.pos_x + 100 >= en_boss.pos_x+57) && (vf1.pos_x + 100 < en_boss.pos_x+171))
+			||((vf1.pos_y >= en_boss.pos_y + 87)&&(vf1.pos_y < en_boss.pos_y + 118)&&(vf1.pos_x + 100 >= en_boss.pos_x+1)&&(vf1.pos_x + 100 < en_boss.pos_x+72)))
+		{ crashed = 1; diff_x = vf1.pos_x+90; diff_y = vf1.pos_y+0;}
+
+		else if (((vf1.pos_y + 27 >= en_boss.pos_y)&&(vf1.pos_y + 27 < en_boss.pos_y + 10)&&(vf1.pos_x + 10 >= en_boss.pos_x+198)&&(vf1.pos_x + 10 < en_boss.pos_x+248))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 11)&&(vf1.pos_y + 27 < en_boss.pos_y + 45)&&(vf1.pos_x + 10 >= en_boss.pos_x+46)&&(vf1.pos_x + 10 < en_boss.pos_x+248))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 46)&&(vf1.pos_y + 27 < en_boss.pos_y + 73)&&(vf1.pos_x + 10 >= en_boss.pos_x+20)&&(vf1.pos_x + 10 < en_boss.pos_x+248))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 73)&&(vf1.pos_y + 27 < en_boss.pos_y + 104)&&(vf1.pos_x + 10 >= en_boss.pos_x+57)&&(vf1.pos_x + 10 < en_boss.pos_x+171))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 87)&&(vf1.pos_y + 27 < en_boss.pos_y + 118)&&(vf1.pos_x + 10 >= en_boss.pos_x+1)&&(vf1.pos_x + 10 < en_boss.pos_x+72)))
+		{ crashed = 1; diff_x = vf1.pos_x+0; diff_y = vf1.pos_y+10;}
+
+		else if (((vf1.pos_y + 27 >= en_boss.pos_y)&&(vf1.pos_y + 27 < en_boss.pos_y + 10)&&(vf1.pos_x + 100 >= en_boss.pos_x+198)&&(vf1.pos_x + 100 < en_boss.pos_x+248))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 11)&&(vf1.pos_y + 27 < en_boss.pos_y + 45)&&(vf1.pos_x + 100 >= en_boss.pos_x+46)&&(vf1.pos_x + 100 < en_boss.pos_x+248))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 46)&&(vf1.pos_y + 27 < en_boss.pos_y + 73)&&(vf1.pos_x + 100 >= en_boss.pos_x+20)&&(vf1.pos_x + 100 < en_boss.pos_x+248))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 73)&&(vf1.pos_y + 27 < en_boss.pos_y + 104)&&(vf1.pos_x + 100 >= en_boss.pos_x+57)&&(vf1.pos_x + 100 < en_boss.pos_x+171))
+			||((vf1.pos_y + 27 >= en_boss.pos_y + 87)&&(vf1.pos_y + 27 < en_boss.pos_y + 118)&&(vf1.pos_x + 100 >= en_boss.pos_x+1)&&(vf1.pos_x + 100 < en_boss.pos_x+72)))
+		{ crashed = 1;  diff_x = vf1.pos_x+90; diff_y = vf1.pos_y+10;}
+
+		for (i=0; i<8; i++)
+		{
+			if (vf1_fire[i].onfire == 0)
+			{ continue; }
+
+			if (((vf1_fire[i].pos_y >= en_boss.pos_y)&&(vf1_fire[i].pos_y < en_boss.pos_y + 10)&&(vf1_fire[i].pos_x >= en_boss.pos_x+198)&&(vf1_fire[i].pos_x < en_boss.pos_x+248))
+				||((vf1_fire[i].pos_y >= en_boss.pos_y + 11)&&(vf1_fire[i].pos_y < en_boss.pos_y + 45)&&(vf1_fire[i].pos_x >= en_boss.pos_x+46)&&(vf1_fire[i].pos_x < en_boss.pos_x+248))
+				||((vf1_fire[i].pos_y >= en_boss.pos_y + 46)&&(vf1_fire[i].pos_y < en_boss.pos_y + 73)&&(vf1_fire[i].pos_x >= en_boss.pos_x+20)&&(vf1_fire[i].pos_x < en_boss.pos_x+248))
+				||((vf1_fire[i].pos_y >= en_boss.pos_y + 73)&&(vf1_fire[i].pos_y < en_boss.pos_y + 104)&&(vf1_fire[i].pos_x >= en_boss.pos_x+57) && (vf1_fire[i].pos_x < en_boss.pos_x+171))
+				||((vf1_fire[i].pos_y >= en_boss.pos_y + 87)&&(vf1_fire[i].pos_y < en_boss.pos_y + 118)&&(vf1_fire[i].pos_x >= en_boss.pos_x+1)&&(vf1_fire[i].pos_x < en_boss.pos_x+72)))
+			{
+				vf1_fire[i].onfire = 0;
+				document.layers[VF_FIRELAYER+i].left = -100;
+				hited = 1;
+			}
+		}
+
+		if (crashed == 1)
+		{
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp1_count].moveTo(diff_x,diff_y);
+				exp2_count++;
+			}
+		}
+
+		if ((hited == 1)||(crashed == 1))
+		{
+			en_boss.energy--;
+			score += 25;
+			document.layers[EXPB_LAYER].moveTo(en_boss.pos_x,en_boss.pos_y);
+
+			if (en_boss.energy == 0)
+			{	state = 100; }
+		}
+
+// fire weapon
+		if (en_boss.fire_delay1 > 0)
+		{	en_boss.fire_delay1--; }
+		else
+		{
+			if (en_fire1[en_boss.fire_count1].onfire == 0)
+			{
+				en_boss.fire_delay1 = 4;
+				en_fire1[en_boss.fire_count1].onfire = 1;
+				en_fire1[en_boss.fire_count1].pos_x = en_boss.pos_x + 100;
+				en_fire1[en_boss.fire_count1].pos_y = en_boss.pos_y + 60;
+
+				x = (en_boss.pos_x - vf1.pos_x + 100);
+				if (x > 0)
+				{	en_fire1[en_boss.fire_count1].velocity_x = -8; }
+				else if (x < 0)
+				{	en_fire1[en_boss.fire_count1].velocity_x = 8; }
+				else
+				{	en_fire1[en_boss.fire_count1].velocity_x = 0; }
+
+				y = Math.round((vf1.pos_y - en_boss.pos_y - 60) / Math.abs(x) * 8);
+				if (y > 6) { y = 6; }
+				if (y < -6) { y = -6; }
+				en_fire1[en_boss.fire_count1].velocity_y = y;
+
+				en_fire1[en_boss.fire_count1].owner = en_boss;
+				en_boss.fire_count1++;
+				if (en_boss.fire_count1 > 11)
+	 			{	en_boss.fire_count1 = 0; }
+				if ((en_boss.fire_count1 == 0) || (en_boss.fire_count1 == 4) || (en_boss.fire_count1 == 8))
+				{ en_boss.fire_delay1 = 15; }
+			}
+		}
+
+		if (en_boss.fire_delay2 > 4)
+		{	en_boss.fire_delay2--; }
+		else
+		{
+			if ((en_fire2[en_boss.fire_count2].onfire == 0)&&(vf1.pos_y >= en_boss.pos_y - 60)&&(vf1.pos_y < en_boss.pos_y+40))
+			{
+				en_boss.fire_delay2 = 0;
+
+				en_fire2[en_boss.fire_count2].onfire = 1;
+				en_fire2[en_boss.fire_count2].pos_x = en_boss.pos_x + 58;
+				en_fire2[en_boss.fire_count2].pos_y = en_boss.pos_y + 20;
+
+				en_fire2[en_boss.fire_count2].owner = en_boss;
+				en_boss.fire_count2++;
+				if (en_boss.fire_count2 > 5)
+	 			{
+					en_boss.fire_count2 = 0;
+					en_boss.fire_delay2 = 15;
+				}
+			}
+		}
+
+		if (en_boss.fire_delay3 > 0)
+		{	en_boss.fire_delay3--; }
+		else
+		{	boss_gun();	}
+	}
+}
+
+var g_state = 0;
+
+function boss_gun()
+{
+	if ((vf1.pos_y > en_boss.pos_y + 50) && (vf1.pos_y < en_boss.pos_y + 140) && (vf1.pos_x < en_boss.pos_x) && (g_state < 1))
+	{	g_state = 1; }
+
+	if (g_state == 0)
+	{ return; }
+	else if (g_state == 1)
+	{ g_state++; }
+	else if (g_state < 7)
+	{
+		document.layers[EN_FIRELAYER3].moveTo(en_boss.pos_x+4-g_state,en_boss.pos_y+89);
+		document.layers[EN_FIRELAYER3].resizeTo(g_state,30);
+		g_state++;
+	}
+	else if (g_state < 12)
+	{
+	 	document.layers[EN_FIRELAYER3].moveTo(0,en_boss.pos_y+89);
+		document.layers[EN_FIRELAYER3].resizeTo(en_boss.pos_x+6,30);
+		if ((vf1.pos_x < en_boss.pos_x)&&(vf1.pos_y > en_boss.pos_y+65)&&(vf1.pos_y < en_boss.pos_y+115))
+		{
+			vf1.energy--;
+			document.energy.document.percent.resizeTo((vf1.energy*10),8);
+			if (vf1.energy <= 0)
+			{
+				document.layers[EXP1_LAYER+exp1_count].moveTo(vf1.pos_x,vf1.pos_y-36);
+				exp1_count++;
+				state = 98;
+				return;
+			}
+			else
+			{
+				document.layers[EXP2_LAYER+exp2_count].moveTo(vf1.pos_x+60,vf1.pos_y+5)
+				exp2_count++;
+			}
+		}
+		g_state++;
+	}
+	else if (g_state == 12)
+	{
+		g_state = 0;
+	 	en_boss.fire_delay3 = 30;
+		document.layers[EN_FIRELAYER3].moveTo(1000,0);
+	}
+}
+
+function key_down(e)
+{
+	switch (state)
+	{
+		case 99:
+		case -3: goto_select();	break;
+		case -1: start_game();
+		case 0:
+			switch (e.which)
+			{
+				case 50: vf1.move_y += 6; break;
+				case 52: vf1.move_x += -8; break;
+				case 54: vf1.move_x += 8; break;
+				case 56: vf1.move_y += -6; break;
+				case 32: vf1.firedown = 1; vf1.fireup = 0; break;
+				case 97: vf1.energy = 10; document.energy.document.percent.resizeTo((vf1.energy*10),8); break;
+				case 98: distance += 400; break;
+				case 99: en_boss.energy = 1; break;
+				case 117: alert("Reset Control"); vf1.move_y = vf1.move_y_not = vf1.move_x = vf1.move_x_not = 0; break;
+				case 118: alert("Boss Energy: "+en_boss.energy); break;
+				case 119: alert("Score: " + score); break;
+				case 120: alert("Distance: "+distance+",  Mode: "+mode); break;
+				case 122: state = 98; break;
+			}
+		break;
+	}
+	return false;
+}
+
+function key_up(e)
+{
+	if ((state != 0) && (state != -1)) return false;
+	switch (e.which)
+	{
+			case 50: vf1.move_y_not += -6; break;
+			case 52: vf1.move_x_not += 8;	break;
+			case 54: vf1.move_x_not += -8; break;
+			case 56: vf1.move_y_not += 6; break;
+			case 32: vf1.fireup = 1; break;
+	}
+	return false;
+}
+// end of javascript -->
+</script></head>
+
+<body bgcolor="000000">
+<embed src="../music/dyrl.mid" height=2 width=1 autostart=true loop=true>
+<embed src="../music/tenshi.mid" height=2 width=1 loop=true>
+
+<div id="load" style="position:absolute; left:180px; top:150px">
+	<font size=4 face="arial" color="ffffff">
+	Loading data, please wait......
+	</font>
+	<div id="compelete" bgcolor="e00000"
+	left=-5 top=25 width=0 height=20>
+	</div>
+</div>
+
+<div id="briefing" style="position:absolute; top:20px; left:80px; width:500px; visibility: hidden">
+
+	<img src="minmay.gif" align="right">
+	<br>
+
+	<font size=+4 color="e00000" face="courier new">
+ 	 <b>Alert!!!</b><br>
+	</font>
+
+	<font size=+1 color="008000" face="courier new"><b>
+	Minmay is kidnapped.<br>
+	Her concert is 3 hours from now.  You are our only hope to save her.<br>
+	</b></font>
+
+	<br><br><br><br>
+	<center>
+	<font size=+1 color="ffffff" face="courier new"><b>
+	Please press any key
+	</b></font>
+	</center>
+</div>
+
+<div id="select" style="position:absolute; visibility:hidden">
+	<center><br><br>
+	<font size=+1 color="ffffff" face="courier new"><b>
+	Please select the pilot:<br><br>
+	</font>
+
+	<table border=0 cellspacing=10>
+	<tr><td  align="right">
+		<font size=+1 color="8080ff" face="courier new"><b>Roy</b></font>
+    </td><td>
+		<a href="" onClick="init_game('vf1s.gif'); return false;"><img src="player1.gif" border=0></a>
+	</td><td>
+		<a href="" onClick="init_game('vf1j_blue.gif'); return false;"><img src="player3.gif" border=0></a>
+	</td><td>
+		<font size=+1 color="8080ff" face="courier new"><b>Max</b></font>
+	</td></tr><tr><td align="right">
+		<font size=+1 color="8080ff" face="courier new"><b>Hikaru</b></font>
+	</td><td>
+		<a href="" onClick="init_game('vf1j_white.gif'); return false;"><img src="player2.gif" border=0></a>
+	</td><td>
+		<a href="" onClick="init_game('vf1j_red.gif'); return false;"><img src="player4.gif" border=0></a>
+	</td><td>
+		<font size=+1 color="8080ff" face="courier new"><b>Millia</b></font>
+	</td></tr></table><br><br>
+	</center>
+
+	<ilayer id=control left=200>
+	<font size=+1 color="ffffff" face="courier new"><b>
+	Controls : 4 6 8 2<br>
+	Fire : space
+	</b></font></ilayer>
+</div>
+
+<div id="stage1" style="position:absolute; top:50px; left:0px visibility:hidden">
+	<center>
+	<font size=+2 color="ffffff" face="courier new"><b>
+	Operation Minmay<br><br></font>
+	<img src="screen1.gif" border=0><br><br>
+	<font size=-1 color="ffffff" face="courier new">
+	<b>Press any key to start</b>
+	</b></font></center>
+</div>
+
+<div id="stars" style="position:absolute; background:stars.jpg;
+top:0px; left:0px; width:800px height:480px;
+visibility:hidden; z-index:1></layer>
+
+<div id="valkyire" style="position:absolute; visibility:hidden;
+left:0px; top:0px z-index:80>
+	<img src="vf1s.gif" name="type">
+</div>
+
+<div style="left:-100; z-index:10; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:11; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:12; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:13; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:14; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:15; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:16; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:17; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:18; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:19; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:20; visibility:show"><img src="bullet1.gif"></div>
+<div style="left:-100; z-index:21; visibility:show"><img src="bullet1.gif"></div>
+
+<div style="left:1000; z-index:25; visibility:show"><img src="enemy4.gif"></div>
+<div style="left:1000; z-index:26; visibility:show"><img src="enemy4a.gif"></div>
+
+<div style="left:1000; top:0; width:200; height:30; z-index:27; visibility:show" background:bullet4.gif"></div>
+
+<layer left=-100 z-index=32 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=33 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=34 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=35 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=36 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=37 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=38 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=39 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=40 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=41 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=42 visibility="show"><img src="bullet2.gif"></layer>
+<layer left=-100 z-index=43 visibility="show"><img src="bullet2.gif"></layer>
+
+<layer left=-100 z-index=44 visibility="show"><img src="bullet3.gif"></layer>
+<layer left=-100 z-index=45 visibility="show"><img src="bullet3.gif"></layer>
+<layer left=-100 z-index=46 visibility="show"><img src="bullet3.gif"></layer>
+<layer left=-100 z-index=47 visibility="show"><img src="bullet3.gif"></layer>
+<layer left=-100 z-index=48 visibility="show"><img src="bullet3.gif"></layer>
+<layer left=-100 z-index=49 visibility="show"><img src="bullet3.gif"></layer>
+
+<layer left=1000 z-index=50 visibility="show"><img src="enemy1.gif"></layer>
+<layer left=1000 z-index=51 visibility="show"><img src="enemy1.gif"></layer>
+<layer left=1000 z-index=52 visibility="show"><img src="enemy1.gif"></layer>
+<layer left=1000 z-index=53 visibility="show"><img src="enemy1.gif"></layer>
+<layer left=1000 z-index=54 visibility="show"><img src="enemy1.gif"></layer>
+<layer left=1000 z-index=55 visibility="show"><img src="enemy1.gif"></layer>
+
+<layer left=1000 z-index=56 visibility="show"><img src="enemy2.gif"></layer>
+<layer left=1000 z-index=57 visibility="show"><img src="enemy2.gif"></layer>
+<layer left=1000 z-index=58 visibility="show"><img src="enemy2.gif"></layer>
+<layer left=1000 z-index=59 visibility="show"><img src="enemy2.gif"></layer>
+
+<layer left=1000 z-index=60 visibility="show"><img src="enemy3.gif"></layer>
+<layer left=1000 z-index=61 visibility="show"><img src="enemy3.gif"></layer>
+
+<layer left=-100 z-index=90 visibility="show"><img src="explode1.gif"></layer>
+<layer left=-100 z-index=91 visibility="show"><img src="explode1.gif"></layer>
+<layer left=-100 z-index=92 visibility="show"><img src="explode1.gif"></layer>
+<layer left=-100 z-index=93 visibility="show"><img src="explode1.gif"></layer>
+<layer left=-100 z-index=94 visibility="show"><img src="explode1.gif"></layer>
+
+<layer left=-100 z-index=95 visibility="show"><img src="explode2.gif"></layer>
+<layer left=-100 z-index=96 visibility="show"><img src="explode2.gif"></layer>
+<layer left=-100 z-index=97 visibility="show"><img src="explode2.gif"></layer>
+<layer left=-100 z-index=98 visibility="show"><img src="explode2.gif"></layer>
+
+<layer id="energy" left=2 top=428 z-index=100 visibility="hidden">
+<font size=2 color="ffffff" face="courier new"><b>ENERGY</b></font>
+	<layer id="percent" bgcolor="e00000"
+	left=52 top=7 width=100 height=8>
+	</layer>
+</layer>
+
+<layer id="over" visibility="hidden">
+	<center>
+	<br><br>
+	<font size=6 color="ffffff" face="courier new"><b>Game Over</b></font><br>
+	<img src="gameover.gif" hspacing=5><br>
+	</center>
+</layer>
+
+<layer id="complete" visibility="hidden">
+	<table border=0 width="100%">
+	<tr><td align="center" valign="top">
+	<font size=5 color="ffffff" face="courier new"><b>Mission Complete</b></font><br>
+	</td><td rowspan=3 align="center" valign="middle">
+	<img src="minmay2.jpg">
+	</td></tr>
+	<tr><td>
+	<font size=4 color="008000" face="courier new"><b>
+	<br>
+	Because of your rescue, Minmay is now safe and the concert
+	can be held on time.  You are the hero and granted a front seat
+	ticket of the concert.  Enjoy the show!<br>
+	<br><br>
+	Do you like this game?  Please send comment and suggestions	to
+	<a href="mailto:yhchan@novice.uwaterloo.ca">me</a><br>
+	<br>
+	Thankyou for playing Operation Minmay<br>
+	</b></font><br>
+	</td></tr>
+	<tr><td align="center">
+	<font size=5 color="000000" face="courier new"><b>Scores: </b></font><br>
+	</td></tr>
+	</table>
+</layer>
+
+<layer id="dis_score" top=380 left=80 visibility="hidden">
+	<font size=5 color="ffffff" face="courier new"><b>Scores: </b></font><br>
+</layer>
+
+<script language="javascript1.2">
+<!-- start of javascript
+document.onKeyDown = key_down;
+document.onKeyUp = key_up;
+document.captureEvents(Event.KEYDOWN | Event.KEYUP);
+
+load_data();
+
+// end of javascript -->
+</script>
+
+</body></html>

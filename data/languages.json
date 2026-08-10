@@ -146,8 +146,8 @@
     "dividerBefore": "the browser takes over",
     "logoHtml": "<div class='big-logo'><img src='/images/javascript_logo.svg' alt='JavaScript logo' /></div>",
     "title": "JavaScript",
-    "era": "circa 2005 · Web 2.0",
-    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "era": "late 1990s · Netscape DHTML",
+    "launch": { "href": "/javascript.html", "label": "Play Operation Minmay", "disabled": false },
     "chunks": [
       {
         "label": "▸ 01 / History",
