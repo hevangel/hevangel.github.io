@@ -6,24 +6,24 @@
     "dividerBefore": null,
     "logoHtml": "<div class='big-logo'><img src='/images/basic_logo.png' alt='BASIC logo' /></div>",
     "title": "GW-BASIC",
-    "era": "circa 1983 · MS-DOS",
-    "launch": { "href": "/gwbasic.html", "label": "▶ Show Case", "disabled": false },
+    "era": "1992 · GW-BASIC / MS-DOS",
+    "launch": { "href": "/gwbasic.html", "label": "▶ Run GW-BASIC Programs", "disabled": false },
     "chunks": [
       {
-        "label": "▸ 01 / History",
+        "label": "▸ 01 / Project",
         "visualHtml": "<div class='crt-screen'><span class='kw'>10</span> PRINT \"HELLO WORLD\"<br><span class='kw'>20</span> FOR I=1 TO 10<br><span class='kw'>30</span> PRINT I; I*I<br><span class='kw'>40</span> NEXT I<br><span class='kw'>50</span> GOTO 10<br><br><span class='prompt'>Ok</span><br><span class='prompt'>RUN</span><br>HELLO WORLD<br>1&nbsp;&nbsp;1<br>2&nbsp;&nbsp;4<br>3&nbsp;&nbsp;9<span class='cursor'></span></div>",
-        "heading": "Where It All Began",
-        "bodyHtml": "GW-BASIC — bundled with IBM PCs and MS-DOS — was the very first screen that ever blinked back at an entire generation. Descended from Altair BASIC (1975), it was an <em>interpreter</em>: type, RUN, obey. No compiler, no build step. It taught millions that a computer was a thing you could <strong>talk to</strong>."
+        "heading": "Super Horse Racing",
+        "bodyHtml": "My 1992 high-school GW-BASIC work culminated in <strong>Super Horse Racing</strong>, my final class project and the first game I ever wrote. The surviving collection also includes a Hong Kong ID validator, a base converter, dice and drawing programs, music, and an unfinished sequel with save/load support."
       },
       {
-        "label": "▸ 02 / Specialty",
-        "heading": "The Immediate-Feedback Machine",
-        "bodyHtml": "GW-BASIC's genius was <strong>instant gratification</strong>. Line numbers were the file system, the version control, the whole mental model. <code>GOTO</code>, <code>GOSUB</code>, <code>PEEK</code>/<code>POKE</code>: raw, unfiltered control over the hardware, with built-in graphics and sound. A teenager alone in a bedroom could make a game and watch it work in seconds."
+        "label": "▸ 02 / Source",
+        "heading": "Line Numbers, Graphics & Sound",
+        "bodyHtml": "The programs use the language exactly as I learned it: numbered statements, <code>GOTO</code> and <code>GOSUB</code> control flow, keyboard input, random numbers, screen graphics, <code>PLAY</code> music, and data files. Each small assignment became another piece of the larger racing game."
       },
       {
-        "label": "▸ 03 / My Take",
-        "heading": "The First Spark",
-        "bodyHtml": "GW-BASIC was my \"hello, world\" — the moment a glowing green screen became a <em>canvas</em>. Today I design chips where a signal flip takes weeks to verify, but the instinct is the same: <em>formulate, run, read the output, iterate</em>. The loop times got longer, the dopamine hit of \"it works!\" was forged right here."
+        "label": "▸ 03 / Runner",
+        "heading": "The Original Programs, Running Again",
+        "bodyHtml": "No port and no rewrite: the preserved <code>.BAS</code> files run with the original <strong>GW-BASIC interpreter</strong> inside browser-hosted DOS. The showcase can display each recovered source listing, then launch the program through DOSBox and js-dos with its original support files."
       }
     ]
   },
@@ -34,24 +34,24 @@
     "dividerBefore": "the prompt evolves",
     "logoHtml": "<div class='big-logo' style='filter: drop-shadow(0 0 22px rgba(232,232,232,0.25));'><img style='filter: brightness(0) invert(1);' src='/images/dbase_logo.png' alt='Ashton-Tate logo' /></div>",
     "title": "dBASE III+",
-    "era": "circa 1988 · Ashton-Tate",
-    "launch": { "href": "/dbase.html", "label": "▶ Show Case", "disabled": false },
+    "era": "1994 · dBASE III+ / MS-DOS",
+    "launch": { "href": "/dbase.html", "label": "▶ Run Appleby Library System", "disabled": false },
     "chunks": [
       {
-        "label": "▸ 01 / History",
+        "label": "▸ 01 / Project",
         "visualHtml": "<div class='dbase-screen'><div class='bar'>dBASE III+ · Command Mode</div>. USE STUDENT<br>. LIST NEXT 5<br><table><tr><th>Record#</th><th>NAME</th><th>GRADE</th></tr><tr><td>1</td><td>HEVANGEL</td><td>A</td></tr><tr><td>2</td><td>ALAN</td><td>B+</td></tr><tr><td>3</td><td>GRACE</td><td>A</td></tr></table>._ <span style='animation:blink 1s steps(2) infinite;'>█</span></div>",
-        "heading": "The Data Awakens",
-        "bodyHtml": "dBASE was the <strong>killer app</strong> of the pre-Windows business world. Born as Vulcan (1978), it turned the IBM PC into a <em>database</em> machine. Its terse dot-prompt language shipped real accounting and inventory systems. It quietly invented the <em>4GL</em> — describe <em>what</em> you want the data to do, not <em>how</em>."
+        "heading": "Appleby College Library System",
+        "bodyHtml": "My 1994 Grade 13 Computer Science final project was a menu-driven library system written in <strong>dBASE III+</strong>. It signed books in and out, maintained student and book records, calculated overdue items, printed reports, and included configuration and context-sensitive help screens."
       },
       {
-        "label": "▸ 02 / Specialty",
-        "heading": "Persistent Records & the Dot Prompt",
-        "bodyHtml": "A <code>.DBF</code> file was a real table on disk — fields, types, records. You could index it and query it relationally decades before SQL was common on PCs. The xBase dialect (FoxPro, Clipper) outlived Ashton-Tate itself."
+        "label": "▸ 02 / Data",
+        "heading": "Menus, Forms & Persistent Records",
+        "bodyHtml": "The project joined dozens of <code>.PRG</code> modules to persistent <code>.DBF</code> tables. Data-entry forms, record editing, searches, deletion, reports, error handling, and keyboard-driven menus made it a complete DOS application rather than a collection of isolated database commands."
       },
       {
-        "label": "▸ 03 / My Take",
-        "heading": "Learning That Data Has Shape",
-        "bodyHtml": "dBASE taught me that programming isn't only about <em>logic</em> — it's about <em>information</em>. A record has a schema, a lifecycle; you index for speed. Today, when I debug cache-coherency bugs that span firmware, OS, and silicon, every one is at heart a <em>data integrity</em> problem. I started asking \"what is canonical?\" at an amber dot prompt."
+        "label": "▸ 03 / Runner",
+        "heading": "The Original Project, Running Again",
+        "bodyHtml": "The preserved 1994 source, database files, help system, and dBASE runtime now run together inside browser-hosted DOS. The showcase launches <strong>Appleby College Library System 2.01r</strong> through DOSBox and js-dos and also exposes the original program modules for inspection."
       }
     ]
   },
@@ -62,24 +62,24 @@
     "dividerBefore": "systems programming arrives",
     "logoHtml": "<div class='big-logo'><img src='/images/cpp_logo.svg' alt='C++ logo' /></div>",
     "title": "C++",
-    "era": "circa 1990 · Stroustrup",
-    "launch": { "href": "/cpp.html", "label": "▶ Show Case", "disabled": false },
+    "era": "1995 · Turbo C++ / MS-DOS",
+    "launch": { "href": "/cpp.html", "label": "▶ Run English Word Collector", "disabled": false },
     "chunks": [
       {
-        "label": "▸ 01 / History",
+        "label": "▸ 01 / Project",
         "visualHtml": "<div class='tc-ide'><div class='tc-menubar'><span>File</span><span>Edit</span><span>Run</span><span>Compile</span><span>Debug</span></div><div class='tc-edit'><span class='cpp-com'>// fibonacci.cpp</span><br><span class='cpp-kw'>#include</span> <iostream><br><br><span class='cpp-type'>int</span> fib(<span class='cpp-type'>int</span> n) {<br>&nbsp;&nbsp;<span class='cpp-kw'>return</span> n < <span class='cpp-num'>2</span> ? n : fib(n-<span class='cpp-num'>1</span>)+fib(n-<span class='cpp-num'>2</span>);<br>}</div><div class='tc-statusbar'><span>● Ready</span><span>Line 4  Col 18</span></div></div>",
-        "heading": "C with Classes",
-        "bodyHtml": "C++ began in 1979 as \"C with Classes\" and grew into the heavyweight champion of systems programming. It gave C a layer of <strong>object orientation, templates, and RAII</strong>. Browsers, databases, game engines, OSes — and crucially, <em>EDA tools themselves</em> — are written in C++. It is the bedrock language of performance."
+        "heading": "English Word Collector",
+        "bodyHtml": "A summer-vacation exercise I built in 1995 while learning C++, <strong>English Word Collector 1.5B</strong> is a menu-driven vocabulary database. It can enter, edit, delete, search, list, and print word records containing a date, part of speech, and notes; it also includes a quiz/test, a learning game, save/load, help, and about screens."
       },
       {
-        "label": "▸ 02 / Specialty",
-        "heading": "Zero-Cost Abstraction",
-        "bodyHtml": "C++ promises towering abstractions that compile down to code as tight as hand-written C. <strong>\"You don't pay for what you don't use.\"</strong> It's the language for when performance is non-negotiable."
+        "label": "▸ 02 / Design",
+        "heading": "Linked Lists, Sorting & Data-Driven Menus",
+        "bodyHtml": "The program keeps records in doubly linked lists sorted both alphabetically and by date, then saves them to <code>TEST.DAT</code>. Its DOS text interface is driven by a binary <code>MENU.INI</code> layout, supported by a separate menu editor and reusable routines for bordered windows, buttons, status lines, dialogs, and listings."
       },
       {
-        "label": "▸ 03 / My Take",
-        "heading": "Building the Tools That Build Chips",
-        "bodyHtml": "The simulators and synthesizers I use every day — the tools that model a billion-transistor chip — are themselves C++ programs. Writing C++ taught me to design fast, layered systems, which is exactly the mindset RTL demands. When I optimize a datapath for timing, I'm thinking in the same cache-lines-and-throughput mental model C++ beat into me."
+        "label": "▸ 03 / Runner",
+        "heading": "The Original Exercises, Running Again",
+        "bodyHtml": "The original Turbo C++ executables now run with their preserved menu and vocabulary data inside browser-hosted DOS. The showcase launches the completed word collector and the smaller exercises I built along the way—box drawing, buttons, animated logos, the menu engine, and the quit dialog—and exposes their original source files."
       }
     ]
   },
@@ -118,24 +118,24 @@
     "dividerBefore": "the network arrives",
     "logoHtml": "<div class='big-logo'><img src='/images/java_logo.svg' alt='Java logo' /></div>",
     "title": "Java",
-    "era": "circa 1995 · Sun Microsystems",
-    "launch": { "href": "/java.html", "label": "Play Macross Tetris", "disabled": false },
+    "era": "1996 · Java Applet",
+    "launch": { "href": "/java.html", "label": "▶ Play Macross Tetris", "disabled": false },
     "chunks": [
       {
-        "label": "▸ 01 / History",
+        "label": "▸ 01 / Project",
         "visualHtml": "<div class='applet-window'><div class='applet-titlebar'><span>☕ HelloWorld — Applet Viewer</span><span>— □ ✕</span></div><div class='applet-menubar'><span>File</span><span>Edit</span><span>Run</span><span>Help</span></div><div class='applet-body'><span style='color:#aa5500;'>public class</span> Hello <span style='color:#aa5500;'>extends</span> Applet {<br>&nbsp;&nbsp;<span style='color:#aa5500;'>public void</span> paint(Graphics g) {<br>&nbsp;&nbsp;&nbsp;&nbsp;g.drawString(<span style='color:#00aa00;'>\"Hello, Web!\"</span>, 50, 25);<br>&nbsp;&nbsp;}<br>}</div><div class='applet-statusbar'><span>Applet started</span><span>JVM 1.0 · 16 MB</span></div></div>",
-        "heading": "Write Once, Run Anywhere",
-        "bodyHtml": "Java landed in 1995 like a meteor. Repackaged for the Web with mascot <strong>Duke</strong> and a steaming coffee cup, its pitch was almost religious: compile to a virtual machine and run on <em>any</em> device. Applets put code inside the browser; then Java quietly conquered the <strong>server</strong>, where it rules enterprise back-ends to this day."
+        "heading": "Macross Tetris",
+        "bodyHtml": "My first substantial Java program was <strong>Macross Tetris</strong>, a two-player applet I wrote in 1996. Two independent playfields run side by side with separate controls, adjustable levels, next-piece and statistics displays, optional matching piece sequences, attack lines, scoring, and a shared high-score table."
       },
       {
-        "label": "▸ 02 / Specialty",
-        "heading": "The JVM & Garbage Collection",
-        "bodyHtml": "Java's gifts were the <strong>JVM</strong> — abstracting the OS, pioneering JIT — and <strong>automatic garbage collection</strong> as a default. Spring, Hadoop, Kafka, Android all run on its descendants."
+        "label": "▸ 02 / Preservation",
+        "heading": "Source, Bytecode, Artwork & Upload Logs",
+        "bodyHtml": "The original Java source survives with its compiled <code>.class</code> files, Macross artwork, MIDI music, archive, applet page, and 1997 FTP transfer logs. The code preserves its AWT interface, game threads, piece logic, and calls to the long-retired Waterloo score service."
       },
       {
-        "label": "▸ 03 / My Take",
-        "heading": "Abstraction as Leverage",
-        "bodyHtml": "Java taught me that <strong>abstraction is leverage, not laziness</strong>. GC freed my brain to think about <em>behavior</em>, not <em>memory</em> — exactly the headroom I need to reason about a billion-transistor chip. But Java also taught me the <em>cost</em> of abstraction: every layer hides latency. In silicon, those hidden costs are nanoseconds and watts."
+        "label": "▸ 03 / Restoration",
+        "heading": "The Original Applet, Running Again",
+        "bodyHtml": "No JavaScript game rewrite and no recompile: the original <code>mactetris.class</code> now runs unchanged through the pinned <strong>CheerpJ 4.3</strong> browser JVM. CheerpJ supplies the Java runtime, AWT, threads, and class loading that modern browsers no longer provide through plug-ins."
       }
     ]
   },
@@ -146,24 +146,24 @@
     "dividerBefore": "the browser takes over",
     "logoHtml": "<div class='big-logo'><img src='/images/javascript_logo.svg' alt='JavaScript logo' /></div>",
     "title": "JavaScript",
-    "era": "late 1990s · Netscape DHTML",
-    "launch": { "href": "/javascript.html", "label": "Play Operation Minmay", "disabled": false },
+    "era": "1997 · Netscape JavaScript 1.2",
+    "launch": { "href": "/javascript.html", "label": "▶ Play Operation Minmay", "disabled": false },
     "chunks": [
       {
-        "label": "▸ 01 / History",
+        "label": "▸ 01 / Project",
         "visualHtml": "<div class='browser-window'><div class='browser-chrome'><span class='dot r'></span><span class='dot y'></span><span class='dot g'></span><span class='browser-url'>https://dev.local/app.js</span></div><div class='code-editor'><span class='gutter'>1</span><span class='js-com'>// the web woke up</span><br><span class='gutter'>2</span><span class='js-kw'>async function</span> <span class='js-fn'>fetchUser</span>(id) {<br><span class='gutter'>3</span>&nbsp;&nbsp;<span class='js-kw'>const</span> res = <span class='js-kw'>await</span> fetch(<span class='js-str'>`/api/u/${id}`</span>);<br><span class='gutter'>4</span>&nbsp;&nbsp;<span class='js-kw'>return</span> res.<span class='js-fn'>json</span>();<br><span class='gutter'>5</span>}<br><span class='gutter'>6</span><span class='js-fn'>fetchUser</span>(<span class='js-num'>42</span>).<span class='js-fn'>then</span>(u => console.<span class='js-fn'>log</span>(u));</div></div>",
-        "heading": "Brendan Eich's Ten Days",
-        "bodyHtml": "JavaScript was written in <strong>ten days</strong> in 1995 — originally Mocha, renamed to ride Java's coattails, with nothing to do with Java. A joke for a decade, then <em>Ajax</em> and Gmail proved the browser was a real platform. With Node.js it escaped the browser and became the <strong>most widely deployed runtime in history</strong>."
+        "heading": "Operation Minmay",
+        "bodyHtml": "I wrote <strong>Operation Minmay</strong> for Netscape in 1997. The side-scrolling shooter lets the player choose Roy, Hikaru, Max, or Millia and pilot the matching Valkyrie through eight enemy waves, survive battle pods and incoming fire, defeat the boss, and rescue Minmay before her concert."
       },
       {
-        "label": "▸ 02 / Specialty",
-        "heading": "The Event Loop & Universal Reach",
-        "bodyHtml": "JS's superpower is its <strong>single-threaded event loop</strong> — a model built for <em>waiting</em>. Its other superpower is <strong>ubiquity</strong>: every device has a JS engine. One language, front to back."
+        "label": "▸ 02 / Preservation",
+        "heading": "JavaScript 1.2, Layers & Original Artwork",
+        "bodyHtml": "The original game is preserved with its Netscape and Internet Explorer pages and hand-built artwork. Its Dynamic HTML engine moved dozens of absolutely positioned <code>&lt;layer&gt;</code> objects with timers, keyboard events, collision checks, enemy formations, projectiles, explosions, energy, and scoring."
       },
       {
-        "label": "▸ 03 / My Take",
-        "heading": "Thinking in Events, End to End",
-        "bodyHtml": "JS rewired my brain to think in <strong>events and reactions</strong>: a promise resolves, a clock edge arrives, a signal settles — the next stage reacts. It also made me a full-stack generalist. Holding the speed of the web and the rigor of silicon in one head keeps me humble — and this very page is hand-written JS."
+        "label": "▸ 03 / Compatibility",
+        "heading": "From Netscape Layers to Canvas",
+        "bodyHtml": "Modern browsers removed Netscape's layer API, so the compatibility edition recreates the original mission and control flow with <strong>Canvas 2D, DOM events, and requestAnimationFrame</strong>. The pilots, artwork, enemy waves, boss battle, controls, and ending remain, while the untouched original page stays available as historical source."
       }
     ]
   },
