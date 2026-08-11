@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Run the preserved 1992 AM2901 VHDL university benchmark in a static browser source-level simulator and inspect its generated waveforms." />
+<title>AM2901 VHDL Lab · Browser Workbench</title>
+<link rel="stylesheet" href="/vhdl/simulator.css" />
+</head>
+<body>
+<header class="app-header">
+  <div><p class="eyebrow">UC Irvine CADLAB benchmark · 1991–1992</p><h1>AM2901 VHDL Lab</h1></div>
+  <nav aria-label="Page actions"><a href="/">Back to Timeline</a><a href="/vhdl/2901/README">Lab README</a><a href="/vhdl/2901/alg_beh/alg_beh2901.vhdl">Original VHDL</a></nav>
+</header>
+<div class="menu-bar" aria-hidden="true"><span>File</span><span>Simulate</span><span>Wave</span><span>Source</span><b>AM2901 / MVL7 source model</b></div>
+<main>
+<section class="intro"><strong>A preserved four-bit bit-slice processor benchmark, running entirely in this page.</strong> The workbench reads the original translated VHDL vectors, executes the falling-edge behavior of <code>a2901</code>, and checks the assertions that accompanied the 1992 ZYCAD simulation.</section>
+<section class="toolbar" aria-label="Simulator controls">
+  <button id="resetButton" type="button">↺ Reset</button><button id="runButton" class="primary" type="button">▶ Run all</button><button id="stepButton" type="button">⇥ Step cycle</button><span class="separator"></span>
+  <label>Source <select id="sourceSelect"><option value="algorithmic">Algorithmic architecture</option><option value="functional">Functional-block architecture</option><option value="testbench">Test vectors</option></select></label>
+  <button id="downloadButton" type="button" disabled>↓ Export VCD</button>
+</section>
+<section class="status-strip" aria-label="Simulation status"><span id="status" role="status" aria-live="polite">Loading preserved VHDL…</span><span id="summary">0 cycles · 0 assertions</span></section>
+<section class="workspace">
+  <section class="panel source-panel"><div class="panel-title"><span id="sourceTitle">alg_beh2901.vhdl</span><span id="sourceLocation">original source</span></div><pre id="sourceCode" tabindex="0" aria-label="VHDL source"></pre></section>
+  <section class="side-column">
+    <section class="panel state-panel"><div class="panel-title"><span>AM2901 state</span><span id="cycleReadout">cycle —</span></div><div id="instruction" class="instruction">Waiting for vectors</div><div id="ports" class="port-grid"></div><div id="registers" class="register-grid" aria-label="Sixteen word RAM"></div></section>
+    <section class="panel assertions-panel"><div class="panel-title"><span>Original assertions</span><span id="assertionCount">not run</span></div><div id="assertions" class="assertions" aria-live="polite"><p class="empty">Step or run the testbench to verify its expected outputs.</p></div></section>
+  </section>
+</section>
+<section class="panel waveform-panel" aria-label="Waveform viewer"><div class="panel-title"><span>Generated waveform · E/AM1</span><span id="timeReadout">0 ns</span></div>
+  <div class="wave-toolbar"><button id="zoomOut" type="button" aria-label="Zoom out">−</button><label>Zoom <input id="zoom" type="range" min="10" max="54" value="24" /></label><button id="zoomIn" type="button" aria-label="Zoom in">+</button><label class="cursor-label">Cursor <input id="cursor" type="range" min="0" max="0" value="0" disabled /></label></div>
+  <div class="wave-grid"><div id="waveLabels" class="wave-labels" aria-hidden="true"></div><div id="waveScroll" class="wave-scroll"><canvas id="waveCanvas" height="420" tabindex="0" aria-label="AM2901 signal waveforms; click to move the time cursor"></canvas></div></div>
+</section>
+<section class="notes"><article><h2>What is preserved</h2><p>The page loads the original MVL7 packages, two <code>a2901</code> architectures, component labs, documentation, and translated test vectors without changing them. The vectors still drive a 10 ns clock and their original assertions provide the pass/fail oracle.</p></article><article><h2>Compatibility boundary</h2><p>This is a source-level behavioral compatibility engine derived from <code>alg_beh2901.vhdl</code>, not a general VHDL compiler or cycle-accurate GHDL build. The experimental GHDL browser ports do not yet provide complete scheduling and signal decoding for this legacy multi-file MVL7 design.</p></article><article><h2>Static by design</h2><p>Parsing, simulation, waveform rendering, assertion checks, and VCD export happen locally. No source or simulation data leaves the browser, and GitHub Pages needs no compile service.</p></article></section>
+</main>
+<footer>Original AM2901 benchmark by Indraneel Ghosh and UC Irvine CADLAB, verified in 1992. Browser workbench informed by <a href="https://github.com/UnsignedChad/ghdl-browser">ghdl-browser</a>, <a href="https://github.com/UnsignedChad/ghdl-wasm">ghdl-wasm</a>, and <a href="https://vhdl.ai/vhdlive">VHDLive</a>. <a href="https://github.com/hevangel/hevangel.github.io/tree/main/vhdl">Browse the corpus</a>.</footer>
+<script src="/vhdl/simulator.js"></script>
+</body>
+</html>

@@ -202,24 +202,24 @@
     "dividerBefore": "describing the hardware itself",
     "logoHtml": "<div class='big-logo'><img src='/images/vhdl_logo.png' alt='VHDL logo' /></div>",
     "title": "VHDL",
-    "era": "circa 1987 · IEEE 1076",
-    "launch": { "href": "#", "label": "Runner Coming Soon", "disabled": true },
+    "era": "1987 standard · 1992 AM2901 lab",
+    "launch": { "href": "/vhdl.html", "label": "Open AM2901 Lab", "disabled": false },
     "chunks": [
       {
-        "label": "▸ 01 / History",
-        "visualHtml": "<div class='waveform-viewer'><div class='wave-toolbar'><span>⚡ waveform.vcd — sim_top</span><span><span class='btn'>▶</span> 100 ns/div</span></div><div class='wave-body'><div class='wave-names'><div>clk</div><div>reset_n</div><div>count[7:0]</div><div>done</div></div><div class='wave-traces'><svg viewBox='0 0 600 140' preserveAspectRatio='none'><path d='M0,20 L40,20 L40,5 L80,5 L80,20 L120,20 L120,5 L160,5 L160,20 L200,20 L200,5 L240,5 L240,20 L280,20 L280,5 L320,5 L320,20 L360,20 L360,5 L400,5 L400,20 L440,20 L440,5 L480,5 L480,20 L520,20 L520,5 L560,5 L560,20 L600,20' stroke='#58a6ff' fill='none' stroke-width='1.5'/><path d='M0,55 L20,55 L20,40 L40,40 L80,40 L80,55 L600,55' stroke='#f0883e' fill='none' stroke-width='1.5'/><path d='M0,90 L80,90 L80,75 L520,75 L520,90 L600,90' stroke='#3fb950' fill='none' stroke-width='1.5'/><path d='M0,125 L515,125 L515,115 L540,115 L540,125 L600,125' stroke='#f85149' fill='none' stroke-width='1.5'/></svg></div></div><div class='wave-statusbar'><span>Simulation: 600 ns</span><span>PASSED · 0 errors</span></div></div>",
-        "heading": "Describing Silicon Before It Exists",
-        "bodyHtml": "VHDL — IEEE 1076, 1987 — is one of two languages used to design <strong>every digital chip on Earth</strong>. The mind-flip: it's not a program that <em>runs</em> — it's a description of a circuit that <em>exists</em>. Write <code>c <= a and b;</code> and you've specified a physical AND gate etched into silicon."
+        "label": "▸ 01 / Project",
+        "visualHtml": "<div class='waveform-viewer'><div class='wave-toolbar'><span>⚡ AM2901 · E/AM1</span><span><span class='btn'>▶</span> 10 ns/cycle</span></div><div class='wave-body'><div class='wave-names'><div>CLK</div><div>I[8:0]</div><div>Y[3:0]</div><div>C4</div></div><div class='wave-traces'><svg viewBox='0 0 600 140' preserveAspectRatio='none'><path d='M0,20 L40,20 L40,5 L80,5 L80,20 L120,20 L120,5 L160,5 L160,20 L200,20 L200,5 L240,5 L240,20 L280,20 L280,5 L320,5 L320,20 L360,20 L360,5 L400,5 L400,20 L440,20 L440,5 L480,5 L480,20 L520,20 L520,5 L560,5 L560,20 L600,20' stroke='#58a6ff' fill='none' stroke-width='1.5'/><path d='M0,48 L100,48 L110,40 L210,40 L220,48 L330,48 L340,40 L470,40 L480,48 L600,48' stroke='#c084fc' fill='none' stroke-width='1.5'/><path d='M0,90 L80,90 L90,75 L250,75 L260,90 L390,90 L400,75 L540,75 L550,90 L600,90' stroke='#3fb950' fill='none' stroke-width='1.5'/><path d='M0,125 L360,125 L360,115 L440,115 L440,125 L600,125' stroke='#f0883e' fill='none' stroke-width='1.5'/></svg></div></div><div class='wave-statusbar'><span>Original 10 ns vectors</span><span>MVL7 · falling edge</span></div></div>",
+        "heading": "A Four-Bit Slice, Preserved in VHDL",
+        "bodyHtml": "This 1991–1992 university corpus models the <strong>AMD Am2901</strong>: a four-bit ALU slice with sixteen words of RAM, a Q register, bidirectional shifter pins, carry lookahead, and tri-state output. Both an algorithmic architecture and a functional-block architecture survive with their original documentation."
       },
       {
-        "label": "▸ 02 / Specialty",
-        "heading": "Concurrency, Signals & Simulation",
-        "bodyHtml": "Everything in VHDL happens <strong>in parallel</strong> — because that's how hardware works. You simulate before fabrication because you <em>can't patch silicon</em>. A bug costs millions and months."
+        "label": "▸ 02 / Verification",
+        "heading": "The Original Testbench Is Still the Oracle",
+        "bodyHtml": "The translated ZYCAD testbench drives one instruction every <strong>10 ns</strong> and checks Y, carry, overflow, propagate, generate, zero, and shifter behavior. The browser reads those preserved VHDL cycles directly and reports every original assertion as pass or fail."
       },
       {
-        "label": "▸ 03 / My Take",
-        "heading": "My Day Job, My Native Layer",
-        "bodyHtml": "VHDL is where my journey <em>converges</em>. Everything above is built on hardware described in languages like this. When a bug spans firmware, OS, and silicon, I chase it from RTL waveform up to the JS console and back. Fifty years in, the loop is closed: <em>the kid who typed <code>GOTO 10</code> now designs the gates that fetch it.</em>"
+        "label": "▸ 03 / Workbench",
+        "heading": "Simulate, Inspect, and Export the Waveform",
+        "bodyHtml": "The static workbench steps or runs the AM2901 source behavior, exposes its RAM, Q register, operands, function decode, and outputs, and draws the resulting scalar and bus traces. Move the cursor through time, zoom the waveform, inspect either original architecture, or export the generated trace as <strong>VCD</strong>."
       }
     ]
   },
